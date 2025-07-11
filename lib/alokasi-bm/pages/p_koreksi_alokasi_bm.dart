@@ -52,20 +52,20 @@ class _MyPageState extends State<PKoreksiAlokasiBM> {
         SizedBox(height: 15),
         Row(children: [
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: WTanggal('Tanggal', tanggal, setTanggal),
             ),
           ),
           Expanded(
-            flex: 1,
+            flex: 2,
             child: waitAPI
                 ? Container()
                 : WTombolPanjangIkon('Get Data', Icons.cloud_download,
                     Colors.white, Colors.black, getData),
           ),
-          Expanded(flex: 7, child: SizedBox())
+          Expanded(flex: 12, child: SizedBox())
         ]),
         SizedBox(height: 10),
         Expanded(

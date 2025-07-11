@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stsj/alokasi-bm/helper/api_alokasi_bm.dart';
 import 'package:stsj/alokasi-bm/helper/model_alokasi_bm.dart';
 import 'package:stsj/alokasi-bm/pages/p_koreksi_alokasi_bm.dart';
 import 'package:stsj/alokasi-bm/widget/w_alertdialog_info.dart';
 import 'package:stsj/alokasi-bm/widget/w_input_number.dart';
-import 'package:stsj/alokasi-bm/widget/w_kolom_detail.dart';
-import 'package:stsj/alokasi-bm/widget/w_kolom_header.dart';
-import 'package:stsj/alokasi-bm/widget/w_input_search.dart';
 import 'package:stsj/alokasi-bm/widget/w_tombol_panjang_ikon.dart';
+import 'package:stsj/global/font.dart';
 
 class PKoreksiAlokasiBMDetail extends StatefulWidget {
   const PKoreksiAlokasiBMDetail(this.tanggal, {super.key});
@@ -20,12 +19,110 @@ class PKoreksiAlokasiBMDetail extends StatefulWidget {
 }
 
 class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
+  int idxAwal = 0,
+      idxAkhir = 0,
+      totalFSN1 = 0,
+      totalNota110 = 0,
+      totalOther = 0,
+      totalSisaStok = 0,
+      totalFSBCity = 0,
+      totalFSBOut = 0,
+      totalFSBNTT = 0,
+      totalFSCity = 0,
+      totalFSOut = 0,
+      totalFSNTT = 0,
+      totalBisaBagi = 0,
+      page = 1;
   bool waitAPI = false;
   List<ModelBrowseAlokasi> filter = [];
+  List<ModelBrowseAlokasi> filterSearch = [];
   TextEditingController searchController = TextEditingController();
 
-  void setSearch(dynamic value) => setState(() =>
-      filter = daftarAlokasi.where((x) => x.itemname.contains(value)).toList());
+  Widget wContentTabel(String value, int jenis, Alignment posisi) {
+    return Container(
+      alignment: posisi,
+      padding: const EdgeInsets.all(10),
+      child: Text(value,
+          style: jenis == 0
+              ? GlobalFont.mediumbigfontMWhiteBold
+              : jenis == 1
+                  ? GlobalFont.smallfontR
+                  : GlobalFont.mediumbigfontMBold),
+    );
+  }
+
+  TableRow detailRow(ModelBrowseAlokasi e) {
+    var index = daftarAlokasi
+        .indexWhere((x) => x.unitid == e.unitid && x.color == e.color);
+
+    void setADJCity(dynamic value) {
+      e.freestokADJ1 = TextEditingController(text: value);
+    }
+
+    void setADJOut(dynamic value) {
+      e.freestokADJ2 = TextEditingController(text: value);
+    }
+
+    void setADJNTT(dynamic value) {
+      e.freestokADJ3 = TextEditingController(text: value);
+    }
+
+    return TableRow(
+        decoration: BoxDecoration(
+            color: (e.freestok1 < 0 || e.freestok2 < 0 || e.freestok3 < 0)
+                ? Colors.red[100]
+                : index % 2 == 0
+                    ? Colors.blueGrey[100]
+                    : Colors.blueGrey[50]),
+        children: [
+          wContentTabel(e.unitid, 1, Alignment.centerLeft),
+          wContentTabel(e.colorname, 1, Alignment.centerLeft),
+          wContentTabel(e.fsn1.toString(), 1, Alignment.centerRight),
+          wContentTabel(e.nota110.toString(), 1, Alignment.centerRight),
+          wContentTabel(e.other.toString(), 1, Alignment.centerRight),
+          wContentTabel(e.sisastok.toString(), 1, Alignment.centerRight),
+          wContentTabel(e.freestokbagi1.toString(), 1, Alignment.centerRight),
+          wContentTabel(e.freestokbagi2.toString(), 1, Alignment.centerRight),
+          wContentTabel(e.freestokbagi3.toString(), 1, Alignment.centerRight),
+          wContentTabel(e.freestok1.toString(), 1, Alignment.centerRight),
+          wContentTabel(e.freestok2.toString(), 1, Alignment.centerRight),
+          wContentTabel(e.freestok3.toString(), 1, Alignment.centerRight),
+          wContentTabel(
+              e.freestokbisabagi.toString(), 1, Alignment.centerRight),
+          WInputNumber('', e.freestokADJ1, setADJCity),
+          WInputNumber('', e.freestokADJ2, setADJOut),
+          WInputNumber('', e.freestokADJ3, setADJNTT),
+        ]);
+  }
+
+  void loadDataPageAwal() {
+    idxAwal = 0;
+    idxAkhir = daftarAlokasi.length > 10 ? 10 : daftarAlokasi.length;
+    filter.addAll(daftarAlokasi.sublist(idxAwal, idxAkhir));
+  }
+
+  void refreshPage(String value, int mode) {
+    mode == 0 ? page -= 1 : page += 1;
+    filter = [];
+    idxAwal = (page * 10) - 10;
+    idxAkhir =
+        (page * 10) > daftarAlokasi.length ? daftarAlokasi.length : (page * 10);
+    filter.addAll(daftarAlokasi.sublist(idxAwal, idxAkhir));
+  }
+
+  void calculateGrandTotal() {
+    totalFSN1 = daftarAlokasi.fold(0, (before, after) => before + after.fsn1);
+    totalNota110 = daftarAlokasi.fold(0, (x, y) => x + y.nota110);
+    totalOther = daftarAlokasi.fold(0, (x, y) => x + y.other);
+    totalSisaStok = daftarAlokasi.fold(0, (x, y) => x + y.sisastok);
+    totalFSBCity = daftarAlokasi.fold(0, (x, y) => x + y.freestokbagi1);
+    totalFSBOut = daftarAlokasi.fold(0, (x, y) => x + y.freestokbagi2);
+    totalFSBNTT = daftarAlokasi.fold(0, (x, y) => x + y.freestokbagi3);
+    totalFSCity = daftarAlokasi.fold(0, (x, y) => x + y.freestok1);
+    totalFSOut = daftarAlokasi.fold(0, (x, y) => x + y.freestok2);
+    totalFSNTT = daftarAlokasi.fold(0, (x, y) => x + y.freestok3);
+    totalBisaBagi = daftarAlokasi.fold(0, (x, y) => x + y.freestokbisabagi);
+  }
 
   void simpan() async {
     setState(() => waitAPI = true);
@@ -44,7 +141,7 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
         var sisaBagi =
             (x.freestokbisabagi - fsADJ) < 0 ? 0 : (x.freestokbisabagi - fsADJ);
 
-        ((fsBagi + fsADJ) + sisaBagi) > x.sisastok
+        ((fsBagi + fsADJ) + sisaBagi) > (x.sisastok + x.nota110)
             ? x.isvalid = false
             : x.isvalid = true;
       }
@@ -72,7 +169,6 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
       var list = await ApiAlokasiBM.revisiAlokasiBM(
           '51', widget.tanggal.toString().substring(0, 10), userid, detail);
 
-      if (msg == 'Sukses') daftarAlokasi = [];
       if (!mounted) return;
       wAlertDialogInfo(context, 'INFORMASI',
           msg == 'Sukses' ? list[0].resultmessage : 'Data Gagal Di Simpan');
@@ -93,7 +189,10 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
   @override
   void initState() {
     super.initState();
-    filter.addAll(daftarAlokasi);
+    if (daftarAlokasi.isNotEmpty) {
+      calculateGrandTotal();
+      loadDataPageAwal();
+    }
   }
 
   @override
@@ -101,127 +200,182 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
     if (waitAPI) {
       return Center(child: SpinKitDualRing(color: Colors.blue[900]!));
     } else {
-      return SingleChildScrollView(
-        child: daftarAlokasi.isEmpty
-            ? Container()
-            : PaginatedDataTable(
-                key: UniqueKey(),
-                header:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Expanded(child: WInputSearch(searchController, setSearch)),
+      return Column(children: [
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          IconButton(
+            onPressed: () => page != 1
+                ? setState(() => refreshPage(searchController.text, 0))
+                : null,
+            padding: EdgeInsets.zero,
+            icon: Icon(Icons.arrow_circle_left,
+                color: Colors.blue[900]!, size: 30),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                  '${idxAwal + 1} - $idxAkhir Of ${daftarAlokasi.length}',
+                  textAlign: TextAlign.center,
+                  style: GlobalFont.bigfontMBold),
+            ),
+          ),
+          IconButton(
+            onPressed: () => daftarAlokasi.length - idxAkhir <= 0
+                ? null
+                : setState(() => refreshPage(searchController.text, 1)),
+            padding: EdgeInsets.zero,
+            icon: Icon(Icons.arrow_circle_right,
+                color: Colors.blue[900], size: 30),
+          )
+        ]),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          child: Row(children: [
+            Expanded(flex: 8, child: SizedBox()),
+            Expanded(
+                flex: 1,
+                child: WTombolPanjangIkon('SIMPAN', Icons.save, Colors.white,
+                    Colors.green[900]!, simpan)),
+            SizedBox(width: 5),
+            Expanded(
+                flex: 1,
+                child: WTombolPanjangIkon('RESET', Icons.refresh, Colors.white,
+                    Colors.red[900]!, reset)),
+          ]),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+              child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Table(
+                border: TableBorder.all(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10)),
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                columnWidths: const {
+                  0: FlexColumnWidth(1.5),
+                  1: FlexColumnWidth(0.7),
+                  2: FlexColumnWidth(0.6),
+                  3: FlexColumnWidth(0.6),
+                  4: FlexColumnWidth(0.6),
+                  5: FlexColumnWidth(0.6),
+                  6: FlexColumnWidth(0.6),
+                  7: FlexColumnWidth(0.6),
+                  8: FlexColumnWidth(0.6),
+                  9: FlexColumnWidth(0.6),
+                  10: FlexColumnWidth(0.6),
+                  11: FlexColumnWidth(0.6),
+                  12: FlexColumnWidth(0.6),
+                  13: FlexColumnWidth(0.4),
+                  14: FlexColumnWidth(0.4),
+                  15: FlexColumnWidth(0.4),
+                },
+                children: [
+                  TableRow(
+                      decoration: BoxDecoration(
+                        color: Colors.blue[900],
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10)),
+                      ),
+                      children: [
+                        wContentTabel('KODE BARANG', 0, Alignment.centerLeft),
+                        wContentTabel('WARNA', 0, Alignment.centerLeft),
+                        wContentTabel('FS N-1', 0, Alignment.centerRight),
+                        wContentTabel('NOTA 1-10', 0, Alignment.centerRight),
+                        wContentTabel('OTHER', 0, Alignment.centerRight),
+                        wContentTabel('SISA STOK', 0, Alignment.centerRight),
+                        wContentTabel('FS B CITY', 0, Alignment.centerRight),
+                        wContentTabel('FS B OUT', 0, Alignment.centerRight),
+                        wContentTabel('FS B NTT', 0, Alignment.centerRight),
+                        wContentTabel('FS CITY', 0, Alignment.centerRight),
+                        wContentTabel('FS OUT', 0, Alignment.centerRight),
+                        wContentTabel('FS NTT', 0, Alignment.centerRight),
+                        wContentTabel('BISA BAGI', 0, Alignment.centerRight),
+                        wContentTabel('', 0, Alignment.centerRight),
+                        wContentTabel('', 0, Alignment.centerRight),
+                        wContentTabel('', 0, Alignment.centerRight)
+                      ]),
+                  TableRow(
+                      decoration: BoxDecoration(color: Colors.blue[100]),
+                      children: [
+                        wContentTabel('GRAND TOTAL', 2, Alignment.centerLeft),
+                        wContentTabel('', 2, Alignment.centerLeft),
+                        wContentTabel(
+                            NumberFormat.currency(
+                                    decimalDigits: 0, locale: 'id', symbol: '')
+                                .format(totalFSN1),
+                            2,
+                            Alignment.centerRight),
+                        wContentTabel(
+                            NumberFormat.currency(
+                                    decimalDigits: 0, locale: 'id', symbol: '')
+                                .format(totalNota110),
+                            2,
+                            Alignment.centerRight),
+                        wContentTabel(
+                            NumberFormat.currency(
+                                    decimalDigits: 0, locale: 'id', symbol: '')
+                                .format(totalOther),
+                            2,
+                            Alignment.centerRight),
+                        wContentTabel(
+                            NumberFormat.currency(
+                                    decimalDigits: 0, locale: 'id', symbol: '')
+                                .format(totalSisaStok),
+                            2,
+                            Alignment.centerRight),
+                        wContentTabel(
+                            NumberFormat.currency(
+                                    decimalDigits: 0, locale: 'id', symbol: '')
+                                .format(totalFSBCity),
+                            2,
+                            Alignment.centerRight),
+                        wContentTabel(
+                            NumberFormat.currency(
+                                    decimalDigits: 0, locale: 'id', symbol: '')
+                                .format(totalFSBOut),
+                            2,
+                            Alignment.centerRight),
+                        wContentTabel(
+                            NumberFormat.currency(
+                                    decimalDigits: 0, locale: 'id', symbol: '')
+                                .format(totalFSBNTT),
+                            2,
+                            Alignment.centerRight),
+                        wContentTabel(
+                            NumberFormat.currency(
+                                    decimalDigits: 0, locale: 'id', symbol: '')
+                                .format(totalFSCity),
+                            2,
+                            Alignment.centerRight),
+                        wContentTabel(
+                            NumberFormat.currency(
+                                    decimalDigits: 0, locale: 'id', symbol: '')
+                                .format(totalFSOut),
+                            2,
+                            Alignment.centerRight),
+                        wContentTabel(
+                            NumberFormat.currency(
+                                    decimalDigits: 0, locale: 'id', symbol: '')
+                                .format(totalFSNTT),
+                            2,
+                            Alignment.centerRight),
+                        wContentTabel(
+                            NumberFormat.currency(
+                                    decimalDigits: 0, locale: 'id', symbol: '')
+                                .format(totalBisaBagi),
+                            2,
+                            Alignment.centerRight),
+                        wContentTabel('', 2, Alignment.centerRight),
+                        wContentTabel('', 2, Alignment.centerRight),
+                        wContentTabel('', 2, Alignment.centerRight)
+                      ]),
+                  ...filter.map((e) => detailRow(e)),
                 ]),
-                actions: [
-                  WTombolPanjangIkon('SIMPAN', Icons.save, Colors.white,
-                      Colors.green[900]!, simpan),
-                  WTombolPanjangIkon('RESET', Icons.cleaning_services,
-                      Colors.white, Colors.blue[900]!, reset),
-                ],
-                rowsPerPage: 15,
-                source: MyData(list: filter),
-                headingRowColor:
-                    WidgetStatePropertyAll(Colors.blueGrey.shade300),
-                headingRowHeight: 30,
-                dataRowMinHeight: 25,
-                dataRowMaxHeight: 30,
-                columnSpacing: 0,
-                horizontalMargin: 0,
-                showFirstLastButtons: true,
-                showEmptyRows: false,
-                columns: [
-                  wKolomHeader(context, '', 0.02, MainAxisAlignment.center),
-                  wKolomHeader(
-                      context, 'KODE BARANG', 0.14, MainAxisAlignment.start),
-                  wKolomHeader(context, 'WARNA', 0.06, MainAxisAlignment.start),
-                  wKolomHeader(context, 'FS N-1', 0.05, MainAxisAlignment.end),
-                  wKolomHeader(
-                      context, 'NOTA 1-10', 0.06, MainAxisAlignment.end),
-                  wKolomHeader(
-                      context, 'SISA STOK', 0.06, MainAxisAlignment.end),
-                  wKolomHeader(
-                      context, 'FS B CITY', 0.06, MainAxisAlignment.end),
-                  wKolomHeader(
-                      context, 'FS B OUT', 0.06, MainAxisAlignment.end),
-                  wKolomHeader(
-                      context, 'FS B NTT', 0.06, MainAxisAlignment.end),
-                  wKolomHeader(context, 'FS CITY', 0.06, MainAxisAlignment.end),
-                  wKolomHeader(context, 'FS OUT', 0.06, MainAxisAlignment.end),
-                  wKolomHeader(context, 'FS NTT', 0.06, MainAxisAlignment.end),
-                  wKolomHeader(
-                      context, 'BISA BAGI', 0.06, MainAxisAlignment.end),
-                  wKolomHeader(
-                      context, 'ADJ CITY', 0.06, MainAxisAlignment.center),
-                  wKolomHeader(
-                      context, 'ADJ OUT', 0.06, MainAxisAlignment.center),
-                  wKolomHeader(
-                      context, 'ADJ NTT', 0.06, MainAxisAlignment.center),
-                ],
-              ),
-      );
+          )),
+        )
+      ]);
     }
   }
-}
-
-class MyData extends DataTableSource {
-  MyData({required this.list});
-  final List<ModelBrowseAlokasi> list;
-
-  @override
-  DataRow? getRow(int index) {
-    var posisi = daftarAlokasi.indexWhere(
-        (x) => x.unitid == list[index].unitid && x.color == list[index].color);
-
-    void setADJCity(dynamic value) {
-      list[index].freestokADJ1 = TextEditingController(text: value);
-      daftarAlokasi[posisi].freestokADJ1 = TextEditingController(text: value);
-    }
-
-    void setADJOut(dynamic value) {
-      list[index].freestokADJ2 = TextEditingController(text: value);
-      daftarAlokasi[posisi].freestokADJ2 = TextEditingController(text: value);
-    }
-
-    void setADJNTT(dynamic value) {
-      list[index].freestokADJ3 = TextEditingController(text: value);
-      daftarAlokasi[posisi].freestokADJ3 = TextEditingController(text: value);
-    }
-
-    return DataRow(
-      color: index % 2 == 0
-          ? WidgetStatePropertyAll(Colors.blue.shade50)
-          : WidgetStatePropertyAll(Colors.white),
-      cells: [
-        DataCell(list[index].isvalid
-            ? Container()
-            : Icon(Icons.info, color: Colors.red)),
-        wKolomDetail(list[index].unitid, Alignment.centerLeft),
-        wKolomDetail(list[index].colorname, Alignment.centerLeft),
-        wKolomDetail(list[index].fsn1.toString(), Alignment.centerRight),
-        wKolomDetail(list[index].nota110.toString(), Alignment.centerRight),
-        wKolomDetail(list[index].sisastok.toString(), Alignment.centerRight),
-        wKolomDetail(
-            list[index].freestokbagi1.toString(), Alignment.centerRight),
-        wKolomDetail(
-            list[index].freestokbagi2.toString(), Alignment.centerRight),
-        wKolomDetail(
-            list[index].freestokbagi3.toString(), Alignment.centerRight),
-        wKolomDetail(list[index].freestok1.toString(), Alignment.centerRight),
-        wKolomDetail(list[index].freestok2.toString(), Alignment.centerRight),
-        wKolomDetail(list[index].freestok3.toString(), Alignment.centerRight),
-        wKolomDetail(
-            list[index].freestokbisabagi.toString(), Alignment.centerRight),
-        DataCell(WInputNumber('', list[index].freestokADJ1, setADJCity)),
-        DataCell(WInputNumber('', list[index].freestokADJ2, setADJOut)),
-        DataCell(WInputNumber('', list[index].freestokADJ3, setADJNTT)),
-      ],
-    );
-  }
-
-  @override
-  bool get isRowCountApproximate => false;
-
-  @override
-  int get rowCount => list.length;
-
-  @override
-  int get selectedRowCount => 0;
 }
