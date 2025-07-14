@@ -74,7 +74,7 @@ class _MyPageState extends State<PKoreksiAlokasiBM> {
               : daftarAlokasi.isEmpty
                   ? WListEmpty(
                       'ALOKASI MASIH KOSONG', Icons.info, Colors.black, 100)
-                  : PKoreksiAlokasiBMDetail(tanggal),
+                  : PKoreksiAlokasiBMDetail(tanggal, getData),
         )
       ]),
     );

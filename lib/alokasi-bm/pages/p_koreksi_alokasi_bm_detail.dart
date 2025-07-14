@@ -7,12 +7,14 @@ import 'package:stsj/alokasi-bm/helper/model_alokasi_bm.dart';
 import 'package:stsj/alokasi-bm/pages/p_koreksi_alokasi_bm.dart';
 import 'package:stsj/alokasi-bm/widget/w_alertdialog_info.dart';
 import 'package:stsj/alokasi-bm/widget/w_input_number.dart';
+import 'package:stsj/alokasi-bm/widget/w_input_search.dart';
 import 'package:stsj/alokasi-bm/widget/w_tombol_panjang_ikon.dart';
 import 'package:stsj/global/font.dart';
 
 class PKoreksiAlokasiBMDetail extends StatefulWidget {
-  const PKoreksiAlokasiBMDetail(this.tanggal, {super.key});
+  const PKoreksiAlokasiBMDetail(this.tanggal, this.loadData, {super.key});
   final DateTime tanggal;
+  final Function loadData;
 
   @override
   State<PKoreksiAlokasiBMDetail> createState() => _MyPageState();
@@ -95,19 +97,20 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
         ]);
   }
 
-  void loadDataPageAwal() {
-    idxAwal = 0;
-    idxAkhir = daftarAlokasi.length > 10 ? 10 : daftarAlokasi.length;
-    filter.addAll(daftarAlokasi.sublist(idxAwal, idxAkhir));
+  void generatedPage(int mode, halaman, List<ModelBrowseAlokasi> list) {
+    filter = [];
+    page = halaman;
+    idxAwal = mode == 0 ? 0 : (page * 10) - 10;
+    idxAkhir = (page * 10) > list.length ? list.length : (page * 10);
+    filter.addAll(list.sublist(idxAwal, idxAkhir));
   }
 
-  void refreshPage(String value, int mode) {
-    mode == 0 ? page -= 1 : page += 1;
-    filter = [];
-    idxAwal = (page * 10) - 10;
-    idxAkhir =
-        (page * 10) > daftarAlokasi.length ? daftarAlokasi.length : (page * 10);
-    filter.addAll(daftarAlokasi.sublist(idxAwal, idxAkhir));
+  void prevPage(List<ModelBrowseAlokasi> list) {
+    if (page != 1) generatedPage(1, page -= 1, list);
+  }
+
+  void nextPage(List<ModelBrowseAlokasi> list) {
+    if ((page * 10) <= list.length) generatedPage(1, page += 1, list);
   }
 
   void calculateGrandTotal() {
@@ -122,6 +125,17 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
     totalFSOut = daftarAlokasi.fold(0, (x, y) => x + y.freestok2);
     totalFSNTT = daftarAlokasi.fold(0, (x, y) => x + y.freestok3);
     totalBisaBagi = daftarAlokasi.fold(0, (x, y) => x + y.freestokbisabagi);
+  }
+
+  void setSearch(dynamic value) {
+    var list = daftarAlokasi.where((x) => x.itemname.contains(value)).toList();
+    if (list.isEmpty) {
+      wAlertDialogInfo(context, 'INFORMASI', 'Data Tidak Di Temukan');
+    } else {
+      filterSearch = [];
+      filterSearch.addAll(list);
+      setState(() => generatedPage(0, 1, filterSearch));
+    }
   }
 
   void simpan() async {
@@ -169,9 +183,15 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
       var list = await ApiAlokasiBM.revisiAlokasiBM(
           '51', widget.tanggal.toString().substring(0, 10), userid, detail);
 
-      if (!mounted) return;
-      wAlertDialogInfo(context, 'INFORMASI',
-          msg == 'Sukses' ? list[0].resultmessage : 'Data Gagal Di Simpan');
+      if (msg == 'Sukses') {
+        widget.loadData();
+        calculateGrandTotal();
+        if (!mounted) return;
+        wAlertDialogInfo(context, 'INFORMASI', list[0].resultmessage);
+      } else {
+        if (!mounted) return;
+        wAlertDialogInfo(context, 'INFORMASI', 'Data Gagal Di Simpan');
+      }
 
       setState(() => waitAPI = false);
     }
@@ -191,7 +211,7 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
     super.initState();
     if (daftarAlokasi.isNotEmpty) {
       calculateGrandTotal();
-      loadDataPageAwal();
+      generatedPage(0, 1, daftarAlokasi);
     }
   }
 
@@ -203,9 +223,8 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
       return Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           IconButton(
-            onPressed: () => page != 1
-                ? setState(() => refreshPage(searchController.text, 0))
-                : null,
+            onPressed: () => setState(() => prevPage(
+                searchController.text == '' ? daftarAlokasi : filterSearch)),
             padding: EdgeInsets.zero,
             icon: Icon(Icons.arrow_circle_left,
                 color: Colors.blue[900]!, size: 30),
@@ -214,15 +233,14 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
-                  '${idxAwal + 1} - $idxAkhir Of ${daftarAlokasi.length}',
+                  '${idxAwal + 1} - $idxAkhir Of ${searchController.text == '' ? daftarAlokasi.length : filterSearch.length}',
                   textAlign: TextAlign.center,
                   style: GlobalFont.bigfontMBold),
             ),
           ),
           IconButton(
-            onPressed: () => daftarAlokasi.length - idxAkhir <= 0
-                ? null
-                : setState(() => refreshPage(searchController.text, 1)),
+            onPressed: () => setState(() => nextPage(
+                searchController.text == '' ? daftarAlokasi : filterSearch)),
             padding: EdgeInsets.zero,
             icon: Icon(Icons.arrow_circle_right,
                 color: Colors.blue[900], size: 30),
@@ -231,7 +249,7 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
           child: Row(children: [
-            Expanded(flex: 8, child: SizedBox()),
+            Expanded(flex: 8, child: WInputSearch(searchController, setSearch)),
             Expanded(
                 flex: 1,
                 child: WTombolPanjangIkon('SIMPAN', Icons.save, Colors.white,
