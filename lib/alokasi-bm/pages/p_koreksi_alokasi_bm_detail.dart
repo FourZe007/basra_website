@@ -310,9 +310,9 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
                         wContentTabel('FS OUT', 0, Alignment.centerRight),
                         wContentTabel('FS NTT', 0, Alignment.centerRight),
                         wContentTabel('BISA BAGI', 0, Alignment.centerRight),
-                        wContentTabel('', 0, Alignment.centerRight),
-                        wContentTabel('', 0, Alignment.centerRight),
-                        wContentTabel('', 0, Alignment.centerRight)
+                        wContentTabel('CITY', 0, Alignment.centerRight),
+                        wContentTabel('OUT', 0, Alignment.centerRight),
+                        wContentTabel('NTT', 0, Alignment.centerRight)
                       ]),
                   TableRow(
                       decoration: BoxDecoration(color: Colors.blue[100]),
