@@ -137,6 +137,35 @@ class ActivityMenuComponent extends HookWidget {
               },
             ),
 
+            Builder(
+              builder: (context) {
+                if (state.getSubHeaderList.contains('113')) {
+                  print('101 is inside SubHeaderList');
+                  return Container(
+                    margin: EdgeInsets.only(right: 50.0),
+                    child: Column(
+                      children: [
+                        // ~:NEW:~
+                        // Aktivitas Sales
+                        _buildMenuIcon(
+                          context,
+                          'assets/images/subdealer.png',
+                          'Aktivitas SubDealer',
+                          RoutesConstant.historyAktivitasSubDealer,
+                          state,
+                        ),
+                        const Text('Aktivitas SubDealer'),
+                        // ~:NEW:~
+                      ],
+                    ),
+                  );
+                } else {
+                  print('101 is not inside SubHeaderList');
+                  return const SizedBox();
+                }
+              },
+            ),
+
             // Points
             Builder(
               builder: (context) {
@@ -304,6 +333,35 @@ class ActivityMenuComponent extends HookWidget {
                 ),
               ),
             ],
+          ),
+
+          Builder(
+            builder: (context) {
+              if (state.getSubHeaderList.contains('113')) {
+                print('101 is inside SubHeaderList');
+                return Container(
+                  margin: EdgeInsets.only(right: 50.0),
+                  child: Column(
+                    children: [
+                      // ~:NEW:~
+                      // Aktivitas Sales
+                      _buildMenuIcon(
+                        context,
+                        'assets/images/subdealer.png',
+                        'Aktivitas SubDealer',
+                        RoutesConstant.historyAktivitasSubDealer,
+                        state,
+                      ),
+                      const Text('Aktivitas SubDealer'),
+                      // ~:NEW:~
+                    ],
+                  ),
+                );
+              } else {
+                print('101 is not inside SubHeaderList');
+                return const SizedBox();
+              }
+            },
           ),
 
           // Points

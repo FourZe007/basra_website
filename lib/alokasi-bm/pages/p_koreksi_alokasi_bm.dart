@@ -6,7 +6,7 @@ import 'package:stsj/alokasi-bm/helper/model_alokasi_bm.dart';
 import 'package:stsj/alokasi-bm/pages/p_koreksi_alokasi_bm_detail.dart';
 import 'package:stsj/alokasi-bm/widget/w_list_empty.dart';
 import 'package:stsj/alokasi-bm/widget/w_tanggal.dart';
-import 'package:stsj/alokasi-bm/widget/w_tombol_panjang_ikon.dart';
+import 'package:stsj/alokasi-bm/widget/w_tombol_teks.dart';
 import 'package:stsj/global/widget/app_bar.dart';
 import 'package:stsj/router/router_const.dart';
 
@@ -23,7 +23,7 @@ class _MyPageState extends State<PKoreksiAlokasiBM> {
   DateTime tanggal = DateTime.now();
   bool waitAPI = false;
 
-  void setTanggal(dynamic value) => tanggal = value;
+  void setTanggal(dynamic value) => setState(() => tanggal = value);
 
   void getData() async {
     setState(() => waitAPI = true);
@@ -55,15 +55,14 @@ class _MyPageState extends State<PKoreksiAlokasiBM> {
             flex: 2,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: WTanggal('Tanggal', tanggal, setTanggal),
+              child: WTanggal(tanggal, setTanggal),
             ),
           ),
           Expanded(
             flex: 2,
             child: waitAPI
                 ? Container()
-                : WTombolPanjangIkon('Get Data', Icons.cloud_download,
-                    Colors.white, Colors.black, getData),
+                : WTombolTeks('Get Data', Colors.black, getData),
           ),
           Expanded(flex: 12, child: SizedBox())
         ]),

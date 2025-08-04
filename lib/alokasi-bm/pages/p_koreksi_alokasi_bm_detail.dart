@@ -8,7 +8,7 @@ import 'package:stsj/alokasi-bm/pages/p_koreksi_alokasi_bm.dart';
 import 'package:stsj/alokasi-bm/widget/w_alertdialog_info.dart';
 import 'package:stsj/alokasi-bm/widget/w_input_number.dart';
 import 'package:stsj/alokasi-bm/widget/w_input_search.dart';
-import 'package:stsj/alokasi-bm/widget/w_tombol_panjang_ikon.dart';
+import 'package:stsj/alokasi-bm/widget/w_tombol_teks.dart';
 import 'package:stsj/global/font.dart';
 
 class PKoreksiAlokasiBMDetail extends StatefulWidget {
@@ -252,13 +252,10 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
             Expanded(flex: 8, child: WInputSearch(searchController, setSearch)),
             Expanded(
                 flex: 1,
-                child: WTombolPanjangIkon('SIMPAN', Icons.save, Colors.white,
-                    Colors.green[900]!, simpan)),
+                child: WTombolTeks('SIMPAN', Colors.green[900]!, simpan)),
             SizedBox(width: 5),
             Expanded(
-                flex: 1,
-                child: WTombolPanjangIkon('RESET', Icons.refresh, Colors.white,
-                    Colors.red[900]!, reset)),
+                flex: 1, child: WTombolTeks('RESET', Colors.red[900]!, reset)),
           ]),
         ),
         Expanded(

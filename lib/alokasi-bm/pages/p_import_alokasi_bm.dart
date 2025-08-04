@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stsj/alokasi-bm/helper/api_alokasi_bm.dart';
 import 'package:stsj/alokasi-bm/widget/w_alertdialog_info.dart';
 import 'package:stsj/alokasi-bm/widget/w_tanggal.dart';
-import 'package:stsj/alokasi-bm/widget/w_tombol_panjang_ikon.dart';
+import 'package:stsj/alokasi-bm/widget/w_tombol_teks.dart';
 import 'package:stsj/global/font.dart';
 import 'package:stsj/global/widget/app_bar.dart';
 import 'package:stsj/router/router_const.dart';
@@ -24,7 +24,7 @@ class _MyPageState extends State<PImportAlokasiBM> {
   bool waitUpload = false;
   List<Map> list = [];
 
-  void setTanggal(dynamic value) => tanggal = value;
+  void setTanggal(dynamic value) => setState(() => tanggal = value);
 
   void processExcel() async {
     setState(() => waitUpload = true);
@@ -93,28 +93,25 @@ class _MyPageState extends State<PImportAlokasiBM> {
             flex: 1,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: WTanggal('Tanggal', tanggal, setTanggal),
+              child: WTanggal(tanggal, setTanggal),
             ),
           ),
           Expanded(
             flex: 1,
             child: waitUpload
                 ? Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    SpinKitFadingCircle(color: Colors.blue[900], size: 30),
+                    SpinKitDualRing(color: Colors.blue[900]!, size: 30),
                   ])
-                : WTombolPanjangIkon('Upload Alokasi', Icons.upload,
-                    Colors.white, Colors.black, processExcel),
+                : WTombolTeks('Upload Alokasi', Colors.black, processExcel),
           ),
           Expanded(flex: 6, child: SizedBox()),
           Expanded(
             flex: 1,
-            child: ElevatedButton.icon(
+            child: ElevatedButton(
               onPressed: () => getFormatExcel("Bagi FS Per BM.xlsx"),
-              label: Text('Format Excel', style: GlobalFont.bigfontRWhite),
-              icon: Icon(Icons.download, color: Colors.white),
               style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(Colors.blue[900]),
-              ),
+                  backgroundColor: WidgetStatePropertyAll(Colors.blue[900])),
+              child: Text('Download Excel', style: GlobalFont.bigfontRWhite),
             ),
           ),
           SizedBox(width: 5)

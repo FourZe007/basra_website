@@ -61,4 +61,5 @@ class RoutesConstant {
   //Punya Haryono -> Jangan Di Ganggu
   static String importAlokasiBM = "importAlokasiBM";
   static String koreksiAlokasiBM = "koreksiAlokasiBM";
+  static String historyAktivitasSubDealer = "historyAktivitasSubDealer";
 }

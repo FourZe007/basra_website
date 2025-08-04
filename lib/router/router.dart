@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stsj/aktivitas-subdealer/pages/p_subdealer_history.dart';
 import 'package:stsj/alokasi-bm/pages/p_koreksi_alokasi_bm.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/dashboardmain.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/models/dashboard.dart';
@@ -417,6 +418,13 @@ class RouterSettings {
             path: 'koreksiAlokasiBM',
             pageBuilder: (context, state) {
               return MaterialPage(child: PKoreksiAlokasiBM());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.historyAktivitasSubDealer,
+            path: 'historyAktivitasSubDealer',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: PSubDealerHistory());
             },
           ),
           // ~:NEW:~

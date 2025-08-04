@@ -6,8 +6,8 @@ wAlertDialogInfo(BuildContext context, String header, detail) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-            title: Text(header, style: GlobalFont.bigfontMBold),
-            content: Text(detail, style: GlobalFont.mediumbigfontM),
+            title: Text(header, style: GlobalFont.giantfontMBold),
+            content: Text(detail, style: GlobalFont.mediumfontR),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             actions: <Widget>[
