@@ -363,6 +363,28 @@ class _FourContainerState extends State<FourContainer> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.01),
+                                (briefing.imageThumb == '' ||
+                                        briefing.image != '1')
+                                    ? SizedBox()
+                                    : GestureDetector(
+                                        onTap: () => viewImage(
+                                          state,
+                                          widget.date,
+                                          briefing.lat,
+                                          briefing.lng,
+                                          briefing.employeeId,
+                                          briefing.actId,
+                                          time: briefing.currentTime != ''
+                                              ? briefing.currentTime
+                                              : '',
+                                        ),
+                                        child: Image.memory(
+                                          base64Decode(briefing.imageThumb),
+                                        ),
+                                      ),
+                                SizedBox(
                                   width: MediaQuery.of(context).size.width,
                                   child: briefing.actDesc != ''
                                       ? Text(
@@ -377,6 +399,7 @@ class _FourContainerState extends State<FourContainer> {
                                         ),
                                 ),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     (briefing.lat != 0 && briefing.lng != 0)
                                         ? Expanded(
@@ -404,37 +427,6 @@ class _FourContainerState extends State<FourContainer> {
                                             ),
                                           )
                                         : SizedBox(),
-                                    (briefing.image == '' ||
-                                            briefing.image != '1')
-                                        ? SizedBox()
-                                        : Expanded(
-                                            child: Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.01,
-                                                ),
-                                                ElevatedButton(
-                                                  onPressed: () => viewImage(
-                                                    state,
-                                                    widget.date,
-                                                    briefing.lat,
-                                                    briefing.lng,
-                                                    briefing.employeeId,
-                                                    briefing.actId,
-                                                    time: briefing
-                                                                .currentTime !=
-                                                            ''
-                                                        ? briefing.currentTime
-                                                        : '',
-                                                  ),
-                                                  child: Text('Lihat Foto'),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
                                   ],
                                 ),
                               ],
@@ -523,6 +515,31 @@ class _FourContainerState extends State<FourContainer> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.01),
+                                widget.visitMarket[index].imageThumb.isEmpty
+                                    ? Container()
+                                    : GestureDetector(
+                                        onTap: () => viewImage(
+                                          state,
+                                          widget.date,
+                                          widget.visitMarket[index].lat,
+                                          widget.visitMarket[index].lng,
+                                          widget.visitMarket[index].employeeId,
+                                          widget.visitMarket[index].actId,
+                                          time: widget.visitMarket[index]
+                                                      .currentTime !=
+                                                  ''
+                                              ? widget.visitMarket[index]
+                                                  .currentTime
+                                              : '',
+                                        ),
+                                        child: Image.memory(
+                                          base64Decode(widget
+                                              .visitMarket[index].imageThumb),
+                                        ),
+                                      ),
+                                SizedBox(
                                   width: MediaQuery.of(context).size.width,
                                   child: widget.visitMarket[index].actDesc != ''
                                       ? Text(
@@ -566,46 +583,6 @@ class _FourContainerState extends State<FourContainer> {
                                             ),
                                           )
                                         : SizedBox(),
-                                    (widget.visitMarket[index].image == '' ||
-                                            widget.visitMarket[index].image !=
-                                                '1')
-                                        ? SizedBox()
-                                        : Expanded(
-                                            child: Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.01,
-                                                ),
-                                                ElevatedButton(
-                                                  onPressed: () => viewImage(
-                                                    state,
-                                                    widget.date,
-                                                    widget
-                                                        .visitMarket[index].lat,
-                                                    widget
-                                                        .visitMarket[index].lng,
-                                                    widget.visitMarket[index]
-                                                        .employeeId,
-                                                    widget.visitMarket[index]
-                                                        .actId,
-                                                    time: widget
-                                                                .visitMarket[
-                                                                    index]
-                                                                .currentTime !=
-                                                            ''
-                                                        ? widget
-                                                            .visitMarket[index]
-                                                            .currentTime
-                                                        : '',
-                                                  ),
-                                                  child: Text('Lihat Foto'),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
                                   ],
                                 ),
                               ],
@@ -690,6 +667,40 @@ class _FourContainerState extends State<FourContainer> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.01),
+                                widget.recruitmentInterview[index].imageThumb
+                                        .isEmpty
+                                    ? Container()
+                                    : GestureDetector(
+                                        onTap: () => viewImage(
+                                          state,
+                                          widget.date,
+                                          widget
+                                              .recruitmentInterview[index].lat,
+                                          widget
+                                              .recruitmentInterview[index].lng,
+                                          widget.recruitmentInterview[index]
+                                              .employeeId,
+                                          widget.recruitmentInterview[index]
+                                              .actId,
+                                          time: widget
+                                                      .recruitmentInterview[
+                                                          index]
+                                                      .currentTime !=
+                                                  ''
+                                              ? widget
+                                                  .recruitmentInterview[index]
+                                                  .currentTime
+                                              : '',
+                                        ),
+                                        child: Image.memory(
+                                          base64Decode(widget
+                                              .recruitmentInterview[index]
+                                              .imageThumb),
+                                        ),
+                                      ),
+                                SizedBox(
                                   width: MediaQuery.of(context).size.width,
                                   child: widget.recruitmentInterview[index]
                                               .actDesc !=
@@ -744,57 +755,6 @@ class _FourContainerState extends State<FourContainer> {
                                             ),
                                           )
                                         : SizedBox(),
-                                    (widget.recruitmentInterview[index].image ==
-                                                '' ||
-                                            widget.recruitmentInterview[index]
-                                                    .image !=
-                                                '1')
-                                        ? SizedBox()
-                                        : Expanded(
-                                            child: Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.01,
-                                                ),
-                                                ElevatedButton(
-                                                  onPressed: () => viewImage(
-                                                    state,
-                                                    widget.date,
-                                                    widget
-                                                        .recruitmentInterview[
-                                                            index]
-                                                        .lat,
-                                                    widget
-                                                        .recruitmentInterview[
-                                                            index]
-                                                        .lng,
-                                                    widget
-                                                        .recruitmentInterview[
-                                                            index]
-                                                        .employeeId,
-                                                    widget
-                                                        .recruitmentInterview[
-                                                            index]
-                                                        .actId,
-                                                    time: widget
-                                                                .recruitmentInterview[
-                                                                    index]
-                                                                .currentTime !=
-                                                            ''
-                                                        ? widget
-                                                            .recruitmentInterview[
-                                                                index]
-                                                            .currentTime
-                                                        : '',
-                                                  ),
-                                                  child: Text('Lihat Foto'),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
                                   ],
                                 ),
                               ],
@@ -882,6 +842,31 @@ class _FourContainerState extends State<FourContainer> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.01),
+                                widget.dailyReport[index].imageThumb.isEmpty
+                                    ? Container()
+                                    : GestureDetector(
+                                        onTap: () => viewImage(
+                                          state,
+                                          widget.date,
+                                          widget.dailyReport[index].lat,
+                                          widget.dailyReport[index].lng,
+                                          widget.dailyReport[index].employeeId,
+                                          widget.dailyReport[index].actId,
+                                          time: widget.dailyReport[index]
+                                                      .currentTime !=
+                                                  ''
+                                              ? widget.dailyReport[index]
+                                                  .currentTime
+                                              : '',
+                                        ),
+                                        child: Image.memory(
+                                          base64Decode(widget
+                                              .dailyReport[index].imageThumb),
+                                        ),
+                                      ),
+                                SizedBox(
                                   width: MediaQuery.of(context).size.width,
                                   child: widget.dailyReport[index].actDesc != ''
                                       ? Text(
@@ -926,46 +911,6 @@ class _FourContainerState extends State<FourContainer> {
                                             ),
                                           )
                                         : SizedBox(),
-                                    (widget.dailyReport[index].image == '' ||
-                                            widget.dailyReport[index].image !=
-                                                '1')
-                                        ? SizedBox()
-                                        : Expanded(
-                                            child: Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.01,
-                                                ),
-                                                ElevatedButton(
-                                                  onPressed: () => viewImage(
-                                                    state,
-                                                    widget.date,
-                                                    widget
-                                                        .dailyReport[index].lat,
-                                                    widget
-                                                        .dailyReport[index].lng,
-                                                    widget.dailyReport[index]
-                                                        .employeeId,
-                                                    widget.dailyReport[index]
-                                                        .actId,
-                                                    time: widget
-                                                                .dailyReport[
-                                                                    index]
-                                                                .currentTime !=
-                                                            ''
-                                                        ? widget
-                                                            .dailyReport[index]
-                                                            .currentTime
-                                                        : '',
-                                                  ),
-                                                  child: Text('Lihat Foto'),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
                                   ],
                                 ),
                               ],

@@ -13,6 +13,7 @@ class ModelManagerActivities {
   double lat;
   double lng;
   String image;
+  String imageThumb;
   int isLate;
 
   ModelManagerActivities({
@@ -30,6 +31,7 @@ class ModelManagerActivities {
     required this.lat,
     required this.lng,
     required this.image,
+    required this.imageThumb,
     required this.isLate,
   });
 
@@ -49,6 +51,7 @@ class ModelManagerActivities {
       lat: json['lat'],
       lng: json['lng'],
       image: json['pic1'],
+      imageThumb: json['pic1Thumb'],
       isLate: json['flag'],
     );
   }
