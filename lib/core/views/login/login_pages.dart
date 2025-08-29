@@ -59,10 +59,13 @@ class _LoginPagesState extends State<LoginPages> {
 
         // ~:Load All Static Data:~
         // await state.fetchSalesmanList();
+        print('a');
         await state.fetchSISDriver();
         await state.fetchProvinces();
         // Added before go to menu page too to make sure branch name changed
         state.fetchSISBranches();
+        print(state.branchList.length);
+        print('b');
         await state
             .fetchUserAccess(state.getCompanyName, state.getEntryLevelId)
             .then((data) async {
@@ -120,6 +123,7 @@ class _LoginPagesState extends State<LoginPages> {
               return '-';
             }
           }));
+
           await prefs.setStringList('subheader', state.subHeaderList);
 
           print('~:List of Sub Header:~');
@@ -193,6 +197,12 @@ class _LoginPagesState extends State<LoginPages> {
         canEntered = true;
 
         if (canEntered) {
+          // loginModel.setUser([
+          //   listdatalogin[0].userID,
+          //   listdatalogin[0].entryLevelID,
+          //   listdatalogin[0].entryLevelName,
+          // ]);
+
           await fetchData(state);
 
           setState(() {
@@ -462,7 +472,7 @@ class _LoginPagesState extends State<LoginPages> {
                 width: MediaQuery.of(context).size.width,
                 alignment: Alignment.center,
                 child: Text(
-                  'v1.0.16',
+                  'v1.0.15',
                   style: GlobalFont.mediumbigfontR,
                 ),
               ),
