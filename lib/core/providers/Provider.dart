@@ -5,6 +5,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stsj/aktivitas-subdealer/helper/api_aktivitas_subdealer.dart';
+import 'package:stsj/aktivitas-subdealer/helper/model_aktivitas_subdealer.dart';
 import 'package:stsj/core/models/Activities/activities.dart';
 import 'package:stsj/core/models/Activities/point_calculation.dart';
 import 'package:stsj/core/models/Activities/activity_route.dart';
@@ -174,6 +176,7 @@ class MenuState with ChangeNotifier {
     String companyName,
     String entryLevelId,
   ) async {
+    log('fetchUserAccess');
     print('Company Name: $companyName');
     print('Entry Level ID: $entryLevelId');
 
@@ -271,12 +274,16 @@ class MenuState with ChangeNotifier {
   Future<void> loadSisBranches() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     log('Branch Name List (before): ${getBranchNameList.length}');
+    log('${prefs.getStringList('branches')}');
     if (branchNameList.isNotEmpty) {
       log('Branch Name List is not empty');
       branchNameList = [];
       log('Branch Name List: ${getBranchNameList.length}');
     }
-    branchNameList.addAll(prefs.getStringList('branches') ?? []);
+    for (var data in prefs.getStringList('branches')!) {
+      branchNameList.add(data);
+    }
+    //branchNameList.addAll(prefs.getStringList('branches'));
     log('Branch Name List (after): ${getBranchNameList.length}');
     setBranchNameListNotifier(prefs.getStringList('branches') ?? []);
     notifyListeners();
@@ -287,25 +294,33 @@ class MenuState with ChangeNotifier {
     final userId = prefs.getString('UserID') ?? '';
     final companyId = prefs.getString('CompanyName') ?? '';
 
-    // print('User ID: $userId');
-    // print('Company ID: $companyId');
+    print('xxUser ID: $userId');
+    print('xxCompany ID: $companyId');
 
-    branchShopList.clear();
+    branchShopList = [];
     branchShopList.addAll(await GlobalAPI.getSISBranchShop(userId, companyId));
 
-    if (prefs.getStringList('branches') == null) {
-      await prefs.setStringList(
-        'branches',
-        branchShopList.map((e) => e.name).toList(),
-      );
-    }
+    log(branchShopList.length.toString());
+
+    prefs.remove('branches');
+    await prefs.setStringList(
+      'branches',
+      branchShopList.map((e) => e.name).toList(),
+    );
+
+    // if (prefs.getStringList('branches') == null) {
+    //   await prefs.setStringList(
+    //     'branches',
+    //     branchShopList.map((e) => e.name).toList(),
+    //   );
+    // }
   }
 
   Future<void> fetchSISDriver() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final companyId = prefs.getString('CompanyName') ?? '';
 
-    // print('Company ID: $companyId');
+    print('Company ID: $companyId');
 
     driverList = [];
     driverList.addAll(await GlobalAPI.getSISDrivers(companyId));
@@ -325,8 +340,10 @@ class MenuState with ChangeNotifier {
       await fetchSISBranches();
     }
     List<ModelBranches> temp = [];
+    print(selectedBranch);
     // log('Branch Shop (before): ${branchShopList.length}');
     temp.addAll(branchShopList.where((e) => e.name == selectedBranch));
+    print(temp.length);
     // log('Branch Shop (after): ${temp.length}');
 
     if (driverList.isEmpty) {
@@ -340,9 +357,14 @@ class MenuState with ChangeNotifier {
               (e.shopId == temp[0].shopId && e.branchId == temp[0].branchId))
           .toList(),
     );
+
     // log('Driver List (after): ${filteredDriverList.length}');
     notifyListeners();
     // log('filterDriver called. New filtered list length: ${filteredDriverList.length}');
+    log('New Driver list');
+    for (var x in filteredDriverList) {
+      print(x.employeeName);
+    }
   }
 
   List<String> filteredDriverNameList = [];
@@ -1455,8 +1477,8 @@ class MenuState with ChangeNotifier {
   Future<void> fetchSipSalesBranches(String companyCode) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('UserID') ?? '';
-    print('User Id: $userId');
-    print('Company Code: $companyCode');
+    print('User Idxx: $userId');
+    print('Company Codexx: $companyCode');
 
     sipBranchList.clear();
     sipBranchList.addAll(await GlobalAPI.getSipSalesBranches(
@@ -2270,6 +2292,5 @@ class MenuState with ChangeNotifier {
     return await GlobalAPI.modifyFreeStock(mapModifyStock);
   }
   // ~:Free Stock:~
-
   // ~:NEW:~
 }
