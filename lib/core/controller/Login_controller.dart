@@ -59,6 +59,7 @@ class DataLoginController {
     String levelID,
     String levelName,
     String companyName,
+    String employeeID,
   ) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('Status', true);
@@ -71,6 +72,8 @@ class DataLoginController {
     print('Level Name: ${prefs.getString('EntryLevelName')}');
     await prefs.setString('CompanyName', companyName);
     print('Company Name: ${prefs.getString('CompanyName')}');
+    await prefs.setString('EmployeeID', employeeID);
+    print('Employee ID: ${prefs.getString('EmployeeID')}');
   }
 
   static void removeDataUser() async {

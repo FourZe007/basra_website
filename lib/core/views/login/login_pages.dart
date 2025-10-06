@@ -185,11 +185,11 @@ class _LoginPagesState extends State<LoginPages> {
           listdatalogin[0].memo == "LOGIN BERHASIL") {
         // ~:Login succeed:~
         await DataLoginController.setIntoSharedPreferences(
-          listdatalogin[0].userID,
-          listdatalogin[0].entryLevelID,
-          listdatalogin[0].entryLevelName,
-          listdatalogin[0].dataDT[0].pt,
-        );
+            listdatalogin[0].userID,
+            listdatalogin[0].entryLevelID,
+            listdatalogin[0].entryLevelName,
+            listdatalogin[0].dataDT[0].pt,
+            listdatalogin[0].employeeid);
 
         await Auth.saveDataToSharedPreferences(listdatalogin[0].dataDT);
         state.userCompanyAccList.addAll(listdatalogin[0].dataDT);

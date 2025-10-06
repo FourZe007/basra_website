@@ -8,6 +8,7 @@ class DataLogin {
   String entryLevelID;
   String entryLevelName;
   String memo;
+  String employeeid;
   List<DataDT> dataDT;
 
   DataLogin({
@@ -15,6 +16,7 @@ class DataLogin {
     required this.entryLevelID,
     required this.entryLevelName,
     required this.memo,
+    required this.employeeid,
     required this.dataDT,
   });
 
@@ -28,6 +30,7 @@ class DataLogin {
       entryLevelID: json['EntryLevelID'],
       entryLevelName: json['EntryLevelName'],
       memo: json['Memo'],
+      employeeid: json['EmployeeID'],
       dataDT: dataDTList,
     );
   }

@@ -1043,7 +1043,7 @@ class GlobalAPI {
   ) async {
     var url = Uri.https(
       'wsip.yamaha-jatim.co.id:2448',
-      '/SIS/Driver/CheckListPengiriman',
+      'SIS/Driver/CheckListPengiriman',
     );
 
     Map mapDelivery = {
@@ -1084,21 +1084,25 @@ class GlobalAPI {
         } else {
           log('Fetch data failed or error occured');
           deliveryList.add(DeliveryModel(
-            employeeId: '',
-            employeeName: '',
-            chasisNumber: '',
-            plateNumber: '',
-            imeiNumber: '',
-            drivingLicense: '',
-            activityNumber: '',
-            startTime: '',
-            startImageThumb: '',
-            startKm: '',
-            endTime: '',
-            endImageThumb: '',
-            endKm: '',
-            deliveryDetail: [],
-          ));
+              employeeId: '',
+              employeeName: '',
+              chasisNumber: '',
+              plateNumber: '',
+              imeiNumber: '',
+              drivingLicense: '',
+              activityNumber: '',
+              startTime: '',
+              startImageThumb: '',
+              startKm: '',
+              endTime: '',
+              endImageThumb: '',
+              endKm: '',
+              flagApproval: 0,
+              totalkoli: 0,
+              totaltekirim: 0,
+              persenterkirim: 0,
+              deliveryDetail: [],
+              rincianBiayaDetail: []));
 
           return deliveryList;
         }
@@ -1805,6 +1809,55 @@ class GlobalAPI {
 
     try {
       final response = await http.post(url, body: jsonEncode(map), headers: {
+        'Content-Type': 'application/json',
+      }).timeout(const Duration(seconds: 60));
+
+      if (response.statusCode <= 200) {
+        var jsonModifyPoint = jsonDecode(response.body);
+        if (jsonModifyPoint['code'] == '100' &&
+            jsonModifyPoint['msg'] == 'Sukses') {
+          modifyPointResult = (jsonModifyPoint['data'] as List)
+              .map<ModelReturnResult>(
+                  (list) => ModelReturnResult.fromJson(list))
+              .toList();
+        } else {
+          return modifyPointResult;
+        }
+      } else {}
+      return modifyPointResult;
+    } catch (e) {
+      print(e.toString());
+      return modifyPointResult;
+    }
+  }
+
+  static Future<List<ModelReturnResult>> fetchModifyApprovalBiaya(
+    String companyid,
+    branch,
+    shop,
+    numerator,
+    employeeid,
+    List<Map> detail,
+  ) async {
+    var url = Uri.https(
+      'wsip.yamaha-jatim.co.id:2448',
+      '/SIS/Driver/ApprovalExpense',
+    );
+
+    Map mapModifyApprovalBiaya = {
+      "Companyid": companyid,
+      "Branch": branch,
+      "Shop": shop,
+      "TransNo": numerator,
+      "EmployeeID": employeeid,
+      "Detail": detail
+    };
+
+    List<ModelReturnResult> modifyPointResult = [];
+
+    try {
+      final response = await http
+          .post(url, body: jsonEncode(mapModifyApprovalBiaya), headers: {
         'Content-Type': 'application/json',
       }).timeout(const Duration(seconds: 60));
 
