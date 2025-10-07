@@ -788,7 +788,36 @@ class _DeliveryPageState extends State<DeliveryPage> {
                                                         .mediumbigfontMBold),
                                               ]),
                                         ),
-                                        Expanded(flex: 3, child: SizedBox())
+                                        Expanded(
+                                          flex: 2,
+                                          child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  height: 30,
+                                                  child:
+                                                      LinearProgressIndicator(
+                                                    backgroundColor:
+                                                        Colors.grey[300],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    value: menuState
+                                                            .getDeliveryList[0]
+                                                            .persentokoterkirim /
+                                                        100,
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                            Color>(Colors.red),
+                                                  ),
+                                                ),
+                                                Text(
+                                                    'Total Toko ${menuState.getDeliveryList[0].totaltokoterkirim} / ${menuState.getDeliveryList[0].totaltoko} (${menuState.getDeliveryList[0].persentokoterkirim} %)',
+                                                    style: GlobalFont
+                                                        .mediumbigfontMBold),
+                                              ]),
+                                        ),
+                                        Expanded(flex: 1, child: SizedBox()),
                                       ]),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(15),
@@ -1268,6 +1297,80 @@ class _DeliveryPageState extends State<DeliveryPage> {
                                                       ),
                                                     ),
                                                   ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Stack(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 30,
+                                                            child:
+                                                                LinearProgressIndicator(
+                                                              backgroundColor:
+                                                                  Colors.grey[
+                                                                      300],
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20),
+                                                              value: menuState
+                                                                      .getDeliveryList[
+                                                                          0]
+                                                                      .persenterkirim /
+                                                                  100,
+                                                              valueColor:
+                                                                  AlwaysStoppedAnimation<
+                                                                          Color>(
+                                                                      Colors
+                                                                          .blue),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                              'Total Koli ${menuState.getDeliveryList[0].totaltekirim} / ${menuState.getDeliveryList[0].totalkoli} (${menuState.getDeliveryList[0].persenterkirim} %)',
+                                                              style: GlobalFont
+                                                                  .mediumbigfontMBold),
+                                                        ]),
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Stack(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 30,
+                                                            child:
+                                                                LinearProgressIndicator(
+                                                              backgroundColor:
+                                                                  Colors.grey[
+                                                                      300],
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20),
+                                                              value: menuState
+                                                                      .getDeliveryList[
+                                                                          0]
+                                                                      .persentokoterkirim /
+                                                                  100,
+                                                              valueColor:
+                                                                  AlwaysStoppedAnimation<
+                                                                          Color>(
+                                                                      Colors
+                                                                          .blue),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                              'Total Toko ${menuState.getDeliveryList[0].totaltokoterkirim} / ${menuState.getDeliveryList[0].totaltoko} (${menuState.getDeliveryList[0].persentokoterkirim} %)',
+                                                              style: GlobalFont
+                                                                  .mediumbigfontMBold),
+                                                        ]),
+                                                  ),
+                                                  Expanded(
+                                                      flex: 1,
+                                                      child: SizedBox()),
 
                                                   // Data Kendaraan
                                                   Expanded(

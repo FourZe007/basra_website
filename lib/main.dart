@@ -38,13 +38,12 @@ class MyApp extends StatelessWidget {
         },
       ),
       theme: ThemeData(
-        useMaterial3: true,
-        iconTheme: IconThemeData(color: Colors.black),
-        colorSchemeSeed: const Color(0xFF8EACCD),
-        cardColor: Color.fromARGB(159, 210, 224, 251),
-        fontFamily: 'Roboto',
-        scaffoldBackgroundColor: Color.fromARGB(255, 231, 230, 230),
-      ),
+          useMaterial3: true,
+          iconTheme: IconThemeData(color: Colors.black),
+          colorSchemeSeed: const Color(0xFF8EACCD),
+          cardColor: Color.fromARGB(159, 210, 224, 251),
+          fontFamily: 'Roboto',
+          scaffoldBackgroundColor: Color.fromARGB(255, 231, 230, 230)),
     );
   }
 }

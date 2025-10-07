@@ -1101,6 +1101,9 @@ class GlobalAPI {
               totalkoli: 0,
               totaltekirim: 0,
               persenterkirim: 0,
+              totaltoko: 0,
+              totaltokoterkirim: 0,
+              persentokoterkirim: 0,
               deliveryDetail: [],
               rincianBiayaDetail: []));
 

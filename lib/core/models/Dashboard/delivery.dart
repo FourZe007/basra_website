@@ -16,6 +16,9 @@ class DeliveryModel {
   int totalkoli;
   int totaltekirim;
   int persenterkirim;
+  int totaltoko;
+  int totaltokoterkirim;
+  int persentokoterkirim;
   List<CheckListDetailsModel> deliveryDetail;
   List<RincianBiayaModel> rincianBiayaDetail;
 
@@ -38,6 +41,9 @@ class DeliveryModel {
       required this.totalkoli,
       required this.totaltekirim,
       required this.persenterkirim,
+      required this.totaltoko,
+      required this.totaltokoterkirim,
+      required this.persentokoterkirim,
       required this.rincianBiayaDetail});
 
   factory DeliveryModel.fromJson(Map<String, dynamic> json) {
@@ -59,6 +65,9 @@ class DeliveryModel {
         totalkoli: json['totalKoli'],
         totaltekirim: json['totalTerkirim'],
         persenterkirim: json['persenTerkirim'],
+        totaltoko: json['totalToko'],
+        totaltokoterkirim: json['totalTokoTerkirim'],
+        persentokoterkirim: json['persenTokoTerkirim'],
         deliveryDetail: List<CheckListDetailsModel>.from(
             json['detail'].map((x) => CheckListDetailsModel.fromJson(x))),
         rincianBiayaDetail: List<RincianBiayaModel>.from(
