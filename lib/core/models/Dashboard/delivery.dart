@@ -15,10 +15,10 @@ class DeliveryModel {
   int flagApproval;
   int totalkoli;
   int totaltekirim;
-  int persenterkirim;
+  double persenterkirim;
   int totaltoko;
   int totaltokoterkirim;
-  int persentokoterkirim;
+  double persentokoterkirim;
   List<CheckListDetailsModel> deliveryDetail;
   List<RincianBiayaModel> rincianBiayaDetail;
 
