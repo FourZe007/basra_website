@@ -25,6 +25,7 @@ import 'package:stsj/core/views/report/browse_salesman.dart';
 import 'package:stsj/core/views/report/mds_sparepart_stock.dart';
 import 'package:stsj/core/views/report/service_history.dart';
 import 'package:stsj/core/views/sales_dashboard/delivery.dart';
+import 'package:stsj/core/views/sales_dashboard/delivery_approval.dart';
 import 'package:stsj/core/views/sales_dashboard/delivery_map.dart';
 import 'package:stsj/core/views/report/branch_free_stock.dart';
 import 'package:stsj/core/views/sales_dashboard/packing.dart';
@@ -232,6 +233,13 @@ class RouterSettings {
                 },
               ),
             ],
+          ),
+          GoRoute(
+            name: RoutesConstant.deliveryApproval,
+            path: 'deliveryApproval',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: DeliveryApproval());
+            },
           ),
           GoRoute(
             name: RoutesConstant.picking,

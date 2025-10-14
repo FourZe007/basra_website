@@ -15,6 +15,7 @@ class RoutesConstant {
   // ~:NEW:~
   static String delivery = 'delivery';
   static String mapDelivery = 'mapDelivery';
+  static String deliveryApproval = 'deliveryApproval';
   static String map = 'maps';
   static String carouselRouteDetails = 'carouselRouteDetails';
   static String routeDetails = 'routeDetails';

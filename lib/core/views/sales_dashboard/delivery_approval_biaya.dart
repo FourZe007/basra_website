@@ -2,41 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stsj/core/models/Dashboard/delivery.dart';
+import 'package:stsj/core/models/Dashboard/delivery_approval.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/global/api.dart';
 import 'package:stsj/global/font.dart';
 import 'package:stsj/global/function.dart';
 import 'package:stsj/global/widget/input_currency.dart';
 
-class DeliveryBiaya extends StatefulWidget {
-  const DeliveryBiaya(this.numerator, this.list, this.handle, {super.key});
+class DeliveryApprovalBiaya extends StatefulWidget {
+  const DeliveryApprovalBiaya(this.numerator, this.list, this.handle,
+      {super.key});
   final String numerator;
-  final List<DeliveryModel> list;
+  final List<DeliveryApprovalModel> list;
   final Function handle;
 
   @override
-  State<DeliveryBiaya> createState() => _MyPageState();
+  State<DeliveryApprovalBiaya> createState() => _MyPageState();
 }
 
-class _MyPageState extends State<DeliveryBiaya> {
+class _MyPageState extends State<DeliveryApprovalBiaya> {
   String companyid = '', branch = '', shop = '', employeeid = '';
   bool waitAPI = false;
+  List<DeliveryApprovalModel> list = [];
 
   DataRow rowDetail(int i) {
-    var list = widget.list[0].rincianBiayaDetail[i];
-    void setAppAmount(dynamic value) => list.appamount = value;
+    var listBiaya = list[0].detail[i];
+    void setAppAmount(dynamic value) => listBiaya.appamount = value;
 
     return DataRow(cells: [
-      DataCell(Text(list.expensename)),
+      DataCell(Text(listBiaya.expensename)),
       DataCell(
         Text(NumberFormat.currency(
                 decimalDigits: 0, symbol: 'Rp. ', locale: 'id')
-            .format(int.parse(list.amount))),
+            .format(int.parse(listBiaya.amount))),
       ),
       DataCell(WInputCurrency(
           NumberFormat.currency(decimalDigits: 0, symbol: '', locale: 'id')
-              .format(int.parse(list.appamount)),
+              .format(int.parse(listBiaya.appamount)),
           'Nominal',
           setAppAmount)),
     ]);
@@ -46,16 +48,16 @@ class _MyPageState extends State<DeliveryBiaya> {
     setState(() => waitAPI = true);
     List<Map> detail = [];
 
-    for (var x in widget.list[0].rincianBiayaDetail) {
+    for (var x in list[0].detail) {
       if (x.appamount != '0') {
         detail.add({'Line': x.line, 'Amount': x.appamount.replaceAll('.', '')});
       }
     }
 
-    var list = await GlobalAPI.fetchModifyApprovalBiaya(
+    var getInsert = await GlobalAPI.fetchModifyApprovalBiaya(
         companyid, branch, shop, widget.numerator, employeeid, detail);
 
-    if (list.isNotEmpty) {
+    if (getInsert.isNotEmpty) {
       if (!mounted) return;
       Navigator.pop(context);
       widget.handle(menuState);
@@ -75,8 +77,10 @@ class _MyPageState extends State<DeliveryBiaya> {
     shop = prefs.getString('shopId') ?? '';
     employeeid = prefs.getString('EmployeeID') ?? '';
 
-    for (var x in widget.list[0].rincianBiayaDetail) {
-      if (x.amount != '0') x.appamount = x.amount;
+    list = widget.list.where((x) => x.transno == widget.numerator).toList();
+
+    for (var x in list[0].detail) {
+      x.appamount = x.amount;
     }
 
     setState(() => waitAPI = false);
@@ -129,23 +133,17 @@ class _MyPageState extends State<DeliveryBiaya> {
                       label:
                           Text('APPROVAL', style: GlobalFont.mediumfontRBold))
                 ], rows: [
-                  for (var i = 0;
-                      i < widget.list[0].rincianBiayaDetail.length;
-                      i++)
-                    rowDetail(i)
+                  for (var i = 0; i < list[0].detail.length; i++) rowDetail(i)
                 ]),
               ),
-              menuState.getDeliveryList[0].flagApproval == 0
-                  ? ElevatedButton.icon(
-                      onPressed: () => submitApproval(menuState),
-                      label: Text('SETUJU', style: GlobalFont.mediumfontCWhite),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStatePropertyAll(Colors.green[900]),
-                      ),
-                      icon: Icon(Icons.save, color: Colors.white),
-                    )
-                  : Container()
+              ElevatedButton.icon(
+                onPressed: () => submitApproval(menuState),
+                label: Text('SETUJU', style: GlobalFont.mediumfontCWhite),
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(Colors.green[900]),
+                ),
+                icon: Icon(Icons.save, color: Colors.white),
+              )
             ]),
     );
   }

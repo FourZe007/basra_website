@@ -16,6 +16,7 @@ import 'package:stsj/core/models/Activities/weekly_report.dart';
 import 'package:stsj/core/models/AuthModel/user_access.dart';
 import 'package:stsj/core/models/Dashboard/branch_shop.dart';
 import 'package:stsj/core/models/Dashboard/delivery.dart';
+import 'package:stsj/core/models/Dashboard/delivery_approval.dart';
 import 'package:stsj/core/models/Dashboard/delivery_history.dart';
 import 'package:stsj/core/models/Dashboard/delivery_memo.dart';
 import 'package:stsj/core/models/Dashboard/driver.dart';
@@ -1108,6 +1109,78 @@ class GlobalAPI {
               rincianBiayaDetail: []));
 
           return deliveryList;
+        }
+      }
+
+      return [];
+    } catch (e) {
+      print('Error: ${e.toString()}');
+      return [];
+    }
+  }
+
+  static Future<List<DeliveryApprovalModel>> fetchDeliveryApproval(
+    String companyId,
+    String branchId,
+    String shopId,
+    String currentDate,
+  ) async {
+    var url = Uri.https(
+      'wsip.yamaha-jatim.co.id:2448',
+      'SIS/Driver/CheckListPengirimanDaily',
+    );
+
+    Map mapDeliveryApproval = {
+      "Companyid": companyId,
+      "Branch": branchId,
+      "Shop": shopId,
+      "CurrentDate": currentDate,
+    };
+
+    print('Delivery map: $mapDeliveryApproval');
+
+    List<DeliveryApprovalModel> deliveryApprovalList = [];
+
+    try {
+      final response =
+          await http.post(url, body: jsonEncode(mapDeliveryApproval), headers: {
+        'Content-Type': 'application/json',
+      }).timeout(const Duration(seconds: 60));
+
+      print(response.body);
+
+      if (response.statusCode <= 200) {
+        var jsonBranches = jsonDecode(response.body);
+        if (jsonBranches['code'] == '100' && jsonBranches['msg'] == 'Sukses') {
+          deliveryApprovalList.addAll((jsonBranches['data'] as List)
+              .map<DeliveryApprovalModel>(
+                  (list) => DeliveryApprovalModel.fromJson(list))
+              .toSet()
+              .toList());
+
+          log('Fetch data succeed');
+          return deliveryApprovalList;
+        } else {
+          log('Fetch data failed or error occured');
+          deliveryApprovalList.add(
+            DeliveryApprovalModel(
+                transno: '',
+                employeeid: '',
+                ename: '',
+                chasisno: '',
+                plateno: '',
+                starttime: '',
+                enddtime: '',
+                toko: 0,
+                koli: 0,
+                terkirim: 0,
+                amount: 0,
+                appamount: 0,
+                flagapproval: 0,
+                detail: []),
+          );
+
+          return deliveryApprovalList;
         }
       }
 
