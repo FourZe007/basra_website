@@ -154,9 +154,7 @@ class _MyPageState extends State<DeliveryApproval> {
           Expanded(
               flex: 1,
               child: Row(children: [
-                Expanded(
-                    child:
-                        Text('Total Koli', style: GlobalFont.mediumbigfontM)),
+                Expanded(child: Text('Koli', style: GlobalFont.mediumbigfontM)),
                 Expanded(
                     child: Text(list[index].koli.toString(),
                         style: GlobalFont.mediumbigfontM))
@@ -183,9 +181,7 @@ class _MyPageState extends State<DeliveryApproval> {
           Expanded(
               flex: 1,
               child: Row(children: [
-                Expanded(
-                    child:
-                        Text('Total Toko', style: GlobalFont.mediumbigfontM)),
+                Expanded(child: Text('Toko', style: GlobalFont.mediumbigfontM)),
                 Expanded(
                     child: Text('${list[index].terkirim} / ${list[index].toko}',
                         style: GlobalFont.mediumbigfontM)),
@@ -509,7 +505,7 @@ class _MyPageState extends State<DeliveryApproval> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 5,
                       mainAxisSpacing: 5,
-                      childAspectRatio: 1.5),
+                      childAspectRatio: 1.25),
                   itemCount: list.length,
                   itemBuilder: (context, index) =>
                       itemApproval(menuState, index),

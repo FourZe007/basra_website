@@ -1155,33 +1155,10 @@ class GlobalAPI {
               .toList());
 
           log('Fetch data succeed');
-          return deliveryApprovalList;
-        } else {
-          log('Fetch data failed or error occured');
-          deliveryApprovalList.add(
-            DeliveryApprovalModel(
-                transno: '',
-                employeeid: '',
-                ename: '',
-                chasisno: '',
-                plateno: '',
-                starttime: '',
-                enddtime: '',
-                toko: 0,
-                koli: 0,
-                terkirim: 0,
-                amount: 0,
-                appamount: 0,
-                flagapproval: 0,
-                waitApprove: false,
-                detail: []),
-          );
-
-          return deliveryApprovalList;
         }
       }
 
-      return [];
+      return deliveryApprovalList;
     } catch (e) {
       print('Error: ${e.toString()}');
       return [];
