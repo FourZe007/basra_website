@@ -1,7 +1,7 @@
 class DeliveryApprovalModel {
   String transno, employeeid, ename, chasisno, plateno, starttime, enddtime;
-  int toko, koli, terkirim, flagapproval;
-  double amount, appamount;
+  int totalkoli, totalterkirim, totaltoko, totaltokoterkirim, flagapproval;
+  double amount, appamount, persenterkirim, persentasetokoterkirim;
   bool waitApprove;
   List<DeliveryBiayaModel> detail;
 
@@ -13,12 +13,15 @@ class DeliveryApprovalModel {
       required this.plateno,
       required this.starttime,
       required this.enddtime,
-      required this.toko,
-      required this.koli,
-      required this.terkirim,
       required this.amount,
       required this.appamount,
       required this.flagapproval,
+      required this.totalkoli,
+      required this.totalterkirim,
+      required this.persenterkirim,
+      required this.totaltoko,
+      required this.totaltokoterkirim,
+      required this.persentasetokoterkirim,
       required this.waitApprove,
       required this.detail});
 
@@ -31,12 +34,15 @@ class DeliveryApprovalModel {
       plateno: json['plateNo'],
       starttime: json['startTime'],
       enddtime: json['endTime'],
-      toko: json['toko'],
-      koli: json['koli'],
-      terkirim: json['terkirim'],
       amount: json['amount'],
       appamount: json['appAmount'],
       flagapproval: json['flagApproval'],
+      totalkoli: json['totalKoli'],
+      totalterkirim: json['totalTerkirim'],
+      persenterkirim: json['persenTerkirim'],
+      totaltoko: json['totalToko'],
+      totaltokoterkirim: json['totalTokoTerkirim'],
+      persentasetokoterkirim: json['persenTokoTerkirim'],
       waitApprove: false,
       detail: List<DeliveryBiayaModel>.from(
           json['detail'].map((x) => DeliveryBiayaModel.fromJson(x))),

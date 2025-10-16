@@ -123,9 +123,7 @@ class _MyPageState extends State<DeliveryApproval> {
           Expanded(
               flex: 1,
               child: Text('Kedatangan', style: GlobalFont.bigfontMBold)),
-          Expanded(
-              flex: 1,
-              child: Text('Informasi Lain', style: GlobalFont.bigfontMBold))
+          Expanded(flex: 1, child: SizedBox()),
         ]),
         Row(children: [
           Expanded(
@@ -151,14 +149,7 @@ class _MyPageState extends State<DeliveryApproval> {
               flex: 1,
               child: Text('Pukul ${list[index].enddtime}',
                   style: GlobalFont.mediumbigfontM)),
-          Expanded(
-              flex: 1,
-              child: Row(children: [
-                Expanded(child: Text('Koli', style: GlobalFont.mediumbigfontM)),
-                Expanded(
-                    child: Text(list[index].koli.toString(),
-                        style: GlobalFont.mediumbigfontM))
-              ])),
+          Expanded(flex: 1, child: SizedBox())
         ]),
         Row(children: [
           Expanded(
@@ -178,49 +169,70 @@ class _MyPageState extends State<DeliveryApproval> {
               )),
           Expanded(flex: 1, child: Text('', style: GlobalFont.mediumbigfontM)),
           Expanded(flex: 1, child: Text('', style: GlobalFont.mediumbigfontM)),
-          Expanded(
-              flex: 1,
-              child: Row(children: [
-                Expanded(child: Text('Toko', style: GlobalFont.mediumbigfontM)),
-                Expanded(
-                    child: Text('${list[index].terkirim} / ${list[index].toko}',
-                        style: GlobalFont.mediumbigfontM)),
-              ])),
+          Expanded(flex: 1, child: SizedBox()),
         ]),
         SizedBox(height: 10),
         Row(children: [
           Expanded(
             flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Text('', style: GlobalFont.bigfontMBold),
-            ),
+            child: Stack(alignment: Alignment.center, children: [
+              Container(
+                height: 30,
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: LinearProgressIndicator(
+                  backgroundColor: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10),
+                  value: list[0].persenterkirim / 100,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue[900]!),
+                ),
+              ),
+              Text(
+                  'Total Koli ${list[0].totalterkirim} / ${list[0].totalterkirim} (${list[0].persenterkirim} %)',
+                  style: GlobalFont.mediumbigfontMWhiteBold),
+            ]),
           ),
-          Expanded(flex: 1, child: Text('', style: GlobalFont.bigfontMBold)),
           Expanded(
               flex: 1,
               child: Text('Total Pengajuan', style: GlobalFont.bigfontMBold)),
           Expanded(
               flex: 1,
-              child: Text('Total Approval', style: GlobalFont.bigfontMBold))
+              child: Text('Total Approval', style: GlobalFont.bigfontMBold)),
+          Expanded(flex: 1, child: Text('', style: GlobalFont.bigfontMBold)),
         ]),
         Row(children: [
-          Expanded(flex: 2, child: SizedBox()),
-          Expanded(flex: 1, child: Text('', style: GlobalFont.mediumbigfontM)),
+          Expanded(
+            flex: 2,
+            child: Stack(alignment: Alignment.center, children: [
+              Container(
+                height: 30,
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: LinearProgressIndicator(
+                  backgroundColor: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10),
+                  value: list[0].persenterkirim / 100,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red[900]!),
+                ),
+              ),
+              Text(
+                  'Total Toko ${list[0].totaltokoterkirim} / ${list[0].totaltoko} (${list[0].persentasetokoterkirim} %)',
+                  style: GlobalFont.mediumbigfontMWhiteBold),
+            ]),
+          ),
           Expanded(
               flex: 1,
               child: Text(
                   NumberFormat.currency(
                           decimalDigits: 0, symbol: 'Rp. ', locale: 'id')
                       .format(list[index].amount),
-                  style: GlobalFont.mediumbigfontM)),
+                  style: GlobalFont.bigfontMBold)),
           Expanded(
               flex: 1,
               child: Text(
                   NumberFormat.currency(
                           decimalDigits: 0, symbol: 'Rp. ', locale: 'id')
                       .format(list[index].appamount),
-                  style: GlobalFont.mediumbigfontM)),
+                  style: GlobalFont.bigfontMBold)),
+          Expanded(flex: 1, child: Text('', style: GlobalFont.mediumbigfontM)),
         ]),
         Padding(
           padding: const EdgeInsets.all(10),
@@ -229,28 +241,29 @@ class _MyPageState extends State<DeliveryApproval> {
               color: Colors.black,
               borderRadius: BorderRadius.circular(0),
             ),
-            headingRowColor: WidgetStatePropertyAll(Colors.blue[900]),
-            dataRowColor: WidgetStatePropertyAll(Colors.grey[200]),
+            columnSpacing: 25,
             headingRowHeight: 25,
+            headingRowColor: WidgetStatePropertyAll(Colors.blue[900]),
             dataRowMinHeight: 25,
             dataRowMaxHeight: 30,
+            dataRowColor: WidgetStatePropertyAll(Colors.grey[200]),
             columns: [
               DataColumn(
                 columnWidth: FlexColumnWidth(0.5),
                 label: Text('NO', style: GlobalFont.mediumbigfontRBoldWhite),
               ),
               DataColumn(
-                columnWidth: FlexColumnWidth(2.5),
+                columnWidth: FlexColumnWidth(2),
                 label: Text('JENIS BIAYA',
                     style: GlobalFont.mediumbigfontRBoldWhite),
               ),
               DataColumn(
-                columnWidth: FlexColumnWidth(1),
+                columnWidth: FlexColumnWidth(1.5),
                 label: Text('PENGAJUAN',
                     style: GlobalFont.mediumbigfontRBoldWhite),
               ),
               DataColumn(
-                  columnWidth: FlexColumnWidth(1),
+                  columnWidth: FlexColumnWidth(1.5),
                   label: Text('APPROVAL',
                       style: GlobalFont.mediumbigfontRBoldWhite))
             ],
