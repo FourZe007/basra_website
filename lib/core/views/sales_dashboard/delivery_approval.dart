@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stsj/alokasi-bm/widget/w_tombol_panjang_ikon.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/helpers/format.dart';
 import 'package:stsj/core/models/Dashboard/delivery_approval.dart';
 import 'package:stsj/core/providers/Provider.dart';
-import 'package:stsj/core/views/sales_dashboard/delivery_approval_biaya.dart';
 import 'package:stsj/global/api.dart';
 import 'package:stsj/global/font.dart';
 import 'package:stsj/global/function.dart';
 import 'package:stsj/global/widget/app_bar.dart';
 import 'package:stsj/global/widget/dropdown/sis_branch_shop_dropdown.dart';
-import 'package:stsj/global/widget/open_dialog.dart';
+import 'package:stsj/global/widget/input_field/currency.dart';
 import 'package:stsj/router/router_const.dart';
 
 class DeliveryApproval extends StatefulWidget {
@@ -23,13 +21,68 @@ class DeliveryApproval extends StatefulWidget {
 }
 
 class _MyPageState extends State<DeliveryApproval> {
-  String branchshop = '', companyid = '', date = '';
+  String branchshop = '', companyid = '', date = '', employeeid = '';
   bool waitAPI = false;
   List<DeliveryApprovalModel> list = [];
 
-  Card itemApproval(int index) {
-    void submit() => wOpenDialog(context, true,
-        DeliveryApprovalBiaya(list[index].transno, list, searchDelivery));
+  Card itemApproval(MenuState menuState, int index) {
+    void submit(int index) async {
+      setState(() => list[index].waitApprove = true);
+      List<Map> detail = [];
+
+      for (var x in list[index].detail) {
+        if (x.appamount != '0') {
+          detail
+              .add({'Line': x.line, 'Amount': x.appamount.replaceAll('.', '')});
+        }
+      }
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      companyid = prefs.getString('CompanyName') ?? '';
+
+      for (var branch in menuState.getBranchShopList) {
+        if (branch.name == branchshop) {
+          menuState.branchId = branch.branchId;
+          menuState.shopId = branch.shopId;
+          break;
+        }
+      }
+
+      var getInsert = await GlobalAPI.fetchModifyApprovalBiaya(
+          companyid,
+          menuState.branchId,
+          menuState.shopId,
+          list[index].transno,
+          employeeid,
+          detail);
+
+      if (getInsert.isNotEmpty) {
+        searchDelivery(menuState);
+      } else {
+        setState(() => list[index].waitApprove = false);
+        if (!mounted) return;
+        GlobalFunction.showSnackbar(context, 'DATA GAGAL DI PROSES');
+      }
+    }
+
+    DataRow rowDetail(int i) {
+      var listBiaya = list[index].detail[i];
+      void setAppAmount(dynamic value) => listBiaya.appamount = value;
+
+      return DataRow(cells: [
+        DataCell(Text(listBiaya.line.toString())),
+        DataCell(Text(listBiaya.expensename)),
+        DataCell(
+          Text(NumberFormat.currency(
+                  decimalDigits: 0, symbol: 'Rp. ', locale: 'id')
+              .format(int.parse(listBiaya.amount))),
+        ),
+        DataCell(CurrencyInputField(
+            NumberFormat.currency(decimalDigits: 0, symbol: '', locale: 'id')
+                .format(int.parse(listBiaya.appamount.replaceAll('.', ''))),
+            setAppAmount)),
+      ]);
+    }
 
     return Card(
       color: Colors.white,
@@ -138,6 +191,7 @@ class _MyPageState extends State<DeliveryApproval> {
                         style: GlobalFont.mediumbigfontM)),
               ])),
         ]),
+        SizedBox(height: 10),
         Row(children: [
           Expanded(
             flex: 2,
@@ -146,40 +200,91 @@ class _MyPageState extends State<DeliveryApproval> {
               child: Text('', style: GlobalFont.bigfontMBold),
             ),
           ),
+          Expanded(flex: 1, child: Text('', style: GlobalFont.bigfontMBold)),
           Expanded(
               flex: 1,
-              child: Text('Pengajuan Biaya', style: GlobalFont.bigfontMBold)),
+              child: Text('Total Pengajuan', style: GlobalFont.bigfontMBold)),
           Expanded(
               flex: 1,
-              child: Text('Approval Biaya', style: GlobalFont.bigfontMBold)),
-          Expanded(flex: 1, child: Text('', style: GlobalFont.bigfontMBold))
+              child: Text('Total Approval', style: GlobalFont.bigfontMBold))
         ]),
         Row(children: [
           Expanded(flex: 2, child: SizedBox()),
+          Expanded(flex: 1, child: Text('', style: GlobalFont.mediumbigfontM)),
           Expanded(
               flex: 1,
               child: Text(
                   NumberFormat.currency(
-                          decimalDigits: 0, locale: 'id', symbol: 'Rp. ')
+                          decimalDigits: 0, symbol: 'Rp. ', locale: 'id')
                       .format(list[index].amount),
                   style: GlobalFont.mediumbigfontM)),
           Expanded(
               flex: 1,
               child: Text(
                   NumberFormat.currency(
-                          decimalDigits: 0, locale: 'id', symbol: 'Rp. ')
+                          decimalDigits: 0, symbol: 'Rp. ', locale: 'id')
                       .format(list[index].appamount),
                   style: GlobalFont.mediumbigfontM)),
+        ]),
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: DataTable(
+            border: TableBorder.all(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(0),
+            ),
+            headingRowColor: WidgetStatePropertyAll(Colors.blue[900]),
+            dataRowColor: WidgetStatePropertyAll(Colors.grey[200]),
+            headingRowHeight: 25,
+            dataRowMinHeight: 25,
+            dataRowMaxHeight: 30,
+            columns: [
+              DataColumn(
+                columnWidth: FlexColumnWidth(0.5),
+                label: Text('NO', style: GlobalFont.mediumbigfontRBoldWhite),
+              ),
+              DataColumn(
+                columnWidth: FlexColumnWidth(2.5),
+                label: Text('JENIS BIAYA',
+                    style: GlobalFont.mediumbigfontRBoldWhite),
+              ),
+              DataColumn(
+                columnWidth: FlexColumnWidth(1),
+                label: Text('PENGAJUAN',
+                    style: GlobalFont.mediumbigfontRBoldWhite),
+              ),
+              DataColumn(
+                  columnWidth: FlexColumnWidth(1),
+                  label: Text('APPROVAL',
+                      style: GlobalFont.mediumbigfontRBoldWhite))
+            ],
+            rows: [
+              for (var i = 0; i < list[index].detail.length; i++) rowDetail(i)
+            ],
+          ),
+        ),
+        Row(children: [
+          Expanded(flex: 4, child: SizedBox()),
           list[index].flagapproval == 0
               ? Expanded(
                   flex: 1,
-                  child: Row(children: [
-                    WTombolPanjangIkon('APPROVAL', Icons.approval, Colors.white,
-                        Colors.blue[900]!, submit),
-                    SizedBox(width: 10)
-                  ]))
+                  child: list[index].waitApprove
+                      ? Center(
+                          child: CircularProgressIndicator(color: Colors.black),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: ElevatedButton(
+                              onPressed: () => submit(index),
+                              style: ButtonStyle(
+                                  backgroundColor: WidgetStatePropertyAll(
+                                      Colors.green[900])),
+                              child: Text('SETUJU',
+                                  style: GlobalFont.mediumfontRWhite)),
+                        ),
+                )
               : Expanded(flex: 1, child: SizedBox()),
-        ]),
+        ])
       ]),
     );
   }
@@ -214,6 +319,7 @@ class _MyPageState extends State<DeliveryApproval> {
     } else {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       companyid = prefs.getString('CompanyName') ?? '';
+      employeeid = prefs.getString('EmployeeID') ?? '';
 
       for (var branch in menuState.getBranchShopList) {
         if (branch.name == branchshop) {
@@ -232,6 +338,12 @@ class _MyPageState extends State<DeliveryApproval> {
           menuState.branchId,
           menuState.shopId,
           date);
+
+      for (var header in list) {
+        for (var detail in header.detail) {
+          if (detail.appamount == '0') detail.appamount = detail.amount;
+        }
+      }
 
       setState(() => waitAPI = false);
     }
@@ -397,9 +509,10 @@ class _MyPageState extends State<DeliveryApproval> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 5,
                       mainAxisSpacing: 5,
-                      childAspectRatio: 3.5),
+                      childAspectRatio: 1.5),
                   itemCount: list.length,
-                  itemBuilder: (context, index) => itemApproval(index),
+                  itemBuilder: (context, index) =>
+                      itemApproval(menuState, index),
                 ),
         ),
         SizedBox(height: 10)

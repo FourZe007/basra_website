@@ -1137,8 +1137,6 @@ class GlobalAPI {
       "CurrentDate": currentDate,
     };
 
-    print('Delivery map: $mapDeliveryApproval');
-
     List<DeliveryApprovalModel> deliveryApprovalList = [];
 
     try {
@@ -1146,8 +1144,6 @@ class GlobalAPI {
           await http.post(url, body: jsonEncode(mapDeliveryApproval), headers: {
         'Content-Type': 'application/json',
       }).timeout(const Duration(seconds: 60));
-
-      print(response.body);
 
       if (response.statusCode <= 200) {
         var jsonBranches = jsonDecode(response.body);
@@ -1177,6 +1173,7 @@ class GlobalAPI {
                 amount: 0,
                 appamount: 0,
                 flagapproval: 0,
+                waitApprove: false,
                 detail: []),
           );
 
@@ -1928,6 +1925,8 @@ class GlobalAPI {
       "EmployeeID": employeeid,
       "Detail": detail
     };
+
+    print(mapModifyApprovalBiaya);
 
     List<ModelReturnResult> modifyPointResult = [];
 

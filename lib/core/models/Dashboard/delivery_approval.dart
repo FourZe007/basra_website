@@ -2,6 +2,7 @@ class DeliveryApprovalModel {
   String transno, employeeid, ename, chasisno, plateno, starttime, enddtime;
   int toko, koli, terkirim, flagapproval;
   double amount, appamount;
+  bool waitApprove;
   List<DeliveryBiayaModel> detail;
 
   DeliveryApprovalModel(
@@ -18,6 +19,7 @@ class DeliveryApprovalModel {
       required this.amount,
       required this.appamount,
       required this.flagapproval,
+      required this.waitApprove,
       required this.detail});
 
   factory DeliveryApprovalModel.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class DeliveryApprovalModel {
       amount: json['amount'],
       appamount: json['appAmount'],
       flagapproval: json['flagApproval'],
+      waitApprove: false,
       detail: List<DeliveryBiayaModel>.from(
           json['detail'].map((x) => DeliveryBiayaModel.fromJson(x))),
     );
