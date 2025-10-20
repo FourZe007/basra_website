@@ -163,6 +163,10 @@ class MenuState with ChangeNotifier {
 
   List<String> get getSubHeaderList => subHeaderList;
 
+  List<String> subHeaderAllowEditList = [];
+
+  List<String> get getsubHeaderAllowEditList => subHeaderAllowEditList;
+
   Future<void> loadSubHeader() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 

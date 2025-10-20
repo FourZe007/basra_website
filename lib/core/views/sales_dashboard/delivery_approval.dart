@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/helpers/format.dart';
+import 'package:stsj/core/models/AuthModel/user_access.dart';
 import 'package:stsj/core/models/Dashboard/delivery_approval.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/global/api.dart';
@@ -22,6 +23,7 @@ class DeliveryApproval extends StatefulWidget {
 
 class _MyPageState extends State<DeliveryApproval> {
   String branchshop = '', companyid = '', date = '', employeeid = '';
+  int allowApprove = 0;
   bool waitAPI = false;
   List<DeliveryApprovalModel> list = [];
 
@@ -272,28 +274,32 @@ class _MyPageState extends State<DeliveryApproval> {
             ],
           ),
         ),
-        Row(children: [
-          Expanded(flex: 4, child: SizedBox()),
-          list[index].flagapproval == 0
-              ? Expanded(
-                  flex: 1,
-                  child: list[index].waitApprove
-                      ? Center(
-                          child: CircularProgressIndicator(color: Colors.black),
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: ElevatedButton(
-                              onPressed: () => submit(index),
-                              style: ButtonStyle(
-                                  backgroundColor: WidgetStatePropertyAll(
-                                      Colors.green[900])),
-                              child: Text('SETUJU',
-                                  style: GlobalFont.mediumfontRWhite)),
-                        ),
-                )
-              : Expanded(flex: 1, child: SizedBox()),
-        ])
+        allowApprove == 1
+            ? Row(children: [
+                Expanded(flex: 4, child: SizedBox()),
+                list[index].flagapproval == 0
+                    ? Expanded(
+                        flex: 1,
+                        child: list[index].waitApprove
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                    color: Colors.black),
+                              )
+                            : Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: ElevatedButton(
+                                    onPressed: () => submit(index),
+                                    style: ButtonStyle(
+                                        backgroundColor: WidgetStatePropertyAll(
+                                            Colors.green[900])),
+                                    child: Text('SETUJU',
+                                        style: GlobalFont.mediumfontRWhite)),
+                              ),
+                      )
+                    : Expanded(flex: 1, child: SizedBox()),
+              ])
+            : Container()
       ]),
     );
   }
@@ -358,9 +364,22 @@ class _MyPageState extends State<DeliveryApproval> {
     }
   }
 
+  void cekPrivilege() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var list = prefs.getStringList('subheaderallowedit');
+
+    for (var x in list!) {
+      if (x == '006') {
+        allowApprove = 1;
+        break;
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    cekPrivilege();
     Provider.of<MenuState>(context, listen: false).resetDeliveryData();
     Provider.of<MenuState>(context, listen: false).loadSisBranches();
   }

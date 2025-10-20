@@ -74,7 +74,7 @@ class _HomePagesState extends State<HomePages>
           // Delivery Page is still considered as global page who can be accessed by all users
           String category = '';
           for (var userAccess in data) {
-            if (userAccess.isAllow == 1) {
+            if (userAccess.isAllowView == 1) {
               category = userAccess.category;
               break;
             }
@@ -96,7 +96,7 @@ class _HomePagesState extends State<HomePages>
           state.headerList.clear();
           // state.headerList.addAll(data.map((e) => e.category).toSet().toList());
           state.headerList.addAll(data.map((e) {
-            if (e.isAllow == 1) {
+            if (e.isAllowView == 1) {
               return e.category;
             } else {
               return '-';
@@ -110,7 +110,7 @@ class _HomePagesState extends State<HomePages>
 
           state.subHeaderList.clear();
           state.subHeaderList.addAll(data.map((e) {
-            if (e.isAllow == 1) {
+            if (e.isAllowView == 1) {
               return e.menuNumber;
             } else {
               return '-';

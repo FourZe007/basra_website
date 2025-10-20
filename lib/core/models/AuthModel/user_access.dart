@@ -6,21 +6,22 @@ class ModelUserAccess {
   String category;
   String menuNumber;
   String menuName;
-  int isAllow;
+  int isAllowView;
+  int isAllowEdit;
 
-  ModelUserAccess({
-    required this.category,
-    required this.menuNumber,
-    required this.menuName,
-    required this.isAllow,
-  });
+  ModelUserAccess(
+      {required this.category,
+      required this.menuNumber,
+      required this.menuName,
+      required this.isAllowView,
+      required this.isAllowEdit});
 
   factory ModelUserAccess.fromJson(Map<String, dynamic> json) {
     return ModelUserAccess(
-      category: json['category'],
-      menuNumber: json['menuNumber'],
-      menuName: json['menuName'],
-      isAllow: json['allowView'],
-    );
+        category: json['category'],
+        menuNumber: json['menuNumber'],
+        menuName: json['menuName'],
+        isAllowView: json['allowView'],
+        isAllowEdit: json['allowEdit']);
   }
 }
