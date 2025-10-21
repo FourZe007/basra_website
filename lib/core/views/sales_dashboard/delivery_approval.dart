@@ -189,7 +189,7 @@ class _MyPageState extends State<DeliveryApproval> {
                 ),
               ),
               Text(
-                  'Total Koli ${list[0].totalterkirim} / ${list[0].totalterkirim} (${list[0].persenterkirim} %)',
+                  'Total Koli ${list[index].totalterkirim} / ${list[index].totalterkirim} (${list[index].persenterkirim} %)',
                   style: GlobalFont.mediumbigfontMWhiteBold),
             ]),
           ),
@@ -216,7 +216,7 @@ class _MyPageState extends State<DeliveryApproval> {
                 ),
               ),
               Text(
-                  'Total Toko ${list[0].totaltokoterkirim} / ${list[0].totaltoko} (${list[0].persentasetokoterkirim} %)',
+                  'Total Toko ${list[index].totaltokoterkirim} / ${list[index].totaltoko} (${list[index].persentasetokoterkirim} %)',
                   style: GlobalFont.mediumbigfontMWhiteBold),
             ]),
           ),
