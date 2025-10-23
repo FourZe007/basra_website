@@ -33,10 +33,7 @@ class _MyPageState extends State<DeliveryApproval> {
       List<Map> detail = [];
 
       for (var x in list[index].detail) {
-        if (x.appamount != '0') {
-          detail
-              .add({'Line': x.line, 'Amount': x.appamount.replaceAll('.', '')});
-        }
+        detail.add({'Line': x.line, 'Amount': x.appamount.replaceAll('.', '')});
       }
 
       final SharedPreferences prefs = await SharedPreferences.getInstance();
