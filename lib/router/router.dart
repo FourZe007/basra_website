@@ -28,6 +28,7 @@ import 'package:stsj/core/views/sales_dashboard/delivery.dart';
 import 'package:stsj/core/views/sales_dashboard/delivery_approval.dart';
 import 'package:stsj/core/views/sales_dashboard/delivery_map.dart';
 import 'package:stsj/core/views/report/branch_free_stock.dart';
+import 'package:stsj/core/views/sales_dashboard/delivery_monthly.dart';
 import 'package:stsj/core/views/sales_dashboard/packing.dart';
 import 'package:stsj/core/views/sales_dashboard/picking.dart';
 import 'package:stsj/dashboard-fixup/pages/dashboard1_page.dart';
@@ -239,6 +240,13 @@ class RouterSettings {
             path: 'deliveryApproval',
             pageBuilder: (context, state) {
               return MaterialPage(child: DeliveryApproval());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.deliveryMpnthly,
+            path: 'deliveryMonthly',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: DeliveryMonthly());
             },
           ),
           GoRoute(

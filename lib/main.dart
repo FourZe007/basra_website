@@ -1,9 +1,9 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/router/router.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +37,11 @@ class MyApp extends StatelessWidget {
           PointerDeviceKind.mouse,
         },
       ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: const [Locale('en'), Locale('id')],
       theme: ThemeData(
           useMaterial3: true,
           iconTheme: IconThemeData(color: Colors.black),

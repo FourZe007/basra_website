@@ -82,6 +82,9 @@ dependencies:
   dotted_border: ^2.1.0
   universal_html: ^2.2.4
   percent_indicator: ^4.2.5
+  table_calendar: ^3.2.0
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:

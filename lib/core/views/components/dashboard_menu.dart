@@ -102,7 +102,7 @@ class DashboardMenuComponent extends HookWidget {
             Builder(
               builder: (context) {
                 // With User Access
-                if (state.getSubHeaderList.contains('003')) {
+                if (state.getSubHeaderList.contains('006')) {
                   return Container(
                     margin: EdgeInsets.only(right: 50.0),
                     child: Column(
@@ -114,6 +114,31 @@ class DashboardMenuComponent extends HookWidget {
                           RoutesConstant.deliveryApproval,
                         ),
                         const Text('Delivery Approval'),
+                      ],
+                    ),
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              },
+            ),
+
+            // ~:Delivery Monthly:~
+            Builder(
+              builder: (context) {
+                // With User Access
+                if (state.getSubHeaderList.contains('007')) {
+                  return Container(
+                    margin: EdgeInsets.only(right: 50.0),
+                    child: Column(
+                      children: [
+                        _buildMenuIcon(
+                          context,
+                          'assets/images/delivery_monthly.png',
+                          'Delivery Monthly',
+                          RoutesConstant.deliveryMpnthly,
+                        ),
+                        const Text('Delivery Monthly'),
                       ],
                     ),
                   );

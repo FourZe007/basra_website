@@ -149,7 +149,8 @@ class ToolsMenuComponent extends HookWidget {
                     builder: (BuildContext context) => ServiceDialogFilter(),
                   );
                 } else if (tooltip == 'Free Stock') {
-                  await Provider.of<MenuState>(context).fetchBranchFreeStock();
+                  // await Provider.of<MenuState>(context, listen: false)
+                  //     .fetchBranchFreeStock();
                 }
                 // else {
                 //   context.goNamed(route);

@@ -2165,7 +2165,7 @@ class MenuState with ChangeNotifier {
 
   void setSelectedFreeStockBranch(String value) {
     selectedFreeStockBranch = value;
-    notifyListeners();
+    //notifyListeners();
   }
 
   List<FreeStockModel> freeStockList = [];

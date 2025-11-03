@@ -22,6 +22,10 @@ class FreeStockDataSource extends DataGridSource {
             value: (index + 1).toString(),
           ),
           DataGridCell<String>(
+            columnName: 'unitID',
+            value: freeStock.unitId,
+          ),
+          DataGridCell<String>(
             columnName: 'unitName',
             value: freeStock.unitName,
           ),

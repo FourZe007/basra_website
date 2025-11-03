@@ -19,6 +19,7 @@ import 'package:stsj/core/models/Dashboard/delivery.dart';
 import 'package:stsj/core/models/Dashboard/delivery_approval.dart';
 import 'package:stsj/core/models/Dashboard/delivery_history.dart';
 import 'package:stsj/core/models/Dashboard/delivery_memo.dart';
+import 'package:stsj/core/models/Dashboard/delivery_monthly.dart';
 import 'package:stsj/core/models/Dashboard/driver.dart';
 import 'package:stsj/core/models/Dashboard/picking_packing.dart';
 import 'package:stsj/core/models/Report/absent_history.dart';
@@ -890,7 +891,7 @@ class GlobalAPI {
         'Content-Type': 'application/json',
       }).timeout(const Duration(seconds: 60));
 
-      // print(response.body);
+      print(response.body);
 
       if (response.statusCode <= 200) {
         var jsonBranches = jsonDecode(response.body);
@@ -1159,6 +1160,54 @@ class GlobalAPI {
       }
 
       return deliveryApprovalList;
+    } catch (e) {
+      print('Error: ${e.toString()}');
+      return [];
+    }
+  }
+
+  static Future<List<DeliveryMonthlyModel>> fetchDeliveryMonthly(
+    String companyId,
+    String branchId,
+    String shopId,
+    String currentmonth,
+  ) async {
+    var url = Uri.https(
+      'wsip.yamaha-jatim.co.id:2448',
+      'SIS/Driver/CheckListPengirimanMonthly',
+    );
+
+    Map mapDeliveryMonthly = {
+      "Companyid": companyId,
+      "Branch": branchId,
+      "Shop": shopId,
+      "CurrentMonth": currentmonth,
+    };
+
+    print(mapDeliveryMonthly);
+
+    List<DeliveryMonthlyModel> deliveryMonthlyList = [];
+
+    try {
+      final response =
+          await http.post(url, body: jsonEncode(mapDeliveryMonthly), headers: {
+        'Content-Type': 'application/json',
+      }).timeout(const Duration(seconds: 60));
+
+      if (response.statusCode <= 200) {
+        var jsonBranches = jsonDecode(response.body);
+        if (jsonBranches['code'] == '100' && jsonBranches['msg'] == 'Sukses') {
+          deliveryMonthlyList.addAll((jsonBranches['data'] as List)
+              .map<DeliveryMonthlyModel>(
+                  (list) => DeliveryMonthlyModel.fromJson(list))
+              .toSet()
+              .toList());
+
+          log('Fetch data succeed');
+        }
+      }
+
+      return deliveryMonthlyList;
     } catch (e) {
       print('Error: ${e.toString()}');
       return [];
