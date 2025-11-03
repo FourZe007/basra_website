@@ -71,7 +71,7 @@ class FreeStockDataSource extends DataGridSource {
           text: data.value.toString(),
         );
 
-        if (i == 4) {
+        if (i == 5) {
           return Container(
             alignment: Alignment.center,
             padding: EdgeInsets.all(8.0),
