@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:http/http.dart' as http;
 import 'package:stsj/core/models/Activities/image_dir.dart';
 import 'package:stsj/core/models/Activities/point_calculation.dart';
@@ -1215,13 +1214,11 @@ class GlobalAPI {
   }
 
   static Future<List<DeliveryHistoryModel>> fetchDeliveryHistory(
-    String token,
-    String imei,
+    String chasisno,
     String date,
   ) async {
     Map mapDeliveryHistory = {
-      "token": token,
-      "imei": imei,
+      "ChasisNo": chasisno,
       "CurrentDate": date,
     };
 
@@ -1229,7 +1226,7 @@ class GlobalAPI {
 
     var url = Uri.https(
       'wsip.yamaha-jatim.co.id:2448',
-      '/SIS/Driver/MaxTracker',
+      '/SIS/Driver/GPSTracker',
     );
 
     print(url);
@@ -1246,10 +1243,15 @@ class GlobalAPI {
 
       if (response.statusCode <= 200) {
         var jsonBranches = jsonDecode(response.body);
-        deliveryHistoryList.addAll((jsonBranches as List)
+        deliveryHistoryList.addAll((jsonBranches['data'] as List)
             .map<DeliveryHistoryModel>(
                 (list) => DeliveryHistoryModel.fromJson(list))
+            .toSet()
             .toList());
+        // deliveryHistoryList.addAll((jsonBranches as List)
+        //     .map<DeliveryHistoryModel>(
+        //         (list) => DeliveryHistoryModel.fromJson(list))
+        //     .toList());
 
         log('Fetch data succeed');
         return deliveryHistoryList;

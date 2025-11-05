@@ -483,13 +483,12 @@ class MenuState with ChangeNotifier {
     deliveryHistoryList.clear();
     deliveryHistoryList.addAll(
       await GlobalAPI.fetchDeliveryHistory(
-        'F5EM45MAZDTNEMGZWD48',
-        deliveryList[0].imeiNumber,
+        deliveryList[0].chasisNumber,
         currentDate,
       ),
     );
 
-    // print('Delivery History length: ${deliveryHistoryList.length}');
+    print('Delivery History length: ${deliveryHistoryList.length}');
 
     // deliveryHistoryLength = deliveryHistoryList.length;
     // print('Delivery History length: ${deliveryHistoryList.length}');

@@ -37,12 +37,11 @@ class _TruckLiveMapState extends State<TruckLiveMap> {
       // Fetch the latest truck and polyline data
       await state
           .fetchDeliveryChecklist(
-        prefs.getString('CompanyName')!,
-        prefs.getString('branchId')!,
-        prefs.getString('shopId')!,
-        prefs.getString('employeeId')!,
-        prefs.getString('date')!,
-      )
+              prefs.getString('CompanyName')!,
+              prefs.getString('branchId')!,
+              prefs.getString('shopId')!,
+              prefs.getString('employeeId')!,
+              prefs.getString('date')!)
           .then((list) {
         print('Delivery map length: ${list.length}');
         print('Is truck camera focus: ${state.getIsTruckCameraFocus}');
