@@ -71,11 +71,25 @@ class _MyPageState extends State<DeliveryMonthly> {
                 x.tanggal.substring(8, 10) == day.toString().substring(8, 10))
             .toList();
 
-        return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(day.toString().substring(8, 10), style: GlobalFont.bigfontMBold),
-          Text('${x[0].approve.toString()} / ${x[0].qty.toString()}',
-              style: GlobalFont.giantfontMBold)
-        ]);
+        var warnaKalendar = x[0].qty == 0
+            ? Colors.grey[600]
+            : x[0].approve < x[0].qty
+                ? Colors.red[900]
+                : Colors.green[900];
+
+        return Container(
+          color: warnaKalendar,
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(day.toString().substring(8, 10),
+                  style: GlobalFont.mediumbigfontMWhiteBold),
+            ]),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text('${x[0].approve.toString()} / ${x[0].qty.toString()}',
+                  style: GlobalFont.gigafontRBoldWhite),
+            ])
+          ]),
+        );
       }, todayBuilder: (context, day, focusedDay) {
         var x = lKalendar
             .where((x) =>
@@ -83,12 +97,29 @@ class _MyPageState extends State<DeliveryMonthly> {
                 focusedDay.toString().substring(8, 10))
             .toList();
 
-        return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(day.toString().substring(8, 10), style: GlobalFont.bigfontMBold),
-          Text('${x[0].approve.toString()} / ${x[0].qty.toString()}',
-              style: GlobalFont.giantfontMBold)
-        ]);
+        var warnaKalendar = x[0].qty == 0
+            ? Colors.grey[600]
+            : x[0].approve < x[0].qty
+                ? Colors.red[900]
+                : Colors.green[900];
+
+        return Container(
+          color: warnaKalendar,
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(day.toString().substring(8, 10),
+                  style: GlobalFont.mediumbigfontMWhiteBold),
+            ]),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text('${x[0].approve.toString()} / ${x[0].qty.toString()}',
+                  style: GlobalFont.gigafontRBoldWhite),
+            ])
+          ]),
+        );
       }),
+      onDaySelected: (selectedDay, focusedDay) {
+        print(selectedDay);
+      },
     );
   }
 
