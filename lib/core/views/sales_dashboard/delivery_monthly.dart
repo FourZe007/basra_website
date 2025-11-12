@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/helpers/format.dart';
 import 'package:stsj/core/models/Dashboard/delivery_monthly.dart';
 import 'package:stsj/core/providers/Provider.dart';
+import 'package:stsj/core/views/sales_dashboard/delivery_monthly_detail.dart';
 import 'package:stsj/global/api.dart';
 import 'package:stsj/global/font.dart';
 import 'package:stsj/global/function.dart';
@@ -22,8 +23,97 @@ class DeliveryMonthly extends StatefulWidget {
 
 class _MyPageState extends State<DeliveryMonthly> {
   String companyid = '', branchshop = '', date = '';
-  bool waitAPI = false;
+  bool isOverlayVisible = false, waitAPI = false;
   List<DeliveryMonthlyModel> lKalendar = [];
+  OverlayEntry? overlayEntry;
+
+  Widget wAdaPengiriman(DateTime day, List<DeliveryMonthlyModel> x) {
+    var warnaApprove = x[0].approve < x[0].qty ? Colors.red : Colors.green;
+    var warnaKirim = x[0].qty < x[0].totaltruck ? Colors.red : Colors.green;
+
+    return MouseRegion(
+      onHover: (event) => showOverlay(x),
+      onExit: (event) => hideOverlay(),
+      child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+        Container(
+          decoration: BoxDecoration(
+              border:
+                  BorderDirectional(bottom: BorderSide(color: Colors.black)),
+              color: Colors.grey[300]),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(day.toString().substring(8, 10),
+                style: GlobalFont.mediumbigfontMBold),
+          ]),
+        ),
+        Container(
+          decoration: BoxDecoration(
+              border:
+                  BorderDirectional(bottom: BorderSide(color: Colors.black)),
+              color: warnaApprove),
+          child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            Expanded(
+                child:
+                    Text('Total Approve', style: GlobalFont.bigfontMWhiteBold)),
+            Expanded(
+              child: Text('${x[0].approve.toString()} / ${x[0].qty.toString()}',
+                  style: GlobalFont.bigfontMWhiteBold),
+            ),
+          ]),
+        ),
+        Container(
+          decoration: BoxDecoration(
+              border:
+                  BorderDirectional(bottom: BorderSide(color: Colors.black)),
+              color: warnaKirim),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Expanded(
+                child:
+                    Text('Total Truck', style: GlobalFont.bigfontMWhiteBold)),
+            Expanded(
+              child: Text(
+                  '${x[0].qty.toString()} / ${x[0].totaltruck.toString()}',
+                  style: GlobalFont.bigfontMWhiteBold),
+            ),
+          ]),
+        ),
+        Container(
+          decoration: BoxDecoration(
+              border:
+                  BorderDirectional(bottom: BorderSide(color: Colors.black)),
+              color: Colors.grey[300]),
+          child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            Expanded(
+                child:
+                    Text('Grand Total', style: GlobalFont.mediumbigfontMBold)),
+            Expanded(
+              child: Text(
+                  NumberFormat.currency(
+                          decimalDigits: 0, locale: 'id', symbol: 'Rp. ')
+                      .format(x[0].appamount),
+                  style: GlobalFont.mediumbigfontMBold),
+            ),
+          ]),
+        )
+      ]),
+    );
+  }
+
+  Widget wTidakAdaPengiriman(DateTime day) {
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Expanded(
+        child: Container(
+          decoration: BoxDecoration(
+              border:
+                  BorderDirectional(bottom: BorderSide(color: Colors.black)),
+              color: Colors.grey[300]),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(day.toString().substring(8, 10),
+                style: GlobalFont.mediumbigfontMBold),
+          ]),
+        ),
+      ),
+    ]);
+  }
 
   TableCalendar kalendarDelivery() {
     return TableCalendar(
@@ -39,11 +129,16 @@ class _MyPageState extends State<DeliveryMonthly> {
             borderRadius: BorderRadius.circular(20), color: Colors.black),
       ),
       headerStyle: HeaderStyle(
+        headerMargin: EdgeInsets.symmetric(horizontal: 10),
+        titleTextStyle: GlobalFont.gigafontMBold,
+        rightChevronIcon: Row(children: [
+          Icon(Icons.local_shipping, color: Colors.black, size: 40),
+          SizedBox(width: 5),
+          Text('${lKalendar[0].totaltruck} Unit',
+              style: GlobalFont.giantfontMBold),
+        ]),
         formatButtonVisible: false,
         leftChevronVisible: false,
-        rightChevronVisible: false,
-        titleCentered: true,
-        titleTextStyle: GlobalFont.giantfontMBold,
       ),
       daysOfWeekHeight: MediaQuery.of(context).size.height * 0.05,
       daysOfWeekStyle: DaysOfWeekStyle(
@@ -58,7 +153,7 @@ class _MyPageState extends State<DeliveryMonthly> {
         ),
       ),
       locale: 'id',
-      rowHeight: MediaQuery.of(context).size.height * 0.1,
+      rowHeight: MediaQuery.of(context).size.height * 0.15,
       calendarBuilders: CalendarBuilders(dowBuilder: (context, day) {
         return Padding(
           padding: const EdgeInsets.all(5),
@@ -71,25 +166,11 @@ class _MyPageState extends State<DeliveryMonthly> {
                 x.tanggal.substring(8, 10) == day.toString().substring(8, 10))
             .toList();
 
-        var warnaKalendar = x[0].qty == 0
-            ? Colors.grey[600]
-            : x[0].approve < x[0].qty
-                ? Colors.red[900]
-                : Colors.green[900];
-
-        return Container(
-          color: warnaKalendar,
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(day.toString().substring(8, 10),
-                  style: GlobalFont.mediumbigfontMWhiteBold),
-            ]),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text('${x[0].approve.toString()} / ${x[0].qty.toString()}',
-                  style: GlobalFont.gigafontRBoldWhite),
-            ])
-          ]),
-        );
+        if (x[0].qty == 0) {
+          return wTidakAdaPengiriman(day);
+        } else {
+          return wAdaPengiriman(day, x);
+        }
       }, todayBuilder: (context, day, focusedDay) {
         var x = lKalendar
             .where((x) =>
@@ -97,30 +178,82 @@ class _MyPageState extends State<DeliveryMonthly> {
                 focusedDay.toString().substring(8, 10))
             .toList();
 
-        var warnaKalendar = x[0].qty == 0
-            ? Colors.grey[600]
-            : x[0].approve < x[0].qty
-                ? Colors.red[900]
-                : Colors.green[900];
-
-        return Container(
-          color: warnaKalendar,
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(day.toString().substring(8, 10),
-                  style: GlobalFont.mediumbigfontMWhiteBold),
-            ]),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text('${x[0].approve.toString()} / ${x[0].qty.toString()}',
-                  style: GlobalFont.gigafontRBoldWhite),
-            ])
-          ]),
-        );
+        if (x[0].qty == 0) {
+          return wTidakAdaPengiriman(day);
+        } else {
+          return wAdaPengiriman(day, x);
+        }
       }),
-      onDaySelected: (selectedDay, focusedDay) {
-        print(selectedDay);
+      onDaySelected: (selectedDay, focusedDay) async {
+        var x = lKalendar
+            .where((x) =>
+                x.tanggal.substring(8, 10) ==
+                selectedDay.toString().substring(8, 10))
+            .toList();
+
+        x[0].qty != 0
+            ? GlobalFunction.tampilkanDialog(context, false,
+                DeliveryMonthlyDetail(selectedDay, searchDelivery))
+            : GlobalFunction.showSnackbar(
+                context, 'Tidak Ada Pengiriman Untuk Tanggal Yang Anda Pilih');
       },
     );
+  }
+
+  void showOverlay(List<DeliveryMonthlyModel> list) {
+    if (isOverlayVisible) return;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.of(context).size.height * 0.05,
+        left: MediaQuery.of(context).size.width * 0.4,
+        right: MediaQuery.of(context).size.width * 0.05,
+        child: Material(
+          animationDuration: Duration(seconds: 1),
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+              side: BorderSide(color: Colors.black)),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.6,
+            height: MediaQuery.of(context).size.height * 0.2,
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 5,
+                childAspectRatio: 1 / .15,
+              ),
+              itemCount: list[0].detail.length,
+              padding: const EdgeInsets.all(10),
+              itemBuilder: (context, index) {
+                return Row(children: [
+                  Expanded(
+                      child: Text(list[0].detail[index].expensename,
+                          style: GlobalFont.mediumfontM)),
+                  Expanded(
+                    child: Text(
+                        NumberFormat.currency(
+                                decimalDigits: 0, locale: 'id', symbol: 'Rp. ')
+                            .format(list[0].detail[index].appamountdt),
+                        style: GlobalFont.mediumfontM),
+                  )
+                ]);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(overlayEntry!);
+    setState(() => isOverlayVisible = true);
+  }
+
+  void hideOverlay() {
+    if (!isOverlayVisible) return;
+    overlayEntry!.remove();
+    overlayEntry = null;
+    setState(() => isOverlayVisible = false);
   }
 
   Future<void> setDateByGoogle(BuildContext context, String tgl) async {
@@ -141,10 +274,10 @@ class _MyPageState extends State<DeliveryMonthly> {
 
   void setBranchShop(dynamic value) => branchshop = value;
 
-  void setDate(String value) => setState(() {
-        lKalendar = [];
-        date = value;
-      });
+  void setDate(String value) async {
+    lKalendar = [];
+    setState(() => date = value);
+  }
 
   void searchDelivery(MenuState state) async {
     if (branchshop.isEmpty) {
@@ -327,13 +460,12 @@ class _MyPageState extends State<DeliveryMonthly> {
             ),
           ),
         ]),
-        SizedBox(height: 15),
         Expanded(
             child: waitAPI
                 ? Center(child: CircularProgressIndicator(color: Colors.black))
                 : lKalendar.isEmpty
                     ? Container()
-                    : kalendarDelivery())
+                    : SingleChildScrollView(child: kalendarDelivery()))
       ]),
     );
   }

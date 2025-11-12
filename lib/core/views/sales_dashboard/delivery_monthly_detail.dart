@@ -2,31 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stsj/core/cleanArc/dashboard_service/helpers/format.dart';
 import 'package:stsj/core/models/Dashboard/delivery_approval.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/global/api.dart';
 import 'package:stsj/global/font.dart';
 import 'package:stsj/global/function.dart';
-import 'package:stsj/global/widget/app_bar.dart';
-import 'package:stsj/global/widget/dropdown/sis_branch_shop_dropdown.dart';
 import 'package:stsj/global/widget/input_field/currency.dart';
-import 'package:stsj/router/router_const.dart';
 
-class DeliveryApproval extends StatefulWidget {
-  const DeliveryApproval({super.key});
+class DeliveryMonthlyDetail extends StatefulWidget {
+  const DeliveryMonthlyDetail(this.tanggal, this.refreshKalendar, {super.key});
+  final DateTime tanggal;
+  final Function refreshKalendar;
 
   @override
-  State<DeliveryApproval> createState() => _MyPageState();
+  State<DeliveryMonthlyDetail> createState() => _MyPageState();
 }
 
-class _MyPageState extends State<DeliveryApproval> {
-  String branchshop = '', companyid = '', date = '', employeeid = '';
-  int allowApprove = 0;
+class _MyPageState extends State<DeliveryMonthlyDetail> {
+  int allowApprove = 0, adaApprove = 0;
   bool waitAPI = false;
   List<DeliveryApprovalModel> list = [];
 
-  Card itemApproval(MenuState menuState, int index) {
+  Card itemApproval(int index) {
     void submit(int index) async {
       setState(() => list[index].waitApprove = true);
       List<Map> detail = [];
@@ -36,30 +33,22 @@ class _MyPageState extends State<DeliveryApproval> {
       }
 
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      companyid = prefs.getString('CompanyName') ?? '';
-
-      for (var branch in menuState.getBranchShopList) {
-        if (branch.name == branchshop) {
-          menuState.branchId = branch.branchId;
-          menuState.shopId = branch.shopId;
-          break;
-        }
-      }
 
       var getInsert = await GlobalAPI.fetchModifyApprovalBiaya(
-          companyid,
-          menuState.branchId,
-          menuState.shopId,
+          prefs.getString('CompanyName') ?? '',
+          prefs.getString('branchId') ?? '',
+          prefs.getString('shopId') ?? '',
           list[index].transno,
-          employeeid,
+          prefs.getString('EmployeeID') ?? '',
           detail);
 
-      if (getInsert.isNotEmpty) {
-        searchDelivery(menuState);
-      } else {
+      if (getInsert.isEmpty) {
         setState(() => list[index].waitApprove = false);
         if (!mounted) return;
         GlobalFunction.showSnackbar(context, 'DATA GAGAL DI PROSES');
+      } else {
+        setState(() => list[index].waitApprove = false);
+        getData();
       }
     }
 
@@ -84,7 +73,7 @@ class _MyPageState extends State<DeliveryApproval> {
 
     return Card(
       color: Colors.white,
-      margin: EdgeInsets.all(5),
+      margin: EdgeInsets.all(10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Column(children: [
         Row(children: [
@@ -300,64 +289,24 @@ class _MyPageState extends State<DeliveryApproval> {
     );
   }
 
-  void setDate(String value) => setState(() => date = value);
-  void setBranchShop(String value) => branchshop = value;
-
-  Future<void> setDateByGoogle(BuildContext context, String tgl) async {
-    tgl = tgl == '' ? DateTime.now().toString().substring(0, 10) : tgl;
-
-    DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: tgl == '' ? DateTime.now() : DateTime.parse(tgl),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(DateTime.now().year + 1, 1, 0),
-    );
-
-    if (picked != null && picked != DateTime.parse(tgl)) {
-      tgl = picked.toString().substring(0, 10);
-      setDate(tgl);
-    }
-  }
-
-  void searchDelivery(MenuState menuState) async {
-    setState(() => waitAPI = true);
+  void getData() async {
     list = [];
-    if (date == '') setDate(DateTime.now().toString().substring(0, 10));
+    setState(() => waitAPI = true);
 
-    if (branchshop.isEmpty) {
-      GlobalFunction.showSnackbar(context, 'Nama Cabang Wajib Di Pilih');
-      setState(() => waitAPI = false);
-    } else {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      companyid = prefs.getString('CompanyName') ?? '';
-      employeeid = prefs.getString('EmployeeID') ?? '';
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    list = await GlobalAPI.fetchDeliveryApproval(
+        prefs.getString('CompanyName') ?? '',
+        prefs.getString('branchId') ?? '',
+        prefs.getString('shopId') ?? '',
+        widget.tanggal.toString().substring(0, 10));
 
-      for (var branch in menuState.getBranchShopList) {
-        if (branch.name == branchshop) {
-          menuState.branchId = branch.branchId;
-          menuState.shopId = branch.shopId;
-          break;
-        }
+    for (var header in list) {
+      for (var detail in header.detail) {
+        if (detail.appamount == '0') detail.appamount = detail.amount;
       }
-
-      await prefs.setString('branchId', menuState.getBranchId);
-      await prefs.setString('shopId', menuState.getShopId);
-      await prefs.setString('date', date);
-
-      list = await GlobalAPI.fetchDeliveryApproval(
-          prefs.getString('CompanyName') ?? '',
-          menuState.branchId,
-          menuState.shopId,
-          date);
-
-      for (var header in list) {
-        for (var detail in header.detail) {
-          if (detail.appamount == '0') detail.appamount = detail.amount;
-        }
-      }
-
-      setState(() => waitAPI = false);
     }
+
+    setState(() => waitAPI = false);
   }
 
   void cekPrivilege() async {
@@ -376,171 +325,55 @@ class _MyPageState extends State<DeliveryApproval> {
   void initState() {
     super.initState();
     cekPrivilege();
-    Provider.of<MenuState>(context, listen: false).resetDeliveryData();
-    Provider.of<MenuState>(context, listen: false).loadSisBranches();
+    getData();
   }
 
   @override
   Widget build(BuildContext context) {
     final menuState = Provider.of<MenuState>(context);
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
-        child: CustomAppBar(goBack: RoutesConstant.menu),
-      ),
-      body: Column(children: [
-        SizedBox(height: 15),
-        Row(children: [
-          SizedBox(width: 10),
-          InkWell(
-            onTap: null,
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.05,
-              decoration: BoxDecoration(
-                  color: Colors.grey[400],
-                  borderRadius: BorderRadius.circular(15.0)),
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(Icons.filter_alt_rounded,
-                        size: 25.0, color: Colors.black),
-                    Text('Filter', style: GlobalFont.mediumgiantfontR)
-                  ]),
-            ),
-          ),
-          SizedBox(width: 10),
+    return Column(children: [
+      Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+            color: Colors.blue[900]!),
+        padding: EdgeInsets.all(10),
+        child: Row(children: [
           Expanded(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  ValueListenableBuilder<List<String>>(
-                    valueListenable: menuState.getBranchNameListNotifier,
-                    builder: (context, value, _) {
-                      if (value.isEmpty) {
-                        return AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          width: MediaQuery.of(context).size.width * 0.15,
-                          height: MediaQuery.of(context).size.height * 0.05,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.01,
-                            vertical: MediaQuery.of(context).size.height * 0.01,
-                          ),
-                          child: SisBranchShopDropdown(
-                            listData: const [],
-                            inputan: '',
-                            hint: 'Cabang',
-                            handle: () {},
-                            disable: true,
-                            isDriver: true,
-                          ),
-                        );
-                      } else {
-                        return AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          width: MediaQuery.of(context).size.width * 0.15,
-                          height: MediaQuery.of(context).size.height * 0.05,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[400],
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.01,
-                            vertical: MediaQuery.of(context).size.height * 0.01,
-                          ),
-                          child: SisBranchShopDropdown(
-                            listData: value,
-                            inputan: branchshop,
-                            hint: 'Cabang',
-                            handle: setBranchShop,
-                            disable: false,
-                            isDriver: true,
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                  SizedBox(width: 10.0),
-                  InkWell(
-                    onTap: () async {
-                      await setDateByGoogle(context, date);
-                    },
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[400],
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(Icons.date_range_rounded),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.003,
-                            ),
-                            Text(
-                              date == ''
-                                  ? Format.tanggalFormat(DateTime.now()
-                                      .toString()
-                                      .substring(0, 10))
-                                  : Format.tanggalFormat(date),
-                              style: GlobalFont.mediumgiantfontR,
-                            )
-                          ]),
-                    ),
-                  ),
-                  SizedBox(width: 10.0),
-                  InkWell(
-                    onTap: () => searchDelivery(menuState),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[400],
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
-                      child: const Icon(
-                        Icons.search_rounded,
-                        size: 25.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            flex: 7,
+            child: Row(children: [
+              Text(DateFormat('dd-MMMM-yyyy').format(widget.tanggal),
+                  style: GlobalFont.gigafontRBoldWhite)
+            ]),
           ),
+          Expanded(
+            flex: 1,
+            child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              IconButton(
+                  onPressed: () {
+                    if (adaApprove == 1) widget.refreshKalendar(menuState);
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.cancel, color: Colors.red, size: 40)),
+            ]),
+          )
         ]),
-        SizedBox(height: 10),
-        Expanded(
-          child: waitAPI
-              ? Center(child: CircularProgressIndicator(color: Colors.black))
-              : GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 5,
-                      childAspectRatio: 1.25),
-                  itemCount: list.length,
-                  itemBuilder: (context, index) =>
-                      itemApproval(menuState, index),
-                ),
-        ),
-        SizedBox(height: 10)
-      ]),
-    );
+      ),
+      SizedBox(height: 10),
+      Expanded(
+        child: waitAPI
+            ? Center(child: CircularProgressIndicator(color: Colors.black))
+            : GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 5,
+                    childAspectRatio: 1.25),
+                itemCount: list.length,
+                itemBuilder: (context, index) => itemApproval(index),
+              ),
+      ),
+      SizedBox(height: 10)
+    ]);
   }
 }

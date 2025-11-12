@@ -29,6 +29,7 @@ import 'package:stsj/core/models/Dashboard/delivery.dart';
 import 'package:stsj/core/models/Dashboard/delivery_approval.dart';
 import 'package:stsj/core/models/Dashboard/delivery_memo.dart';
 import 'package:stsj/core/models/Dashboard/delivery_history.dart';
+import 'package:stsj/core/models/Dashboard/delivery_monthly.dart';
 import 'package:stsj/core/models/Dashboard/driver.dart';
 import 'package:stsj/core/models/Dashboard/picking_packing.dart';
 import 'package:stsj/core/models/Report/absent_history.dart';

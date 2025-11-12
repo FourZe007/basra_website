@@ -16,7 +16,7 @@ class RoutesConstant {
   static String delivery = 'delivery';
   static String mapDelivery = 'mapDelivery';
   static String deliveryApproval = 'deliveryApproval';
-  static String deliveryMpnthly = 'deliveryMonthly';
+  static String deliveryMonthly = 'deliveryMonthly';
   static String map = 'maps';
   static String carouselRouteDetails = 'carouselRouteDetails';
   static String routeDetails = 'routeDetails';

@@ -136,7 +136,7 @@ class DashboardMenuComponent extends HookWidget {
                           context,
                           'assets/images/delivery_monthly.png',
                           'Delivery Monthly',
-                          RoutesConstant.deliveryMpnthly,
+                          RoutesConstant.deliveryMonthly,
                         ),
                         const Text('Delivery Monthly'),
                       ],
