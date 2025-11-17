@@ -157,11 +157,14 @@ class _MyPageState extends State<DeliveryMonthly> {
       locale: 'id',
       rowHeight: MediaQuery.of(context).size.height * 0.15,
       calendarBuilders: CalendarBuilders(dowBuilder: (context, day) {
-        return Padding(
-          padding: const EdgeInsets.all(5),
-          child: Text(DateFormat('EEEE', 'id').format(day),
-              textAlign: TextAlign.center, style: GlobalFont.bigfontMWhiteBold),
-        );
+        return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: Text(DateFormat('EEEE', 'id').format(day),
+                textAlign: TextAlign.center,
+                style: GlobalFont.bigfontMWhiteBold),
+          )
+        ]);
       }, defaultBuilder: (context, day, focusedDay) {
         var x = lKalendar
             .where((x) =>
