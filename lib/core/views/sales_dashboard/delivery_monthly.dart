@@ -52,9 +52,11 @@ class _MyPageState extends State<DeliveryMonthly> {
               color: warnaApprove),
           child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
             Expanded(
+                flex: 3,
                 child:
                     Text('Total Approve', style: GlobalFont.bigfontMWhiteBold)),
             Expanded(
+              flex: 1,
               child: Text('${x[0].approve.toString()} / ${x[0].qty.toString()}',
                   style: GlobalFont.bigfontMWhiteBold),
             ),
@@ -67,9 +69,11 @@ class _MyPageState extends State<DeliveryMonthly> {
               color: warnaKirim),
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Expanded(
+                flex: 3,
                 child:
                     Text('Total Truck', style: GlobalFont.bigfontMWhiteBold)),
             Expanded(
+              flex: 1,
               child: Text(
                   '${x[0].qty.toString()} / ${x[0].totaltruck.toString()}',
                   style: GlobalFont.bigfontMWhiteBold),
@@ -82,16 +86,14 @@ class _MyPageState extends State<DeliveryMonthly> {
                   BorderDirectional(bottom: BorderSide(color: Colors.black)),
               color: Colors.grey[300]),
           child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-            Expanded(
-                child:
-                    Text('Grand Total', style: GlobalFont.mediumbigfontMBold)),
-            Expanded(
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Text(
                   NumberFormat.currency(
                           decimalDigits: 0, locale: 'id', symbol: 'Rp. ')
                       .format(x[0].appamount),
-                  style: GlobalFont.mediumbigfontMBold),
-            ),
+                  style: GlobalFont.bigfontMBold),
+            )
           ]),
         )
       ]),
@@ -140,7 +142,7 @@ class _MyPageState extends State<DeliveryMonthly> {
         formatButtonVisible: false,
         leftChevronVisible: false,
       ),
-      daysOfWeekHeight: MediaQuery.of(context).size.height * 0.05,
+      daysOfWeekHeight: MediaQuery.of(context).size.height * 0.1,
       daysOfWeekStyle: DaysOfWeekStyle(
         weekdayStyle: GlobalFont.bigfontMWhiteBold,
         weekendStyle: GlobalFont.bigfontMWhiteBold,
