@@ -137,10 +137,9 @@ class _BranchFreeStockPageState extends State<BranchFreeStockPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    // Provider.of<MenuState>(context, listen: false).fetchBranchFreeStock();
-    Provider.of<MenuState>(context, listen: false)
-        .setSearchTriggerNotifier(false);
+    Provider.of<MenuState>(context, listen: false).fetchBranchFreeStock();
+    // Provider.of<MenuState>(context, listen: false)
+    //     .setSearchTriggerNotifier(false);
     Provider.of<MenuState>(context, listen: false).resetFreeStockFilter();
     Provider.of<MenuState>(context, listen: false).setIsValueChanged(false);
 
@@ -440,6 +439,14 @@ class _BranchFreeStockPageState extends State<BranchFreeStockPage> {
                                   padding: EdgeInsets.all(16.0),
                                   alignment: Alignment.center,
                                   child: Text('No'),
+                                ),
+                              ),
+                              GridColumn(
+                                columnName: 'unitID',
+                                label: Container(
+                                  padding: EdgeInsets.all(16.0),
+                                  alignment: Alignment.center,
+                                  child: Text('Kode Unit'),
                                 ),
                               ),
                               GridColumn(

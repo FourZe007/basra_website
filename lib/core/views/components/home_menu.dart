@@ -199,7 +199,7 @@ class HomeMenuComponent extends HookWidget {
         // Delivery Page is still considered as global page who can be accessed by all users
         String category = '';
         for (var userAccess in access) {
-          if (userAccess.isAllow == 1) {
+          if (userAccess.isAllowView == 1) {
             category = userAccess.category;
             break;
           }
@@ -221,7 +221,7 @@ class HomeMenuComponent extends HookWidget {
         state.headerList.clear();
         // state.headerList.addAll(access.map((e) => e.category).toSet().toList());
         state.headerList.addAll(access.map((e) {
-          if (e.isAllow == 1) {
+          if (e.isAllowView == 1) {
             return e.category;
           } else {
             return '-';
@@ -235,7 +235,7 @@ class HomeMenuComponent extends HookWidget {
 
         state.subHeaderList.clear();
         state.subHeaderList.addAll(access.map((e) {
-          if (e.isAllow == 1) {
+          if (e.isAllowView == 1) {
             return e.menuNumber;
           } else {
             return '-';

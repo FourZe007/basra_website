@@ -26,8 +26,10 @@ import 'package:stsj/core/models/AuthModel/DataAuth.dart';
 import 'package:stsj/core/models/AuthModel/user_access.dart';
 import 'package:stsj/core/models/Dashboard/branch_shop.dart';
 import 'package:stsj/core/models/Dashboard/delivery.dart';
+import 'package:stsj/core/models/Dashboard/delivery_approval.dart';
 import 'package:stsj/core/models/Dashboard/delivery_memo.dart';
 import 'package:stsj/core/models/Dashboard/delivery_history.dart';
+import 'package:stsj/core/models/Dashboard/delivery_monthly.dart';
 import 'package:stsj/core/models/Dashboard/driver.dart';
 import 'package:stsj/core/models/Dashboard/picking_packing.dart';
 import 'package:stsj/core/models/Report/absent_history.dart';
@@ -161,6 +163,10 @@ class MenuState with ChangeNotifier {
   List<String> subHeaderList = [];
 
   List<String> get getSubHeaderList => subHeaderList;
+
+  List<String> subHeaderAllowEditList = [];
+
+  List<String> get getsubHeaderAllowEditList => subHeaderAllowEditList;
 
   Future<void> loadSubHeader() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -478,13 +484,12 @@ class MenuState with ChangeNotifier {
     deliveryHistoryList.clear();
     deliveryHistoryList.addAll(
       await GlobalAPI.fetchDeliveryHistory(
-        'F5EM45MAZDTNEMGZWD48',
-        deliveryList[0].imeiNumber,
+        deliveryList[0].chasisNumber,
         currentDate,
       ),
     );
 
-    // print('Delivery History length: ${deliveryHistoryList.length}');
+    print('Delivery History length: ${deliveryHistoryList.length}');
 
     // deliveryHistoryLength = deliveryHistoryList.length;
     // print('Delivery History length: ${deliveryHistoryList.length}');
@@ -2240,7 +2245,7 @@ class MenuState with ChangeNotifier {
 
   void setSelectedFreeStockBranch(String value) {
     selectedFreeStockBranch = value;
-    notifyListeners();
+    //notifyListeners();
   }
 
   List<FreeStockModel> freeStockList = [];

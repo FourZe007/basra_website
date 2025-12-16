@@ -12,44 +12,66 @@ class DeliveryModel {
   String endTime;
   String endImageThumb;
   String endKm;
+  int flagApproval;
+  int totalkoli;
+  int totaltekirim;
+  double persenterkirim;
+  int totaltoko;
+  int totaltokoterkirim;
+  double persentokoterkirim;
   List<CheckListDetailsModel> deliveryDetail;
+  List<RincianBiayaModel> rincianBiayaDetail;
 
-  DeliveryModel({
-    required this.employeeId,
-    required this.employeeName,
-    required this.chasisNumber,
-    required this.plateNumber,
-    required this.imeiNumber,
-    required this.drivingLicense,
-    required this.activityNumber,
-    required this.startTime,
-    required this.startImageThumb,
-    required this.startKm,
-    required this.endTime,
-    required this.endImageThumb,
-    required this.deliveryDetail,
-    required this.endKm,
-  });
+  DeliveryModel(
+      {required this.employeeId,
+      required this.employeeName,
+      required this.chasisNumber,
+      required this.plateNumber,
+      required this.imeiNumber,
+      required this.drivingLicense,
+      required this.activityNumber,
+      required this.startTime,
+      required this.startImageThumb,
+      required this.startKm,
+      required this.endTime,
+      required this.endImageThumb,
+      required this.deliveryDetail,
+      required this.endKm,
+      required this.flagApproval,
+      required this.totalkoli,
+      required this.totaltekirim,
+      required this.persenterkirim,
+      required this.totaltoko,
+      required this.totaltokoterkirim,
+      required this.persentokoterkirim,
+      required this.rincianBiayaDetail});
 
   factory DeliveryModel.fromJson(Map<String, dynamic> json) {
     return DeliveryModel(
-      employeeId: json['employeeID'],
-      employeeName: json['eName'],
-      chasisNumber: json['chasisNo'],
-      plateNumber: json['plateNo'],
-      imeiNumber: json['imei'],
-      drivingLicense: json['simCard'],
-      activityNumber: json['activityNo'],
-      startTime: json['startTime'],
-      startImageThumb: json['startImageThumb'],
-      startKm: json['startKm'],
-      endTime: json['endTime'],
-      endImageThumb: json['endImageThumb'],
-      endKm: json['endKm'],
-      deliveryDetail: List<CheckListDetailsModel>.from(
-        json['detail'].map((x) => CheckListDetailsModel.fromJson(x)),
-      ),
-    );
+        employeeId: json['employeeID'],
+        employeeName: json['eName'],
+        chasisNumber: json['chasisNo'],
+        plateNumber: json['plateNo'],
+        imeiNumber: json['imei'],
+        drivingLicense: json['simCard'],
+        activityNumber: json['activityNo'],
+        startTime: json['startTime'],
+        startImageThumb: json['startImageThumb'],
+        startKm: json['startKm'],
+        endTime: json['endTime'],
+        endImageThumb: json['endImageThumb'],
+        endKm: json['endKm'],
+        flagApproval: json['flagApproval'],
+        totalkoli: json['totalKoli'],
+        totaltekirim: json['totalTerkirim'],
+        persenterkirim: json['persenTerkirim'],
+        totaltoko: json['totalToko'],
+        totaltokoterkirim: json['totalTokoTerkirim'],
+        persentokoterkirim: json['persenTokoTerkirim'],
+        deliveryDetail: List<CheckListDetailsModel>.from(
+            json['detail'].map((x) => CheckListDetailsModel.fromJson(x))),
+        rincianBiayaDetail: List<RincianBiayaModel>.from(
+            json['detailE'].map((x) => RincianBiayaModel.fromJson(x))));
   }
 }
 
@@ -112,5 +134,28 @@ class CheckListDetailsModel {
       line: json['line'],
       deliveryOrder: json['urutanDelivery'],
     );
+  }
+}
+
+class RincianBiayaModel {
+  String expensename, appby, appbyname, amount, appamount;
+  int line;
+
+  RincianBiayaModel(
+      {required this.line,
+      required this.expensename,
+      required this.amount,
+      required this.appamount,
+      required this.appby,
+      required this.appbyname});
+
+  factory RincianBiayaModel.fromJson(Map<String, dynamic> json) {
+    return RincianBiayaModel(
+        line: json['line'],
+        expensename: json['expenseName'],
+        amount: json['amount'].toString(),
+        appamount: json['appAmount'].toString(),
+        appby: json['appBy'] ?? '',
+        appbyname: json['appByName'] ?? '');
   }
 }

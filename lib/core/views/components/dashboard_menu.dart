@@ -98,6 +98,56 @@ class DashboardMenuComponent extends HookWidget {
               },
             ),
 
+            // ~:Delivery Approval:~
+            Builder(
+              builder: (context) {
+                // With User Access
+                if (state.getSubHeaderList.contains('006')) {
+                  return Container(
+                    margin: EdgeInsets.only(right: 50.0),
+                    child: Column(
+                      children: [
+                        _buildMenuIcon(
+                          context,
+                          'assets/images/authorization.png',
+                          'Delivery Approval',
+                          RoutesConstant.deliveryApproval,
+                        ),
+                        const Text('Delivery Approval'),
+                      ],
+                    ),
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              },
+            ),
+
+            // ~:Delivery Monthly:~
+            Builder(
+              builder: (context) {
+                // With User Access
+                if (state.getSubHeaderList.contains('007')) {
+                  return Container(
+                    margin: EdgeInsets.only(right: 50.0),
+                    child: Column(
+                      children: [
+                        _buildMenuIcon(
+                          context,
+                          'assets/images/delivery_monthly.png',
+                          'Delivery Monthly',
+                          RoutesConstant.deliveryMonthly,
+                        ),
+                        const Text('Delivery Monthly'),
+                      ],
+                    ),
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              },
+            ),
+
             // ~:Picking PIC:~
             Builder(
               builder: (context) {

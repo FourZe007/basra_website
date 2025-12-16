@@ -78,7 +78,7 @@ class _LoginPagesState extends State<LoginPages> {
           // ~:Header Privillage Preprocessing:~
           String category = '';
           for (var userAccess in data) {
-            if (userAccess.isAllow == 1) {
+            if (userAccess.isAllowView == 1) {
               category = userAccess.category;
               break;
             }
@@ -100,7 +100,7 @@ class _LoginPagesState extends State<LoginPages> {
 
           state.headerList.clear();
           state.headerList.addAll(data.map((e) {
-            if (e.isAllow == 1) {
+            if (e.isAllowView == 1) {
               return e.category;
             } else {
               return '-';
@@ -117,7 +117,16 @@ class _LoginPagesState extends State<LoginPages> {
 
           state.subHeaderList.clear();
           state.subHeaderList.addAll(data.map((e) {
-            if (e.isAllow == 1) {
+            if (e.isAllowView == 1) {
+              return e.menuNumber;
+            } else {
+              return '-';
+            }
+          }));
+
+          state.subHeaderAllowEditList.clear();
+          state.subHeaderAllowEditList.addAll(data.map((e) {
+            if (e.isAllowEdit == 1) {
               return e.menuNumber;
             } else {
               return '-';
@@ -125,6 +134,8 @@ class _LoginPagesState extends State<LoginPages> {
           }));
 
           await prefs.setStringList('subheader', state.subHeaderList);
+          await prefs.setStringList(
+              'subheaderallowedit', state.subHeaderAllowEditList);
 
           print('~:List of Sub Header:~');
           for (var value in state.getSubHeaderList) {
@@ -185,11 +196,11 @@ class _LoginPagesState extends State<LoginPages> {
           listdatalogin[0].memo == "LOGIN BERHASIL") {
         // ~:Login succeed:~
         await DataLoginController.setIntoSharedPreferences(
-          listdatalogin[0].userID,
-          listdatalogin[0].entryLevelID,
-          listdatalogin[0].entryLevelName,
-          listdatalogin[0].dataDT[0].pt,
-        );
+            listdatalogin[0].userID,
+            listdatalogin[0].entryLevelID,
+            listdatalogin[0].entryLevelName,
+            listdatalogin[0].dataDT[0].pt,
+            listdatalogin[0].employeeid);
 
         await Auth.saveDataToSharedPreferences(listdatalogin[0].dataDT);
         state.userCompanyAccList.addAll(listdatalogin[0].dataDT);

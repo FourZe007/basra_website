@@ -1,7 +1,5 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,14 +7,15 @@ import 'package:stsj/core/cleanArc/dashboard_service/helpers/format.dart';
 import 'package:stsj/core/models/Dashboard/delivery.dart';
 import 'package:stsj/core/models/Dashboard/driver.dart';
 import 'package:stsj/core/providers/Provider.dart';
+import 'package:stsj/core/views/sales_dashboard/delivery_biaya.dart';
 import 'package:stsj/global/api.dart';
 import 'package:stsj/global/font.dart';
 import 'package:stsj/global/function.dart';
 import 'package:stsj/global/widget/app_bar.dart';
 import 'package:stsj/global/widget/dropdown/sip_delivery_driver_dropdown.dart';
-import 'package:stsj/global/widget/dropdown/sip_driver_dropdown.dart';
 import 'package:stsj/global/widget/dropdown/sis_branch_shop_dropdown.dart';
 import 'package:stsj/global/widget/card/delivery_card.dart';
+import 'package:stsj/global/widget/open_dialog.dart';
 import 'package:stsj/global/widget/text_display.dart';
 import 'package:stsj/router/router_const.dart';
 
@@ -599,8 +598,6 @@ class _DeliveryPageState extends State<DeliveryPage> {
                                   await setDateByGoogle(
                                     context,
                                     date,
-                                  ).then(
-                                    (_) => searchTriggerNotifier.value = false,
                                   );
                                 },
                                 child: Container(
@@ -751,27 +748,90 @@ class _DeliveryPageState extends State<DeliveryPage> {
                                     ],
                                   ),
                                   child: ExpansionTile(
-                                    initiallyExpanded: true,
-                                    title: Text(
-                                      'Identitas Pengemudi',
-                                      style: GlobalFont.mediumgiantfontR,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    childrenPadding: EdgeInsets.symmetric(
-                                      horizontal: 15.0,
-                                      vertical: 10.0,
-                                    ),
-                                    children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.135,
-                                        child: Row(
-                                          children: [
+                                      initiallyExpanded: true,
+                                      title: Row(children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Text('Identitas Pengemudi',
+                                              style:
+                                                  GlobalFont.mediumgiantfontR),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  height: 30,
+                                                  child:
+                                                      LinearProgressIndicator(
+                                                    backgroundColor:
+                                                        Colors.grey[300],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    value: menuState
+                                                            .getDeliveryList[0]
+                                                            .persenterkirim /
+                                                        100,
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                            Color>(Colors.blue),
+                                                  ),
+                                                ),
+                                                Text(
+                                                    'Total Koli ${menuState.getDeliveryList[0].totaltekirim} / ${menuState.getDeliveryList[0].totalkoli} (${menuState.getDeliveryList[0].persenterkirim} %)',
+                                                    style: GlobalFont
+                                                        .mediumbigfontMBold),
+                                              ]),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  height: 30,
+                                                  child:
+                                                      LinearProgressIndicator(
+                                                    backgroundColor:
+                                                        Colors.grey[300],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    value: menuState
+                                                            .getDeliveryList[0]
+                                                            .persentokoterkirim /
+                                                        100,
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                            Color>(Colors.red),
+                                                  ),
+                                                ),
+                                                Text(
+                                                    'Total Toko ${menuState.getDeliveryList[0].totaltokoterkirim} / ${menuState.getDeliveryList[0].totaltoko} (${menuState.getDeliveryList[0].persentokoterkirim} %)',
+                                                    style: GlobalFont
+                                                        .mediumbigfontMBold),
+                                              ]),
+                                        ),
+                                        Expanded(flex: 1, child: SizedBox()),
+                                      ]),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      childrenPadding: EdgeInsets.symmetric(
+                                        horizontal: 15.0,
+                                        vertical: 10.0,
+                                      ),
+                                      children: [
+                                        SizedBox(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.135,
+                                          child: Row(children: [
                                             // Data Pengemudi
                                             Expanded(
                                               child: SizedBox(
@@ -916,65 +976,138 @@ class _DeliveryPageState extends State<DeliveryPage> {
                                             // Data Kedatangan
                                             Expanded(
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Kedatangan',
-                                                    style:
-                                                        GlobalFont.bigfontRBold,
-                                                  ),
-                                                  Text(
-                                                    (menuState
-                                                            .getDeliveryList[0]
-                                                            .endTime
-                                                            .isNotEmpty)
-                                                        ? 'Pukul ${menuState.getDeliveryList[0].endTime}'
-                                                        : '-',
-                                                    style: GlobalFont.bigfontR,
-                                                  ),
-                                                  Text(
-                                                    (menuState
-                                                            .getDeliveryList[0]
-                                                            .endKm
-                                                            .isNotEmpty)
-                                                        ? '${menuState.getDeliveryList[0].endKm} (KM)'
-                                                        : '-',
-                                                    style: GlobalFont.bigfontR,
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () => GlobalFunction
-                                                        .viewImage(
-                                                      context,
-                                                      menuState,
-                                                      'END',
-                                                      menuState.getDeliveryList
-                                                              .isNotEmpty
-                                                          ? menuState
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Kedatangan',
+                                                      style: GlobalFont
+                                                          .bigfontRBold,
+                                                    ),
+                                                    Text(
+                                                      (menuState
                                                               .getDeliveryList[
                                                                   0]
-                                                              .activityNumber
-                                                          : '',
-                                                      '',
+                                                              .endTime
+                                                              .isNotEmpty)
+                                                          ? 'Pukul ${menuState.getDeliveryList[0].endTime}'
+                                                          : '-',
+                                                      style:
+                                                          GlobalFont.bigfontR,
                                                     ),
-                                                    hoverColor:
-                                                        Colors.transparent,
-                                                    focusColor:
-                                                        Colors.transparent,
-                                                    child: Text(
-                                                      'Lihat Gambar',
-                                                      style: GlobalFont
-                                                          .bigfontRBlue,
+                                                    Text(
+                                                      (menuState
+                                                              .getDeliveryList[
+                                                                  0]
+                                                              .endKm
+                                                              .isNotEmpty)
+                                                          ? '${menuState.getDeliveryList[0].endKm} (KM)'
+                                                          : '-',
+                                                      style:
+                                                          GlobalFont.bigfontR,
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
+                                                    InkWell(
+                                                      onTap: () =>
+                                                          GlobalFunction
+                                                              .viewImage(
+                                                        context,
+                                                        menuState,
+                                                        'END',
+                                                        menuState
+                                                                .getDeliveryList
+                                                                .isNotEmpty
+                                                            ? menuState
+                                                                .getDeliveryList[
+                                                                    0]
+                                                                .activityNumber
+                                                            : '',
+                                                        '',
+                                                      ),
+                                                      hoverColor:
+                                                          Colors.transparent,
+                                                      focusColor:
+                                                          Colors.transparent,
+                                                      child: Text(
+                                                        'Lihat Gambar',
+                                                        style: GlobalFont
+                                                            .bigfontRBlue,
+                                                      ),
+                                                    )
+                                                  ]),
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                            Expanded(
+                                              child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Approval Biaya',
+                                                      style: GlobalFont
+                                                          .bigfontRBold,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                            menuState
+                                                                        .getDeliveryList[
+                                                                            0]
+                                                                        .flagApproval ==
+                                                                    0
+                                                                ? Icons.info
+                                                                : Icons
+                                                                    .check_circle,
+                                                            color: menuState
+                                                                        .getDeliveryList[
+                                                                            0]
+                                                                        .flagApproval ==
+                                                                    0
+                                                                ? Colors
+                                                                    .red[900]
+                                                                : Colors.green[
+                                                                    900]),
+                                                        SizedBox(width: 5),
+                                                        Text(
+                                                            menuState
+                                                                        .getDeliveryList[
+                                                                            0]
+                                                                        .flagApproval ==
+                                                                    0
+                                                                ? 'PENDING'
+                                                                : 'SUDAH APPROVE',
+                                                            style: GlobalFont
+                                                                .bigfontR),
+                                                      ],
+                                                    ),
+                                                    Text('',
+                                                        style: GlobalFont
+                                                            .bigfontR),
+                                                    InkWell(
+                                                      onTap: () => wOpenDialog(
+                                                          context,
+                                                          true,
+                                                          DeliveryBiaya(
+                                                              menuState
+                                                                  .getDeliveryList[
+                                                                      0]
+                                                                  .activityNumber,
+                                                              menuState
+                                                                  .getDeliveryList,
+                                                              searchDelivery)),
+                                                      hoverColor:
+                                                          Colors.transparent,
+                                                      focusColor:
+                                                          Colors.transparent,
+                                                      child: Text(
+                                                        'Lihat Rincian',
+                                                        style: GlobalFont
+                                                            .bigfontRBlue,
+                                                      ),
+                                                    )
+                                                  ]),
+                                            ),
+                                          ]),
+                                        )
+                                      ]),
                                 ),
 
                                 // Devider
@@ -1161,6 +1294,80 @@ class _DeliveryPageState extends State<DeliveryPage> {
                                                       ),
                                                     ),
                                                   ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Stack(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 30,
+                                                            child:
+                                                                LinearProgressIndicator(
+                                                              backgroundColor:
+                                                                  Colors.grey[
+                                                                      300],
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20),
+                                                              value: menuState
+                                                                      .getDeliveryList[
+                                                                          0]
+                                                                      .persenterkirim /
+                                                                  100,
+                                                              valueColor:
+                                                                  AlwaysStoppedAnimation<
+                                                                          Color>(
+                                                                      Colors
+                                                                          .blue),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                              'Total Koli ${menuState.getDeliveryList[0].totaltekirim} / ${menuState.getDeliveryList[0].totalkoli} (${menuState.getDeliveryList[0].persenterkirim} %)',
+                                                              style: GlobalFont
+                                                                  .mediumbigfontMBold),
+                                                        ]),
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Stack(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 30,
+                                                            child:
+                                                                LinearProgressIndicator(
+                                                              backgroundColor:
+                                                                  Colors.grey[
+                                                                      300],
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20),
+                                                              value: menuState
+                                                                      .getDeliveryList[
+                                                                          0]
+                                                                      .persentokoterkirim /
+                                                                  100,
+                                                              valueColor:
+                                                                  AlwaysStoppedAnimation<
+                                                                          Color>(
+                                                                      Colors
+                                                                          .blue),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                              'Total Toko ${menuState.getDeliveryList[0].totaltokoterkirim} / ${menuState.getDeliveryList[0].totaltoko} (${menuState.getDeliveryList[0].persentokoterkirim} %)',
+                                                              style: GlobalFont
+                                                                  .mediumbigfontMBold),
+                                                        ]),
+                                                  ),
+                                                  Expanded(
+                                                      flex: 1,
+                                                      child: SizedBox()),
 
                                                   // Data Kendaraan
                                                   Expanded(
@@ -1337,6 +1544,72 @@ class _DeliveryPageState extends State<DeliveryPage> {
                                                         ),
                                                       ],
                                                     ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            'Approval Biaya',
+                                                            style: GlobalFont
+                                                                .bigfontRBold,
+                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              Icon(
+                                                                  menuState.getDeliveryList[0].flagApproval == 0
+                                                                      ? Icons
+                                                                          .info
+                                                                      : Icons
+                                                                          .check_circle,
+                                                                  color: menuState
+                                                                              .getDeliveryList[
+                                                                                  0]
+                                                                              .flagApproval ==
+                                                                          0
+                                                                      ? Colors.red[
+                                                                          900]
+                                                                      : Colors.green[
+                                                                          900]),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Text(
+                                                                  menuState.getDeliveryList[0].flagApproval ==
+                                                                          0
+                                                                      ? 'PENDING'
+                                                                      : 'SUDAH APPROVE',
+                                                                  style: GlobalFont
+                                                                      .bigfontR),
+                                                            ],
+                                                          ),
+                                                          Text('',
+                                                              style: GlobalFont
+                                                                  .bigfontR),
+                                                          InkWell(
+                                                            onTap: () => wOpenDialog(
+                                                                context,
+                                                                true,
+                                                                DeliveryBiaya(
+                                                                    menuState
+                                                                        .getDeliveryList[
+                                                                            0]
+                                                                        .activityNumber,
+                                                                    menuState
+                                                                        .getDeliveryList,
+                                                                    searchDelivery)),
+                                                            hoverColor: Colors
+                                                                .transparent,
+                                                            focusColor: Colors
+                                                                .transparent,
+                                                            child: Text(
+                                                              'Lihat Rincian',
+                                                              style: GlobalFont
+                                                                  .bigfontRBlue,
+                                                            ),
+                                                          )
+                                                        ]),
                                                   ),
                                                 ],
                                               ),
