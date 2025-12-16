@@ -1302,6 +1302,86 @@ class MenuState with ChangeNotifier {
     return activitiesPointList;
   }
 
+  Future<List<ModelPointsType>> fetchActivitiesPoint2(
+    String province,
+    String area,
+    String beginDate,
+    String endDate,
+  ) async {
+    // print('Province: $province');
+    // print('Area: $area');
+    // print('Begin Date: $beginDate');
+    // print('End Date: $endDate');
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    username = prefs.getString('UserID') ?? '';
+
+    await GlobalAPI.fetchActivitiesPoint(
+      username,
+      province,
+      area,
+      beginDate,
+      endDate,
+    ).then((list) {
+      List<String> dealers = [];
+      dealers.addAll(list.map((e) => e.shopName).toSet().toList());
+
+      // for (var dealer in dealers) {
+      //   print('Dealer: $dealer');
+      // }
+
+      activitiesPointList.clear();
+      for (var dealer in dealers) {
+        // print('Date: $date');
+        List<ModelPointCalculation> briefing = [];
+        briefing.addAll(
+          list.where(
+            (element) => element.actId == '00' && element.shopName == dealer,
+          ),
+        );
+        // print('Briefing length: ${briefing.length}');
+
+        List<ModelPointCalculation> visit = [];
+        visit.addAll(
+          list.where(
+            (element) => element.actId == '01' && element.shopName == dealer,
+          ),
+        );
+        // print('Visit length: ${visit.length}');
+
+        List<ModelPointCalculation> recruitment = [];
+        recruitment.addAll(
+          list.where(
+            (element) => element.actId == '02' && element.shopName == dealer,
+          ),
+        );
+        // print('Recruitment length: ${recruitment.length}');
+
+        List<ModelPointCalculation> daily = [];
+        daily.addAll(
+          list.where(
+            (element) => element.actId == '03' && element.shopName == dealer,
+          ),
+        );
+        // print('Daily length: ${daily.length}');
+
+        activitiesPointList.add(
+          ModelPointsType(
+            date: dealer,
+            morningBriefing: briefing,
+            visitMarket: visit,
+            recruitmentInterview: recruitment,
+            dailyReport: daily,
+          ),
+        );
+      }
+    });
+
+    print('Point List length: ${activitiesPointList.length}');
+
+    return activitiesPointList;
+  }
+
   // ==================================================================
   // ===================== Point Calculation ==========================
   // ==================================================================

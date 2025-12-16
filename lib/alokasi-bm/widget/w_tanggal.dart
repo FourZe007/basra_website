@@ -22,7 +22,7 @@ class _MyPageState extends State<WTanggal> {
       lastDate: DateTime(2999),
       builder: (context, child) => Theme(
           data: ThemeData.light().copyWith(
-              dialogTheme: DialogTheme(
+              dialogTheme: DialogThemeData(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
