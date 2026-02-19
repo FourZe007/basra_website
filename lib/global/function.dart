@@ -176,7 +176,7 @@ class GlobalFunction {
                   backgroundColor: Colors.blue.shade50,
                   elevation: 16,
                   child: Container(
-                    width: MediaQuery.of(context).size.width * 0.35,
+                    //width: MediaQuery.of(context).size.width * 0.35,
                     height: MediaQuery.of(context).size.height * 0.9,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -203,7 +203,7 @@ class GlobalFunction {
                             child: Image.memory(
                               base64Decode(snapshot.data!),
                               fit: BoxFit.cover,
-                              width: MediaQuery.of(context).size.width * 0.325,
+                              //width: MediaQuery.of(context).size.width * 0.325,
                             ),
                           ),
                         ),
