@@ -1,4 +1,6 @@
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:stsj/dashboard-fixup/utilities/utils.dart';
 
 class UpperCaseText extends TextInputFormatter {
   @override
@@ -57,6 +59,16 @@ class Format {
       String bln = tanggal.substring(5, 7);
       String tgl = tanggal.substring(8, 10);
       return tanggal.replaceRange(0, 10, '$tgl-$bln-$thn');
+    }
+    return '';
+  }
+
+  static String kalenderFormat(String tanggal) {
+    if (tanggal != '') {
+      String thn = tanggal.substring(0, 4);
+      String bln = tanggal.substring(5, 7);
+      String tgl = tanggal.substring(8, 10);
+      return '${DateFormat('EEEE', "id_ID").format(DateTime.parse(tanggal))}, $tgl ${listBulan[int.parse(bln) - 1]} $thn';
     }
     return '';
   }

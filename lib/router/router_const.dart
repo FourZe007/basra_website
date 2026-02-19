@@ -24,9 +24,14 @@ class RoutesConstant {
   static String routeImageView = 'routeImageView';
   static String salesActivities = 'salesActivities';
   static String managerActivities = 'managerActivities';
+  static String filterPoint = 'filterPoint';
+  static String filterPemetaan = 'filterPemetaan';
+  static String importTargetActivities = 'importTargetActivities';
+  static String targetResult = 'targetResult';
+  static String dashboardMarketing = 'dashboardMarketing';
   static String managerActivitiesInMap = 'managerActivitiesInMap';
   static String weeklyActivitiesReport = 'weeklyActivitiesReport';
-  static String activitiesPoint = 'activitiesPoint';
+  //static String activitiesPoint = 'activitiesPoint';
   static String editActivitiesPoint = 'editActivitiesPoint';
   // ~:Dashboard:~
   static String branchFreeStock = 'branchFreeStock';

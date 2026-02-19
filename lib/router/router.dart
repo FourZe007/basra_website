@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stsj/activity_point/pages/filter_page.dart';
+import 'package:stsj/activity_point/pages/import_target_dealer.dart';
+import 'package:stsj/activity_point/pages/manager_activities_2.dart';
+import 'package:stsj/activity_point/pages/point_vs_target.dart';
 import 'package:stsj/aktivitas-subdealer/pages/p_subdealer_history.dart';
 import 'package:stsj/alokasi-bm/pages/p_koreksi_alokasi_bm.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/dashboardmain.dart';
@@ -10,9 +14,6 @@ import 'package:stsj/core/cleanArc/dashboard_service/pages/dashboard02.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/pages/dashboard03.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/pages/dashboard04.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/pages/dashboard05.dart';
-import 'package:stsj/core/views/activities/activities_point.dart';
-import 'package:stsj/core/views/activities/edit_activites_point.dart';
-import 'package:stsj/core/views/activities/manager_activities.dart';
 import 'package:stsj/core/views/activities/sales_activities.dart';
 import 'package:stsj/core/views/activities/carousel_route_details.dart';
 import 'package:stsj/core/views/activities/image_preview.dart';
@@ -29,7 +30,6 @@ import 'package:stsj/core/views/sales_dashboard/delivery_approval.dart';
 import 'package:stsj/core/views/sales_dashboard/delivery_map.dart';
 import 'package:stsj/core/views/report/branch_free_stock.dart';
 import 'package:stsj/core/views/sales_dashboard/delivery_monthly.dart';
-import 'package:stsj/core/views/sales_dashboard/delivery_monthly_detail.dart';
 import 'package:stsj/core/views/sales_dashboard/packing.dart';
 import 'package:stsj/core/views/sales_dashboard/picking.dart';
 import 'package:stsj/dashboard-fixup/pages/dashboard1_page.dart';
@@ -38,8 +38,9 @@ import 'package:stsj/dashboard-fixup/pages/dashboard3_page.dart';
 import 'package:stsj/dashboard-fixup/pages/dashboard4_page.dart';
 import 'package:stsj/dashboard-fixup/pages/dashboard5_page.dart';
 import 'package:stsj/dashboard-fixup/pages/import_excel.dart';
+import 'package:stsj/dashboard_pemetaan/pages/filter_dashboard.dart';
+import 'package:stsj/dashboard_powerbi/pages/powerbi_view1.dart';
 import 'package:stsj/global/globalVar.dart';
-import 'package:stsj/global/widget/open_map.dart';
 import 'package:stsj/alokasi-bm/pages/p_import_alokasi_bm.dart';
 
 import 'package:stsj/router/not_found_page.dart';
@@ -63,8 +64,7 @@ import 'package:stsj/core/views/sales_dashboard/subpages/STUbyDP+Category_pages/
 import 'package:stsj/core/views/sales_dashboard/subpages/STUbyLeasingGroupCC/STUbyleasingGroupCC_pages.dart';
 
 class RouterSettings {
-  static Future<String?> redirect(
-      BuildContext context, GoRouterState state) async {
+  static Future<String?> redirect(BuildContext context, GoRouterState state) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (prefs.getBool("Status") == true) {
@@ -388,17 +388,69 @@ class RouterSettings {
             name: RoutesConstant.managerActivities,
             path: 'managerActivities',
             pageBuilder: (context, state) {
-              return MaterialPage(child: ManagerActivitiesPage());
+              //return MaterialPage(child: ManagerActivitiesPage());
+              return MaterialPage(child: ManagerActivities2());
             },
-            routes: [
-              GoRoute(
-                name: RoutesConstant.managerActivitiesInMap,
-                path: 'managerActivitiesInMap',
-                pageBuilder: (context, state) {
-                  return MaterialPage(child: OpenMap());
-                },
-              ),
-            ],
+            // routes: [
+            //   GoRoute(
+            //     name: RoutesConstant.managerActivitiesInMap,
+            //     path: 'managerActivitiesInMap',
+            //     pageBuilder: (context, state) {
+            //       return MaterialPage(child: OpenMap());
+            //     },
+            //   ),
+            // ],
+          ),
+          GoRoute(
+            name: RoutesConstant.filterPemetaan,
+            path: 'filterPemetaan',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: FilterDashboard());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.filterPoint,
+            path: 'filterPoint',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: FilterPage());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.targetResult,
+            path: 'targetResult',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: PointVsTarget());
+            },
+          ),
+          // GoRoute(
+          //   name: RoutesConstant.activitiesPoint,
+          //   path: 'activitiesPoint',
+          //   pageBuilder: (context, state) {
+          //     return MaterialPage(child: FilterPage());
+          //   },
+          // routes: [
+          //   GoRoute(
+          //     name: RoutesConstant.editActivitiesPoint,
+          //     path: 'editActivitiesPoint',
+          //     pageBuilder: (context, state) {
+          //       return MaterialPage(child: EditActivitiesPoint());
+          //     },
+          //   ),
+          // ],
+          //),
+          GoRoute(
+            name: RoutesConstant.importTargetActivities,
+            path: 'importTargetActivites',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: ImportTargetDealer());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.dashboardMarketing,
+            path: 'dashboardMarketing',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: PowerbiView1());
+            },
           ),
           GoRoute(
             name: RoutesConstant.weeklyActivitiesReport,
@@ -406,22 +458,6 @@ class RouterSettings {
             pageBuilder: (context, state) {
               return MaterialPage(child: WeeklyActivitiesReport());
             },
-          ),
-          GoRoute(
-            name: RoutesConstant.activitiesPoint,
-            path: 'activitiesPoint',
-            pageBuilder: (context, state) {
-              return MaterialPage(child: ActivitiesPoint());
-            },
-            routes: [
-              GoRoute(
-                name: RoutesConstant.editActivitiesPoint,
-                path: 'editActivitiesPoint',
-                pageBuilder: (context, state) {
-                  return MaterialPage(child: EditActivitiesPoint());
-                },
-              ),
-            ],
           ),
           GoRoute(
             name: RoutesConstant.importAlokasiBM,

@@ -17,7 +17,7 @@ class ButtonWidget extends StatelessWidget {
         minimumSize: const Size.fromHeight(50),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       ),
-      child: Text(txt, style: const TextStyle(fontSize: 15, color: Colors.white)),
+      child: Text(txt, style: TextStyle(fontSize: 15, color: disable ? Colors.blueGrey[300] : Colors.white)),
     );
   }
 }

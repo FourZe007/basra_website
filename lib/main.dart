@@ -37,10 +37,7 @@ class MyApp extends StatelessWidget {
           PointerDeviceKind.mouse,
         },
       ),
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
-      ],
+      localizationsDelegates: const [GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate],
       supportedLocales: const [Locale('en'), Locale('id')],
       theme: ThemeData(
           useMaterial3: true,

@@ -205,8 +205,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
       }
     }
 
-    if ((await state.fetchModifyPoint(state.modifyPoint))[0].result ==
-        'SUKSES') {
+    if ((await state.fetchModifyPoint(state.modifyPoint))[0].result == 'SUKSES') {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Data has been modified'),
@@ -264,10 +263,9 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
+        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
         child: CustomAppBar(
-          goBack: RoutesConstant.activitiesPoint,
+          goBack: RoutesConstant.menu,
         ),
       ),
       body: Form(
@@ -326,9 +324,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                   AnimatedSize(
                     duration: const Duration(milliseconds: 500),
                     reverseDuration: const Duration(milliseconds: 500),
-                    curve: editPointState.isFilterOpen
-                        ? Curves.easeInOut
-                        : Curves.easeIn,
+                    curve: editPointState.isFilterOpen ? Curves.easeInOut : Curves.easeIn,
                     child: SizedBox(
                       // Note -> used for slide in and slide out animation
                       // but it didn't work because maybe it's a web based program
@@ -344,22 +340,16 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                               if (value.getProvinceList.isEmpty) {
                                 return AnimatedContainer(
                                   duration: const Duration(milliseconds: 500),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.125,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.05,
+                                  width: MediaQuery.of(context).size.width * 0.125,
+                                  height: MediaQuery.of(context).size.height * 0.05,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: Colors.grey,
                                     borderRadius: BorderRadius.circular(15.0),
                                   ),
                                   padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        MediaQuery.of(context).size.width *
-                                            0.01,
-                                    vertical:
-                                        MediaQuery.of(context).size.height *
-                                            0.01,
+                                    horizontal: MediaQuery.of(context).size.width * 0.01,
+                                    vertical: MediaQuery.of(context).size.height * 0.01,
                                   ),
                                   child: ProvinceDropdown(
                                     listData: const [],
@@ -372,22 +362,16 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                               } else {
                                 return AnimatedContainer(
                                   duration: const Duration(milliseconds: 500),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.125,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.05,
+                                  width: MediaQuery.of(context).size.width * 0.125,
+                                  height: MediaQuery.of(context).size.height * 0.05,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: Colors.grey[400],
                                     borderRadius: BorderRadius.circular(15.0),
                                   ),
                                   padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        MediaQuery.of(context).size.width *
-                                            0.01,
-                                    vertical:
-                                        MediaQuery.of(context).size.height *
-                                            0.01,
+                                    horizontal: MediaQuery.of(context).size.width * 0.01,
+                                    vertical: MediaQuery.of(context).size.height * 0.01,
                                   ),
                                   child: ProvinceDropdown(
                                     listData: value.getProvinceList,
@@ -411,22 +395,16 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                               if (value == '') {
                                 return AnimatedContainer(
                                   duration: const Duration(milliseconds: 500),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.125,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.05,
+                                  width: MediaQuery.of(context).size.width * 0.125,
+                                  height: MediaQuery.of(context).size.height * 0.05,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: Colors.grey,
                                     borderRadius: BorderRadius.circular(15.0),
                                   ),
                                   padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        MediaQuery.of(context).size.width *
-                                            0.01,
-                                    vertical:
-                                        MediaQuery.of(context).size.height *
-                                            0.01,
+                                    horizontal: MediaQuery.of(context).size.width * 0.01,
+                                    vertical: MediaQuery.of(context).size.height * 0.01,
                                   ),
                                   child: AreaDropdown(
                                     listData: const [],
@@ -439,38 +417,23 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                               } else {
                                 return AnimatedContainer(
                                   duration: const Duration(milliseconds: 500),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.125,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.05,
+                                  width: MediaQuery.of(context).size.width * 0.125,
+                                  height: MediaQuery.of(context).size.height * 0.05,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: (editPointState.getAreaList.length >
-                                                1 &&
-                                            province != '')
-                                        ? Colors.grey[400]
-                                        : Colors.grey,
+                                    color: (editPointState.getAreaList.length > 1 && province != '') ? Colors.grey[400] : Colors.grey,
                                     borderRadius: BorderRadius.circular(15.0),
                                   ),
                                   padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        MediaQuery.of(context).size.width *
-                                            0.01,
-                                    vertical:
-                                        MediaQuery.of(context).size.height *
-                                            0.01,
+                                    horizontal: MediaQuery.of(context).size.width * 0.01,
+                                    vertical: MediaQuery.of(context).size.height * 0.01,
                                   ),
                                   child: AreaDropdown(
                                     listData: editPointState.getAreaList,
                                     inputan: area,
                                     hint: 'Wilayah',
                                     handle: setArea,
-                                    disable: (value == province &&
-                                            province != '' &&
-                                            editPointState.getAreaList.length >
-                                                1)
-                                        ? false
-                                        : true,
+                                    disable: (value == province && province != '' && editPointState.getAreaList.length > 1) ? false : true,
                                   ),
                                 );
                               }
@@ -500,20 +463,16 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                               ),
                               padding: EdgeInsets.symmetric(horizontal: 15.0),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Icon(Icons.date_range_rounded),
                                   SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.003,
+                                    width: MediaQuery.of(context).size.width * 0.003,
                                   ),
                                   Text(
                                     date == ''
                                         ? Format.tanggalFormat(
-                                            DateTime.now()
-                                                .toString()
-                                                .substring(0, 10),
+                                            DateTime.now().toString().substring(0, 10),
                                           )
                                         : Format.tanggalFormat(date),
                                     style: GlobalFont.mediumgiantfontR,
@@ -535,10 +494,8 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                               );
 
                               filterDataNotifier.value.clear();
-                              filterDataNotifier.value
-                                  .add(editPointState.provinceNotifier.value);
-                              filterDataNotifier.value
-                                  .add(editPointState.areaNotifier.value);
+                              filterDataNotifier.value.add(editPointState.provinceNotifier.value);
+                              filterDataNotifier.value.add(editPointState.areaNotifier.value);
                               filterDataNotifier.value.add(dateNotifier.value);
                             },
                             child: Container(
@@ -679,8 +636,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                           date,
                         ),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
                             return Container(
                               width: MediaQuery.of(context).size.width,
                               alignment: Alignment.center,
@@ -689,19 +645,15 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.02,
-                                vertical:
-                                    MediaQuery.of(context).size.height * 0.02,
+                                horizontal: MediaQuery.of(context).size.width * 0.02,
+                                vertical: MediaQuery.of(context).size.height * 0.02,
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  CircularProgressIndicator(
-                                      color: Colors.black),
+                                  CircularProgressIndicator(color: Colors.black),
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.01,
+                                    height: MediaQuery.of(context).size.height * 0.01,
                                   ),
                                   Text(
                                     'Loading...',
@@ -723,10 +675,8 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.02,
-                                vertical:
-                                    MediaQuery.of(context).size.height * 0.02,
+                                horizontal: MediaQuery.of(context).size.width * 0.02,
+                                vertical: MediaQuery.of(context).size.height * 0.02,
                               ),
                               child: Text('Data not available'),
                             );
@@ -738,10 +688,8 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.02,
-                                vertical:
-                                    MediaQuery.of(context).size.height * 0.02,
+                                horizontal: MediaQuery.of(context).size.width * 0.02,
+                                vertical: MediaQuery.of(context).size.height * 0.02,
                               ),
                               child: ActivitiesPointTable(isModify: true),
                             );
@@ -781,12 +729,10 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(
-          (deviceWidth <= 450)
-              ? MediaQuery.of(context).size.height * 0.055
-              : MediaQuery.of(context).size.height * 0.085,
+          (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.055 : MediaQuery.of(context).size.height * 0.085,
         ),
         child: CustomAppBar(
-          goBack: RoutesConstant.activitiesPoint,
+          goBack: RoutesConstant.menu,
           imageSize: 35,
           profileRadius: 15,
           returnButtonSize: 20,
@@ -812,9 +758,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
               // ==================================================================
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: (deviceWidth <= 450)
-                    ? MediaQuery.of(context).size.height * 0.0425
-                    : MediaQuery.of(context).size.height * 0.065,
+                height: (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : MediaQuery.of(context).size.height * 0.065,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
@@ -822,9 +766,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                     InkWell(
                       onTap: null,
                       child: Container(
-                        height: (deviceWidth <= 450)
-                            ? MediaQuery.of(context).size.height * 0.0425
-                            : MediaQuery.of(context).size.height * 0.065,
+                        height: (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : MediaQuery.of(context).size.height * 0.065,
                         decoration: BoxDecoration(
                           color: Colors.grey[400],
                           borderRadius: BorderRadius.circular(15.0),
@@ -854,9 +796,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                     AnimatedSize(
                       duration: const Duration(milliseconds: 500),
                       reverseDuration: const Duration(milliseconds: 500),
-                      curve: editPointState.isFilterOpen
-                          ? Curves.easeInOut
-                          : Curves.easeIn,
+                      curve: editPointState.isFilterOpen ? Curves.easeInOut : Curves.easeIn,
                       child: SizedBox(
                         // Note -> used for slide in and slide out animation
                         // but it didn't work because maybe it's a web based program
@@ -873,28 +813,18 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 if (value.getProvinceList.isEmpty) {
                                   return AnimatedContainer(
                                     duration: const Duration(milliseconds: 500),
-                                    width: (deviceWidth <= 450)
-                                        ? MediaQuery.of(context).size.width *
-                                            0.3
-                                        : MediaQuery.of(context).size.width *
-                                            0.16,
+                                    width: (deviceWidth <= 450) ? MediaQuery.of(context).size.width * 0.3 : MediaQuery.of(context).size.width * 0.16,
                                     height: (deviceWidth <= 450)
-                                        ? MediaQuery.of(context).size.height *
-                                            0.0425
-                                        : MediaQuery.of(context).size.height *
-                                            0.065,
+                                        ? MediaQuery.of(context).size.height * 0.0425
+                                        : MediaQuery.of(context).size.height * 0.065,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       color: Colors.grey,
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
                                     padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          MediaQuery.of(context).size.width *
-                                              0.01,
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
-                                              0.01,
+                                      horizontal: MediaQuery.of(context).size.width * 0.01,
+                                      vertical: MediaQuery.of(context).size.height * 0.01,
                                     ),
                                     child: ProvinceDropdown(
                                       listData: const [],
@@ -908,28 +838,18 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 } else {
                                   return AnimatedContainer(
                                     duration: const Duration(milliseconds: 500),
-                                    width: (deviceWidth <= 450)
-                                        ? MediaQuery.of(context).size.width *
-                                            0.3
-                                        : MediaQuery.of(context).size.width *
-                                            0.16,
+                                    width: (deviceWidth <= 450) ? MediaQuery.of(context).size.width * 0.3 : MediaQuery.of(context).size.width * 0.16,
                                     height: (deviceWidth <= 450)
-                                        ? MediaQuery.of(context).size.height *
-                                            0.0425
-                                        : MediaQuery.of(context).size.height *
-                                            0.065,
+                                        ? MediaQuery.of(context).size.height * 0.0425
+                                        : MediaQuery.of(context).size.height * 0.065,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       color: Colors.grey[400],
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
                                     padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          MediaQuery.of(context).size.width *
-                                              0.01,
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
-                                              0.01,
+                                      horizontal: MediaQuery.of(context).size.width * 0.01,
+                                      vertical: MediaQuery.of(context).size.height * 0.01,
                                     ),
                                     child: ProvinceDropdown(
                                       listData: value.getProvinceList,
@@ -950,28 +870,18 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 if (value == '') {
                                   return AnimatedContainer(
                                     duration: const Duration(milliseconds: 500),
-                                    width: (deviceWidth <= 450)
-                                        ? MediaQuery.of(context).size.width *
-                                            0.3
-                                        : MediaQuery.of(context).size.width *
-                                            0.16,
+                                    width: (deviceWidth <= 450) ? MediaQuery.of(context).size.width * 0.3 : MediaQuery.of(context).size.width * 0.16,
                                     height: (deviceWidth <= 450)
-                                        ? MediaQuery.of(context).size.height *
-                                            0.0425
-                                        : MediaQuery.of(context).size.height *
-                                            0.065,
+                                        ? MediaQuery.of(context).size.height * 0.0425
+                                        : MediaQuery.of(context).size.height * 0.065,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       color: Colors.grey,
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
                                     padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          MediaQuery.of(context).size.width *
-                                              0.01,
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
-                                              0.01,
+                                      horizontal: MediaQuery.of(context).size.width * 0.01,
+                                      vertical: MediaQuery.of(context).size.height * 0.01,
                                     ),
                                     child: AreaDropdown(
                                       listData: const [],
@@ -985,46 +895,25 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 } else {
                                   return AnimatedContainer(
                                     duration: const Duration(milliseconds: 500),
-                                    width: (deviceWidth <= 450)
-                                        ? MediaQuery.of(context).size.width *
-                                            0.3
-                                        : MediaQuery.of(context).size.width *
-                                            0.16,
+                                    width: (deviceWidth <= 450) ? MediaQuery.of(context).size.width * 0.3 : MediaQuery.of(context).size.width * 0.16,
                                     height: (deviceWidth <= 450)
-                                        ? MediaQuery.of(context).size.height *
-                                            0.0425
-                                        : MediaQuery.of(context).size.height *
-                                            0.065,
+                                        ? MediaQuery.of(context).size.height * 0.0425
+                                        : MediaQuery.of(context).size.height * 0.065,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color:
-                                          (editPointState.getAreaList.length >
-                                                      1 &&
-                                                  province != '')
-                                              ? Colors.grey[400]
-                                              : Colors.grey,
+                                      color: (editPointState.getAreaList.length > 1 && province != '') ? Colors.grey[400] : Colors.grey,
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
                                     padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          MediaQuery.of(context).size.width *
-                                              0.01,
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
-                                              0.01,
+                                      horizontal: MediaQuery.of(context).size.width * 0.01,
+                                      vertical: MediaQuery.of(context).size.height * 0.01,
                                     ),
                                     child: AreaDropdown(
                                       listData: editPointState.getAreaList,
                                       inputan: area,
                                       hint: 'Wilayah',
                                       handle: setArea,
-                                      disable: (value == province &&
-                                              province != '' &&
-                                              editPointState
-                                                      .getAreaList.length >
-                                                  1)
-                                          ? false
-                                          : true,
+                                      disable: (value == province && province != '' && editPointState.getAreaList.length > 1) ? false : true,
                                       isMobile: true,
                                     ),
                                   );
@@ -1042,11 +931,8 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 );
                               },
                               child: Container(
-                                height: (deviceWidth <= 450)
-                                    ? MediaQuery.of(context).size.height *
-                                        0.0425
-                                    : MediaQuery.of(context).size.height *
-                                        0.065,
+                                height:
+                                    (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : MediaQuery.of(context).size.height * 0.065,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   color: Colors.grey[400],
@@ -1054,23 +940,19 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 ),
                                 padding: EdgeInsets.symmetric(horizontal: 15.0),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Icon(
                                       Icons.date_range_rounded,
                                       size: 17.5,
                                     ),
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.003,
+                                      width: MediaQuery.of(context).size.width * 0.003,
                                     ),
                                     Text(
                                       date == ''
                                           ? Format.tanggalFormat(
-                                              DateTime.now()
-                                                  .toString()
-                                                  .substring(0, 10),
+                                              DateTime.now().toString().substring(0, 10),
                                             )
                                           : Format.tanggalFormat(date),
                                       style: GlobalFont.mediumbigfontR,
@@ -1088,19 +970,13 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 );
 
                                 filterDataNotifier.value.clear();
-                                filterDataNotifier.value
-                                    .add(editPointState.provinceNotifier.value);
-                                filterDataNotifier.value
-                                    .add(editPointState.areaNotifier.value);
-                                filterDataNotifier.value
-                                    .add(dateNotifier.value);
+                                filterDataNotifier.value.add(editPointState.provinceNotifier.value);
+                                filterDataNotifier.value.add(editPointState.areaNotifier.value);
+                                filterDataNotifier.value.add(dateNotifier.value);
                               },
                               child: Container(
-                                height: (deviceWidth <= 450)
-                                    ? MediaQuery.of(context).size.height *
-                                        0.0425
-                                    : MediaQuery.of(context).size.height *
-                                        0.065,
+                                height:
+                                    (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : MediaQuery.of(context).size.height * 0.065,
                                 decoration: BoxDecoration(
                                   color: Colors.grey[400],
                                   borderRadius: BorderRadius.circular(15.0),
@@ -1130,11 +1006,8 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 }
                               },
                               child: Container(
-                                height: (deviceWidth <= 450)
-                                    ? MediaQuery.of(context).size.height *
-                                        0.0425
-                                    : MediaQuery.of(context).size.height *
-                                        0.065,
+                                height:
+                                    (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : MediaQuery.of(context).size.height * 0.065,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   color: Colors.grey[400],
@@ -1173,11 +1046,8 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 // filterDataNotifier.value.add(dateNotifier.value);
                               },
                               child: Container(
-                                height: (deviceWidth <= 450)
-                                    ? MediaQuery.of(context).size.height *
-                                        0.0425
-                                    : MediaQuery.of(context).size.height *
-                                        0.065,
+                                height:
+                                    (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : MediaQuery.of(context).size.height * 0.065,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   color: Colors.grey[400],
@@ -1240,8 +1110,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                           date,
                         ),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
                             return Container(
                               width: MediaQuery.of(context).size.width,
                               alignment: Alignment.center,
@@ -1250,10 +1119,8 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.02,
-                                vertical:
-                                    MediaQuery.of(context).size.height * 0.02,
+                                horizontal: MediaQuery.of(context).size.width * 0.02,
+                                vertical: MediaQuery.of(context).size.height * 0.02,
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -1267,8 +1134,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.01,
+                                    height: MediaQuery.of(context).size.height * 0.01,
                                   ),
                                   Text(
                                     'Loading...',
@@ -1290,10 +1156,8 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.02,
-                                vertical:
-                                    MediaQuery.of(context).size.height * 0.02,
+                                horizontal: MediaQuery.of(context).size.width * 0.02,
+                                vertical: MediaQuery.of(context).size.height * 0.02,
                               ),
                               child: Text('Data not available'),
                             );
@@ -1305,10 +1169,8 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.02,
-                                vertical:
-                                    MediaQuery.of(context).size.height * 0.02,
+                                horizontal: MediaQuery.of(context).size.width * 0.02,
+                                vertical: MediaQuery.of(context).size.height * 0.02,
                               ),
                               child: ActivitiesPointTable(
                                 isModify: true,

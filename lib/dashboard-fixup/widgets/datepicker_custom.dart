@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/helpers/format.dart';
 
 class DatepickerCustom extends StatefulWidget {
-  const DatepickerCustom(this.tgl, this.handle,
-      {this.readOnly = false, super.key});
+  const DatepickerCustom(this.tgl, this.handle, {this.readOnly = false, super.key});
   final String tgl;
   final Function handle;
   final bool readOnly;
