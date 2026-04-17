@@ -15,22 +15,14 @@ import 'package:stsj/router/router_const.dart';
 //HASIL DATA BEDA ANTARA BULAN "03" vs "3"
 class Dashboard1Page extends StatefulWidget {
   const Dashboard1Page({
-    // this.user = '',
-    // this.branchShop = '',
-    // this.periode = '',
     super.key,
   });
-
-  // final String user;
-  // final String branchShop;
-  // final String periode;
 
   @override
   State<Dashboard1Page> createState() => _Dashboard1PageState();
 }
 
-class _Dashboard1PageState extends State<Dashboard1Page>
-    with BasePage, AutomaticKeepAliveClientMixin<Dashboard1Page> {
+class _Dashboard1PageState extends State<Dashboard1Page> with BasePage, AutomaticKeepAliveClientMixin<Dashboard1Page> {
   late List<Dashboard1> listDashboard1;
   late List<DetailDashboard1> sortDetailOmset;
   late String tgl, bln, thn;
@@ -91,8 +83,7 @@ class _Dashboard1PageState extends State<Dashboard1Page>
     return Scaffold(
       backgroundColor: Colors.blue[50]!.withAlpha(200),
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
+        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
         child: CustomAppBar(
           goBack: RoutesConstant.menu,
         ),
@@ -101,9 +92,7 @@ class _Dashboard1PageState extends State<Dashboard1Page>
         onRefresh: () => setAwal(state),
         child: Stack(
           children: [
-            dashboardView
-                ? Dashboard1Chart(listDashboard1, sortDetailOmset, bln)
-                : Dashboard1Table(listDashboard1, bln),
+            dashboardView ? Dashboard1Chart(listDashboard1, sortDetailOmset, bln) : Dashboard1Table(listDashboard1, bln),
             //*FOOTER
             Align(
               alignment: Alignment.bottomRight,
@@ -112,11 +101,7 @@ class _Dashboard1PageState extends State<Dashboard1Page>
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('\u00a9 ', style: TextStyle(fontSize: 10)),
-                    Text(' 2025 IT Basra Corporation',
-                        style: TextStyle(fontSize: 10))
-                  ],
+                  children: [Text('\u00a9 ', style: TextStyle(fontSize: 10)), Text(' 2025 IT Basra Corporation', style: TextStyle(fontSize: 10))],
                 ),
               ),
             ),
@@ -141,8 +126,7 @@ class _Dashboard1PageState extends State<Dashboard1Page>
                       },
                       style: const ButtonStyle(
                         padding: WidgetStatePropertyAll(EdgeInsets.zero),
-                        overlayColor:
-                            WidgetStatePropertyAll(Colors.transparent),
+                        overlayColor: WidgetStatePropertyAll(Colors.transparent),
                         minimumSize: WidgetStatePropertyAll(Size(50, 20)),
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),

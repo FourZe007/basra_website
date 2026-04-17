@@ -66,14 +66,12 @@ class _LoginPagesState extends State<LoginPages> {
         state.fetchSISBranches();
         print(state.branchList.length);
         print('b');
-        await state
-            .fetchUserAccess(state.getCompanyName, state.getEntryLevelId)
-            .then((data) async {
+        await state.fetchUserAccess(state.getCompanyName, state.getEntryLevelId).then((data) async {
           state.userAccessList.addAll(data);
 
           // SIP - Salesman
           // await state.fetchSipSalesBranches(); --> moved after home menu pressed
-          await state.fetchSipSalesman();
+          //await state.fetchSipSalesman();
 
           // ~:Header Privillage Preprocessing:~
           String category = '';
@@ -134,8 +132,7 @@ class _LoginPagesState extends State<LoginPages> {
           }));
 
           await prefs.setStringList('subheader', state.subHeaderList);
-          await prefs.setStringList(
-              'subheaderallowedit', state.subHeaderAllowEditList);
+          await prefs.setStringList('subheaderallowedit', state.subHeaderAllowEditList);
 
           print('~:List of Sub Header:~');
           for (var value in state.getSubHeaderList) {
@@ -145,8 +142,7 @@ class _LoginPagesState extends State<LoginPages> {
           print('');
           List<Map<String, String>> temp = [];
           for (Map<String, String> e in dashboardList) {
-            if (state.getSubHeaderList.contains(e['acc']) &&
-                e['acc'] != '000') {
+            if (state.getSubHeaderList.contains(e['acc']) && e['acc'] != '000') {
               print('${e['acc']} added');
               temp.add(e);
             } else if (e['acc'] == '000') {
@@ -192,15 +188,10 @@ class _LoginPagesState extends State<LoginPages> {
         passwordController.text,
       );
 
-      if (listdatalogin.isNotEmpty &&
-          listdatalogin[0].memo == "LOGIN BERHASIL") {
+      if (listdatalogin.isNotEmpty && listdatalogin[0].memo == "LOGIN BERHASIL") {
         // ~:Login succeed:~
-        await DataLoginController.setIntoSharedPreferences(
-            listdatalogin[0].userID,
-            listdatalogin[0].entryLevelID,
-            listdatalogin[0].entryLevelName,
-            listdatalogin[0].dataDT[0].pt,
-            listdatalogin[0].employeeid);
+        await DataLoginController.setIntoSharedPreferences(listdatalogin[0].userID, listdatalogin[0].entryLevelID, listdatalogin[0].entryLevelName,
+            listdatalogin[0].dataDT[0].pt, listdatalogin[0].employeeid);
 
         await Auth.saveDataToSharedPreferences(listdatalogin[0].dataDT);
         state.userCompanyAccList.addAll(listdatalogin[0].dataDT);
@@ -334,17 +325,14 @@ class _LoginPagesState extends State<LoginPages> {
                                     textAlignVertical: TextAlignVertical.center,
                                     controller: idController,
                                     autofocus: true,
-                                    inputFormatters: [
-                                      UppercaseTextInputFormatter()
-                                    ],
+                                    inputFormatters: [UppercaseTextInputFormatter()],
                                     decoration: InputDecoration(
                                       filled: true, //<-- SEE HERE
                                       fillColor: Colors.white70,
                                       labelText: "Username", //babel text
                                       hintText: 'Masukan username perusahaan',
                                       border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                        borderRadius: BorderRadius.circular(10.0),
                                         borderSide: BorderSide(width: 0.5),
                                       ),
                                     ),
@@ -358,16 +346,13 @@ class _LoginPagesState extends State<LoginPages> {
                                 ),
 
                                 SizedBox(
-                                  height: MediaQuery.of(context).size.height *
-                                      0.015,
+                                  height: MediaQuery.of(context).size.height * 0.015,
                                 ),
 
                                 // Password Text Field
                                 Expanded(
                                   child: TextFormField(
-                                    inputFormatters: [
-                                      UppercaseTextInputFormatter()
-                                    ],
+                                    inputFormatters: [UppercaseTextInputFormatter()],
                                     controller: passwordController,
                                     obscureText: !_passwordVisible,
                                     decoration: InputDecoration(
@@ -377,24 +362,19 @@ class _LoginPagesState extends State<LoginPages> {
                                       filled: true, //<-- SEE HERE
                                       fillColor: Colors.white70,
                                       border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                        borderRadius: BorderRadius.circular(10.0),
                                         borderSide: BorderSide(width: 0.5),
                                       ),
                                       suffixIcon: IconButton(
                                         icon: Icon(
                                           // Based on passwordVisible state choose the icon
-                                          _passwordVisible
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
-                                          color: Theme.of(context)
-                                              .primaryColorDark,
+                                          _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                                          color: Theme.of(context).primaryColorDark,
                                         ),
                                         onPressed: () {
                                           // Update the state i.e. toogle the state of passwordVisible variable
                                           setState(() {
-                                            _passwordVisible =
-                                                !_passwordVisible;
+                                            _passwordVisible = !_passwordVisible;
                                           });
                                         },
                                       ),
@@ -418,10 +398,8 @@ class _LoginPagesState extends State<LoginPages> {
                           style: ButtonStyle(
                             padding: WidgetStateProperty.all(
                               EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.05,
-                                vertical:
-                                    MediaQuery.of(context).size.height * 0.025,
+                                horizontal: MediaQuery.of(context).size.width * 0.05,
+                                vertical: MediaQuery.of(context).size.height * 0.025,
                               ),
                             ),
                             backgroundColor: WidgetStateProperty.all(
@@ -447,8 +425,7 @@ class _LoginPagesState extends State<LoginPages> {
                                       width: 25,
                                       height: 25,
                                       child: CircularProgressIndicator(
-                                        backgroundColor:
-                                            Color.fromARGB(255, 4, 101, 237),
+                                        backgroundColor: Color.fromARGB(255, 4, 101, 237),
                                         strokeWidth: 5,
                                       ),
                                     ),
@@ -497,8 +474,7 @@ class _LoginPagesState extends State<LoginPages> {
 
 class UppercaseTextInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     return TextEditingValue(
       text: newValue.text.toUpperCase(),
       selection: newValue.selection,

@@ -17,7 +17,6 @@ import 'package:stsj/activity_point/widgets/view_activity02.dart';
 import 'package:stsj/activity_point/widgets/view_activity03.dart';
 import 'package:stsj/activity_point/widgets/view_activity04.dart';
 import 'package:stsj/activity_point/widgets/view_map.dart';
-import 'package:stsj/dashboard-fixup/utilities/extension.dart';
 import 'package:stsj/dashboard-fixup/utilities/format.dart';
 import 'package:stsj/dashboard-fixup/widgets/snackbar_info.dart';
 
@@ -157,11 +156,11 @@ class _CardActivityState extends State<CardActivity> {
                               titleAlignment: ListTileTitleAlignment.top,
                               leading: Icon(Icons.person_outline, size: 23, color: Colors.indigo.shade600),
                               title: Text(
-                                widget.model.eName.toCapitalized,
+                                widget.model.eName,
                                 style: TextStyle(fontSize: 13.5, color: Colors.black),
                               ),
                               onTap: () {
-                                Clipboard.setData(ClipboardData(text: widget.model.eName.toCapitalized));
+                                Clipboard.setData(ClipboardData(text: widget.model.eName));
                                 ScaffoldMessenger.of(context).showSnackBar(info(false, 'BERHASIL DISALIN'));
                               },
                             ),
@@ -171,7 +170,7 @@ class _CardActivityState extends State<CardActivity> {
                               titleAlignment: ListTileTitleAlignment.top,
                               leading: Icon(Icons.date_range_outlined, size: 22, color: Colors.indigo.shade600),
                               title: Text(
-                                '${Format.kalenderFormat(widget.model.currentDate).toCapitalized}, ${widget.model.currentTime}',
+                                '${Format.kalenderFormat(widget.model.currentDate)}, ${widget.model.currentTime}',
                                 style: TextStyle(fontSize: 13.5, color: Colors.black),
                               ),
                               trailing: widget.model.flag == 1
@@ -184,7 +183,7 @@ class _CardActivityState extends State<CardActivity> {
                               onTap: () {
                                 Clipboard.setData(
                                   ClipboardData(
-                                    text: '${Format.kalenderFormat(widget.model.currentDate).toCapitalized}, ${widget.model.currentTime}',
+                                    text: '${Format.kalenderFormat(widget.model.currentDate)}, ${widget.model.currentTime}',
                                   ),
                                 );
                                 ScaffoldMessenger.of(context).showSnackBar(info(false, 'BERHASIL DISALIN'));

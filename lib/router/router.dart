@@ -39,7 +39,8 @@ import 'package:stsj/dashboard-fixup/pages/dashboard4_page.dart';
 import 'package:stsj/dashboard-fixup/pages/dashboard5_page.dart';
 import 'package:stsj/dashboard-fixup/pages/import_excel.dart';
 import 'package:stsj/dashboard_pemetaan/pages/filter_dashboard.dart';
-import 'package:stsj/dashboard_powerbi/pages/powerbi_view1.dart';
+import 'package:stsj/external_web/pages/monitoring_network.dart';
+import 'package:stsj/external_web/pages/powerbi_view1.dart';
 import 'package:stsj/global/globalVar.dart';
 import 'package:stsj/alokasi-bm/pages/p_import_alokasi_bm.dart';
 
@@ -450,6 +451,27 @@ class RouterSettings {
             path: 'dashboardMarketing',
             pageBuilder: (context, state) {
               return MaterialPage(child: PowerbiView1());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.pdcaNetwork,
+            path: 'network',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: MonitoringNetwork());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.pdcaNetwork1,
+            path: 'network1',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: MonitoringNetwork());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.pdcaNetwork2,
+            path: 'network2',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: MonitoringNetwork());
             },
           ),
           GoRoute(

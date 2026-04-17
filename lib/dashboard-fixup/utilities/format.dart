@@ -1,13 +1,5 @@
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:stsj/dashboard-fixup/utilities/utils.dart';
-
-class UpperCaseText extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    return newValue.copyWith(text: newValue.text.toUpperCase());
-  }
-}
 
 class Format {
   static String rupiahFormat(String price) {

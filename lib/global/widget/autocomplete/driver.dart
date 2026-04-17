@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stsj/core/cleanArc/dashboard_service/helpers/format.dart';
 import 'package:stsj/core/models/Dashboard/driver.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/global/font.dart';
@@ -113,7 +112,6 @@ class _DriverAutoCompleteState extends State<DriverAutoComplete> {
           return TextField(
             controller: textEditingController,
             focusNode: focusNode,
-            inputFormatters: [UpperCaseText()],
             textCapitalization: TextCapitalization.characters,
             textAlignVertical: TextAlignVertical.center,
             style: GlobalFont.bigfontR,
@@ -145,12 +143,10 @@ class _DriverAutoCompleteState extends State<DriverAutoComplete> {
           }
 
           return state.filteredDriverList.where((ModelDriver driver) {
-            return driver.employeeName.startsWith(textEditingValue.text) ||
-                driver.employeeId.contains(textEditingValue.text);
+            return driver.employeeName.startsWith(textEditingValue.text) || driver.employeeId.contains(textEditingValue.text);
           }).toList();
         },
-        onSelected: (ModelDriver selection) =>
-            widget.setFilter(selection.employeeId),
+        onSelected: (ModelDriver selection) => widget.setFilter(selection.employeeId),
       ),
     );
   }

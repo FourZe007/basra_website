@@ -7,7 +7,6 @@ import 'package:stsj/dashboard-fixup/models/dashboard.dart';
 import 'package:stsj/dashboard-fixup/models/dashboard4_model.dart';
 import 'package:stsj/dashboard-fixup/services/api.dart';
 import 'package:stsj/dashboard-fixup/utilities/basepage.dart';
-import 'package:stsj/dashboard-fixup/utilities/extension.dart';
 import 'package:stsj/dashboard-fixup/utilities/utils.dart';
 import 'package:stsj/dashboard-fixup/widgets/container_table.dart';
 import 'package:stsj/dashboard-fixup/widgets/header_table.dart';
@@ -17,22 +16,14 @@ import 'package:stsj/router/router_const.dart';
 
 class Dashboard4Page extends StatefulWidget {
   const Dashboard4Page({
-    // this.user = '',
-    // this.branchShop = '',
-    // this.periode = '',
     super.key,
   });
-
-  // final String user;
-  // final String branchShop;
-  // final String periode;
 
   @override
   State<Dashboard4Page> createState() => _Dashboard4PageState();
 }
 
-class _Dashboard4PageState extends State<Dashboard4Page>
-    with BasePage, AutomaticKeepAliveClientMixin<Dashboard4Page> {
+class _Dashboard4PageState extends State<Dashboard4Page> with BasePage, AutomaticKeepAliveClientMixin<Dashboard4Page> {
   late List<Dashboard4> listDashboard4;
   late String tgl, bln, thn;
   late int totalDay;
@@ -63,8 +54,7 @@ class _Dashboard4PageState extends State<Dashboard4Page>
     thn = state.getFpmDateFilter.substring(0, 4);
     bln = state.getFpmDateFilter.substring(5, 7);
     tgl = state.getFpmDateFilter.substring(8, 10);
-    totalDay = DateTime(int.parse(thn), int.parse(bln) + 1, 0)
-        .day; //Ambil tanggal mundur dari bulan selanjutnya
+    totalDay = DateTime(int.parse(thn), int.parse(bln) + 1, 0).day; //Ambil tanggal mundur dari bulan selanjutnya
     listInt = Iterable<int>.generate(totalDay, (i) => i + 1).toList();
   }
 
@@ -96,8 +86,7 @@ class _Dashboard4PageState extends State<Dashboard4Page>
     return Scaffold(
       backgroundColor: Colors.blue[50]!.withAlpha(200),
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
+        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
         child: CustomAppBar(
           goBack: RoutesConstant.menu,
         ),
@@ -111,25 +100,14 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                   ListView(
                     padding: const EdgeInsets.all(20),
                     children: [
-                      const Center(
-                          child: Text('MONTHLY REPORT BENGKEL',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold))),
-                      Center(
-                          child: Text(listDashboard4[0].bsName,
-                              style: const TextStyle(fontSize: 15))),
-                      Center(
-                          child: Text(
-                              'PERIODE ${listBulan[int.parse(bln) - 1]} $thn',
-                              style: const TextStyle(fontSize: 15))),
+                      const Center(child: Text('MONTHLY REPORT BENGKEL', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+                      Center(child: Text(listDashboard4[0].bsName, style: const TextStyle(fontSize: 15))),
+                      Center(child: Text('PERIODE ${listBulan[int.parse(bln) - 1]} $thn', style: const TextStyle(fontSize: 15))),
                       const SizedBox(height: 15),
                       SelectionArea(
                         child: Table(
-                          border: TableBorder.all(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(10)),
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
+                          border: TableBorder.all(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                           columnWidths: const {
                             0: FlexColumnWidth(1.3),
                             1: FlexColumnWidth(1),
@@ -150,9 +128,7 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                             TableRow(
                               decoration: const BoxDecoration(
                                 color: Colors.indigo,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10)),
+                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
                               ),
                               children: [
                                 headerTable(''),
@@ -160,24 +136,12 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                                   Column(
                                     children: [
                                       Text(
-                                        Dashboard.toJson(
-                                                listDashboard4[0])['h${i + 1}']
-                                            .toString()
-                                            .split('-')[0],
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
+                                        Dashboard.toJson(listDashboard4[0])['h${i + 1}'].toString().split('-')[0],
+                                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
                                       ),
                                       Text(
-                                        listBulan[int.parse(Dashboard.toJson(
-                                                        listDashboard4[0])[
-                                                    'h${i + 1}']
-                                                .toString()
-                                                .split('-')[1]) -
-                                            1],
-                                        style: const TextStyle(
-                                            fontSize: 13, color: Colors.white),
+                                        listBulan[int.parse(Dashboard.toJson(listDashboard4[0])['h${i + 1}'].toString().split('-')[1]) - 1],
+                                        style: const TextStyle(fontSize: 13, color: Colors.white),
                                       ),
                                     ],
                                   ),
@@ -190,24 +154,18 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                                   textTable(listDashboard4[j].rowName),
                                   for (var i = 0; i < 12; i++)
                                     containerTable(
-                                      Dashboard.toJson(
-                                          listDashboard4[j])['h${i + 1}'],
+                                      Dashboard.toJson(listDashboard4[j])['h${i + 1}'],
                                     )
                                 ],
                               ),
                           ],
                         ),
                       ),
-                      const Text(' Unit Entry',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      const Text(' Unit Entry', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       SelectionArea(
                         child: Table(
-                          border: TableBorder.all(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(10)),
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
+                          border: TableBorder.all(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                           columnWidths: const {
                             0: FlexColumnWidth(1.3),
                             1: FlexColumnWidth(1),
@@ -228,20 +186,15 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                             for (var j = 4; j < 10; j++)
                               TableRow(
                                 children: [
-                                  textTable(
-                                      listDashboard4[j].rowName.toCapitalized),
-                                  for (var i = 0; i < 12; i++)
-                                    containerTable(Dashboard.toJson(
-                                        listDashboard4[j])['h${i + 1}'])
+                                  textTable(listDashboard4[j].rowName),
+                                  for (var i = 0; i < 12; i++) containerTable(Dashboard.toJson(listDashboard4[j])['h${i + 1}'])
                                 ],
                               ),
                             //TOTAL
                             TableRow(
                               decoration: BoxDecoration(
                                 color: Colors.orange.shade300,
-                                borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
+                                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                               ),
                               children: [
                                 textTable('Total'),
@@ -261,16 +214,11 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                           ],
                         ),
                       ),
-                      const Text(' Income Bengkel',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      const Text(' Income Bengkel', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       SelectionArea(
                         child: Table(
-                          border: TableBorder.all(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(10)),
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
+                          border: TableBorder.all(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                           columnWidths: const {
                             0: FlexColumnWidth(1.3),
                             1: FlexColumnWidth(1),
@@ -291,46 +239,32 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                             for (var j = 10; j < 13; j++)
                               TableRow(
                                 children: [
-                                  textTable(
-                                      listDashboard4[j].rowName.toCapitalized),
-                                  for (var i = 0; i < 12; i++)
-                                    containerTable(Dashboard.toJson(
-                                        listDashboard4[j])['h${i + 1}'])
+                                  textTable(listDashboard4[j].rowName),
+                                  for (var i = 0; i < 12; i++) containerTable(Dashboard.toJson(listDashboard4[j])['h${i + 1}'])
                                 ],
                               ),
                             //TOTAL
                             TableRow(
                               decoration: BoxDecoration(
                                 color: Colors.orange.shade300,
-                                borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
+                                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                               ),
                               children: [
                                 textTable('Total'),
                                 for (var i = 0; i < 12; i++)
                                   containerTable(
-                                    sumList([
-                                      listDashboard4[10],
-                                      listDashboard4[11],
-                                      listDashboard4[12]
-                                    ], i),
+                                    sumList([listDashboard4[10], listDashboard4[11], listDashboard4[12]], i),
                                   ),
                               ],
                             ),
                           ],
                         ),
                       ),
-                      const Text(' Retail',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      const Text(' Retail', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       SelectionArea(
                         child: Table(
-                          border: TableBorder.all(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(10)),
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
+                          border: TableBorder.all(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                           columnWidths: const {
                             0: FlexColumnWidth(1.3),
                             1: FlexColumnWidth(1),
@@ -351,45 +285,32 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                             for (var j = 13; j < 15; j++)
                               TableRow(
                                 children: [
-                                  textTable(
-                                      listDashboard4[j].rowName.toCapitalized),
-                                  for (var i = 0; i < 12; i++)
-                                    containerTable(Dashboard.toJson(
-                                        listDashboard4[j])['h${i + 1}'])
+                                  textTable(listDashboard4[j].rowName),
+                                  for (var i = 0; i < 12; i++) containerTable(Dashboard.toJson(listDashboard4[j])['h${i + 1}'])
                                 ],
                               ),
                             //TOTAL
                             TableRow(
                               decoration: BoxDecoration(
                                 color: Colors.orange.shade300,
-                                borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
+                                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                               ),
                               children: [
                                 textTable('Total'),
                                 for (var i = 0; i < 12; i++)
                                   containerTable(
-                                    sumList([
-                                      listDashboard4[13],
-                                      listDashboard4[14]
-                                    ], i),
+                                    sumList([listDashboard4[13], listDashboard4[14]], i),
                                   ),
                               ],
                             ),
                           ],
                         ),
                       ),
-                      const Text(' Total Income',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      const Text(' Total Income', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       SelectionArea(
                         child: Table(
-                          border: TableBorder.all(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(10)),
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
+                          border: TableBorder.all(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                           columnWidths: const {
                             0: FlexColumnWidth(1.3),
                             1: FlexColumnWidth(1),
@@ -408,22 +329,13 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                           children: [
                             //TOTAL
                             TableRow(
-                              decoration: BoxDecoration(
-                                  color: Colors.orange.shade300,
-                                  borderRadius: BorderRadius.circular(10)),
+                              decoration: BoxDecoration(color: Colors.orange.shade300, borderRadius: BorderRadius.circular(10)),
                               children: [
                                 textTable('Total'),
                                 for (var i = 0; i < 12; i++)
                                   containerTable(
-                                    (int.parse(sumList([
-                                              listDashboard4[10],
-                                              listDashboard4[11],
-                                              listDashboard4[12]
-                                            ], i)) +
-                                            int.parse(sumList([
-                                              listDashboard4[13],
-                                              listDashboard4[14]
-                                            ], i)))
+                                    (int.parse(sumList([listDashboard4[10], listDashboard4[11], listDashboard4[12]], i)) +
+                                            int.parse(sumList([listDashboard4[13], listDashboard4[14]], i)))
                                         .toString(),
                                   ),
                               ],
@@ -431,16 +343,11 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                           ],
                         ),
                       ),
-                      const Text(' SPU',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      const Text(' SPU', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       SelectionArea(
                         child: Table(
-                          border: TableBorder.all(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(10)),
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
+                          border: TableBorder.all(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                           columnWidths: const {
                             0: FlexColumnWidth(1.3),
                             1: FlexColumnWidth(1),
@@ -461,9 +368,7 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                             TableRow(
                               decoration: BoxDecoration(
                                 color: Colors.orange.shade300,
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10)),
+                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
                               ),
                               children: [
                                 textTable('Total'),
@@ -492,26 +397,18 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                             for (var j = 15; j < 18; j++)
                               TableRow(
                                 children: [
-                                  textTable(
-                                      listDashboard4[j].rowName.toCapitalized),
-                                  for (var i = 0; i < 12; i++)
-                                    containerTable(Dashboard.toJson(
-                                        listDashboard4[j])['h${i + 1}'])
+                                  textTable(listDashboard4[j].rowName),
+                                  for (var i = 0; i < 12; i++) containerTable(Dashboard.toJson(listDashboard4[j])['h${i + 1}'])
                                 ],
                               ),
                           ],
                         ),
                       ),
-                      const Text(' IPM',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      const Text(' IPM', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       SelectionArea(
                         child: Table(
-                          border: TableBorder.all(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(10)),
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
+                          border: TableBorder.all(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                           columnWidths: const {
                             0: FlexColumnWidth(1.3),
                             1: FlexColumnWidth(1),
@@ -532,17 +429,12 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                             TableRow(
                               decoration: BoxDecoration(
                                 color: Colors.orange.shade300,
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10)),
+                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
                               ),
                               children: [
                                 textTable('Total'),
                                 for (var i = 0; i < 12; i++)
-                                  containerTable(int.parse(Dashboard.toJson(
-                                                  listDashboard4[3])[
-                                              'h${i + 1}']) ==
-                                          0
+                                  containerTable(int.parse(Dashboard.toJson(listDashboard4[3])['h${i + 1}']) == 0
                                       ? '-'
                                       : ((int.parse(sumList([
                                                     listDashboard4[10],
@@ -553,9 +445,7 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                                                     listDashboard4[13],
                                                     listDashboard4[14],
                                                   ], i))) ~/
-                                              int.parse(Dashboard.toJson(
-                                                      listDashboard4[3])[
-                                                  'h${i + 1}']))
+                                              int.parse(Dashboard.toJson(listDashboard4[3])['h${i + 1}']))
                                           .toString()),
                               ],
                             ),
@@ -563,11 +453,8 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                             for (var j = 18; j < 21; j++)
                               TableRow(
                                 children: [
-                                  textTable(
-                                      listDashboard4[j].rowName.toCapitalized),
-                                  for (var i = 0; i < 12; i++)
-                                    containerTable(Dashboard.toJson(
-                                        listDashboard4[j])['h${i + 1}'])
+                                  textTable(listDashboard4[j].rowName),
+                                  for (var i = 0; i < 12; i++) containerTable(Dashboard.toJson(listDashboard4[j])['h${i + 1}'])
                                 ],
                               ),
                           ],
@@ -585,8 +472,7 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text('\u00a9 ', style: TextStyle(fontSize: 10)),
-                          Text(' 2025 IT Basra Corporation',
-                              style: TextStyle(fontSize: 10))
+                          Text(' 2025 IT Basra Corporation', style: TextStyle(fontSize: 10))
                         ],
                       ),
                     ),
@@ -600,10 +486,7 @@ class _Dashboard4PageState extends State<Dashboard4Page>
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                              Format.tanggalFormat(
-                                  DateTime.now().toString().substring(0, 10)),
-                              style: const TextStyle(fontSize: 10)),
+                          Text(Format.tanggalFormat(DateTime.now().toString().substring(0, 10)), style: const TextStyle(fontSize: 10)),
                         ],
                       ),
                     ),

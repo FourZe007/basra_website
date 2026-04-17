@@ -29,6 +29,9 @@ class RoutesConstant {
   static String importTargetActivities = 'importTargetActivities';
   static String targetResult = 'targetResult';
   static String dashboardMarketing = 'dashboardMarketing';
+  static String pdcaNetwork = 'pdcaNetwork';
+  static String pdcaNetwork1 = 'pdcaNetwork1';
+  static String pdcaNetwork2 = 'pdcaNetwork2';
   static String managerActivitiesInMap = 'managerActivitiesInMap';
   static String weeklyActivitiesReport = 'weeklyActivitiesReport';
   //static String activitiesPoint = 'activitiesPoint';

@@ -83,12 +83,10 @@ class _DashboardPemetaanState extends State<DashboardPemetaan> {
     } while (_zoomPanBehavior.focalLatLng != MapLatLng(lat, lng));
 
     setState(() => animSize[idx] = animSize[idx] == 50 ? 80 : 50);
-    _mapController.updateMarkers([idx]);
 
     await Future.delayed(Duration(milliseconds: 600));
 
     setState(() => animSize[idx] = animSize[idx] == 80 ? 50 : 50);
-    _mapController.updateMarkers([idx]);
   }
 
   @override
@@ -261,7 +259,6 @@ class _DashboardPemetaanState extends State<DashboardPemetaan> {
                           );
                         }
                       },
-                      //*ZOOM CONTROL
                       onWillZoom: (MapZoomDetails details) {
                         if (details.newZoomLevel! >= _zoomPanBehavior.maxZoomLevel) {
                           setState(() {

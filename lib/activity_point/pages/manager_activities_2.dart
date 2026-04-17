@@ -14,7 +14,6 @@ import 'package:stsj/dashboard-fixup/widgets/snackbar_info.dart';
 import 'package:stsj/global/globalVar.dart';
 import 'package:stsj/global/widget/app_bar.dart';
 import 'package:stsj/router/router_const.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ManagerActivities2 extends StatefulWidget {
   const ManagerActivities2({super.key});

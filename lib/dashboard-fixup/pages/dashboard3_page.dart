@@ -8,7 +8,6 @@ import 'package:stsj/dashboard-fixup/models/dashboard3_model.dart';
 import 'package:stsj/dashboard-fixup/services/api.dart';
 import 'package:stsj/dashboard-fixup/utilities/basepage.dart';
 import 'package:stsj/dashboard-fixup/utilities/enum.dart';
-import 'package:stsj/dashboard-fixup/utilities/extension.dart';
 import 'package:stsj/dashboard-fixup/utilities/utils.dart';
 import 'package:stsj/dashboard-fixup/widgets/container_table.dart';
 import 'package:stsj/dashboard-fixup/widgets/header_table.dart';
@@ -18,30 +17,16 @@ import 'package:stsj/router/router_const.dart';
 
 class Dashboard3Page extends StatefulWidget {
   const Dashboard3Page({
-    // this.user = '',
-    // this.branchShop = '',
-    // this.periode = '',
     super.key,
   });
-
-  // final String user;
-  // final String branchShop;
-  // final String periode;
 
   @override
   State<Dashboard3Page> createState() => _Dashboard3PageState();
 }
 
-class _Dashboard3PageState extends State<Dashboard3Page>
-    with BasePage, AutomaticKeepAliveClientMixin<Dashboard3Page> {
+class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, AutomaticKeepAliveClientMixin<Dashboard3Page> {
   late List<Dashboard3> listDashboard3;
-  late List<Dashboard3> listUnitEntry,
-      listJasa,
-      listOli,
-      listSparepart,
-      listRetail,
-      listIncome,
-      listSPU;
+  late List<Dashboard3> listUnitEntry, listJasa, listOli, listSparepart, listRetail, listIncome, listSPU;
   late String tgl, bln, thn;
   late int totalDay;
   late List<int> listInt;
@@ -80,8 +65,7 @@ class _Dashboard3PageState extends State<Dashboard3Page>
     thn = state.getFpmDateFilter.substring(0, 4);
     bln = state.getFpmDateFilter.substring(5, 7);
     tgl = state.getFpmDateFilter.substring(8, 10);
-    totalDay = DateTime(int.parse(thn), int.parse(bln) + 1, 0)
-        .day; //Ambil tanggal mundur dari bulan selanjutnya
+    totalDay = DateTime(int.parse(thn), int.parse(bln) + 1, 0).day; //Ambil tanggal mundur dari bulan selanjutnya
     listInt = Iterable<int>.generate(totalDay, (i) => i + 1).toList();
   }
 
@@ -127,8 +111,7 @@ class _Dashboard3PageState extends State<Dashboard3Page>
     return Scaffold(
       backgroundColor: Colors.blue[50]!.withAlpha(200),
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
+        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
         child: CustomAppBar(
           goBack: RoutesConstant.menu,
         ),
@@ -142,13 +125,8 @@ class _Dashboard3PageState extends State<Dashboard3Page>
                   ListView(
                     padding: const EdgeInsets.all(20),
                     children: [
-                      const Center(
-                          child: Text('DAILY REPORT MEKANIK',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold))),
-                      Center(
-                          child: Text(listDashboard3[0].bsName,
-                              style: const TextStyle(fontSize: 15))),
+                      const Center(child: Text('DAILY REPORT MEKANIK', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+                      Center(child: Text(listDashboard3[0].bsName, style: const TextStyle(fontSize: 15))),
                       Center(
                         child: Text(
                           'PERIODE ${listBulan[int.parse(bln) - 1]} $thn',
@@ -176,127 +154,20 @@ class _Dashboard3PageState extends State<Dashboard3Page>
                       ),
                       const SizedBox(height: 10),
                       report == Report.unitEntry
-                          ? contentMenu(listUnitEntry,
-                              rutUnitEntry(listUnitEntry)) //UNITENTRY
+                          ? contentMenu(listUnitEntry, rutUnitEntry(listUnitEntry)) //UNITENTRY
                           : report == Report.jasa
                               ? contentMenu(listJasa, rutJasa(listJasa)) //JASA
                               : report == Report.oli
                                   ? contentMenu(listOli, rutOli(listOli)) //OLI
                                   : report == Report.spareparts
-                                      ? contentMenu(
-                                          listSparepart,
-                                          rutSparepart(
-                                              listSparepart)) //SPAREPART
+                                      ? contentMenu(listSparepart, rutSparepart(listSparepart)) //SPAREPART
                                       : report == Report.retail
-                                          ? contentMenu(listRetail,
-                                              rutRetail(listRetail)) //RETAIL
+                                          ? contentMenu(listRetail, rutRetail(listRetail)) //RETAIL
                                           : report == Report.income
-                                              ? contentMenu(
-                                                  listIncome,
-                                                  rutIncome(
-                                                      listIncome)) //INCOME
-                                              : contentMenu(listSPU,
-                                                  rutSPU(listSPU)) //SPU
+                                              ? contentMenu(listIncome, rutIncome(listIncome)) //INCOME
+                                              : contentMenu(listSPU, rutSPU(listSPU)) //SPU
                     ],
                   ),
-                  // ListView(
-                  //   padding: const EdgeInsets.all(20),
-                  //   children: [
-                  //     const Center(child: Text('DAILY REPORT MEKANIK', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
-                  //     Center(child: Text(listDashboard3[0].bsName, style: const TextStyle(fontSize: 15))),
-                  //     Center(child: Text('PERIODE ${listBulan[int.parse(bln) - 1]} $thn', style: const TextStyle(fontSize: 15))),
-                  //     const SizedBox(height: 15),
-                  //     //UNIT ENTRY
-                  //     const Text(' Unit Entry', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  //     SelectionArea(
-                  //       child: Table(
-                  //         border: TableBorder.all(color: Colors.black, borderRadius: BorderRadius.circular(10)),
-                  //         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  //         columnWidths: {
-                  //           0: const FlexColumnWidth(2.7),
-                  //           ...{for (var k in listInt) k: const FlexColumnWidth(1)},
-                  //           totalDay + 1: const FlexColumnWidth(1.3),
-                  //           totalDay + 2: const FlexColumnWidth(1.3),
-                  //           totalDay + 3: const FlexColumnWidth(1.3),
-                  //           totalDay + 4: const FlexColumnWidth(1.3),
-                  //           totalDay + 5: const FlexColumnWidth(1.3),
-                  //         },
-                  //         children: [
-                  //           //HEADER
-                  //           TableRow(
-                  //             decoration: BoxDecoration(
-                  //               color: Colors.indigo,
-                  //               borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                  //               border: Border.all(color: Colors.black),
-                  //             ),
-                  //             children: [
-                  //               headerTable('Mekanik'),
-                  //               for (var i = 0; i < totalDay; i++)
-                  //                 Column(
-                  //                   children: [
-                  //                     Text(
-                  //                       Dashboard.toJson(listDashboard3[0])['h${i + 1}'].toString().substring(0, 3),
-                  //                       style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
-                  //                     ),
-                  //                     Text(
-                  //                       (i + 1).toString(),
-                  //                       style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
-                  //                     ),
-                  //                   ],
-                  //                 ),
-                  //               headerTable('∑'),
-                  //               headerTable('Target'),
-                  //               headerTable('%'),
-                  //               headerTable('Gab'),
-                  //               headerTable('Rut'),
-                  //             ],
-                  //           ),
-                  //           //BODY
-                  //           ...listUnitEntry.map((data) {
-                  //             return TableRow(
-                  //               children: [
-                  //                 textTable((data.eName).toTitleCase),
-                  //                 for (var i = 0; i < totalDay; i++)
-                  //                   containerTable(
-                  //                     int.parse(Dashboard.toJson(data)['h${i + 1}']) == 0 &&
-                  //                             DateTime(int.parse(thn), int.parse(bln), i + 1).isAfter(DateTime.now())
-                  //                         ? ''
-                  //                         : Dashboard.toJson(data)['h${i + 1}'],
-                  //                     Dashboard.toJson(listDashboard3[0])['h${i + 1}'] == 'Minggu' ? Colors.red : Colors.transparent,
-                  //                   ),
-                  //                 containerTable(sumRow(data, totalDay), Colors.green),
-                  //                 containerTable(sumRow(data, totalDay), Colors.green),
-                  //                 containerTable(sumRow(data, totalDay), Colors.green),
-                  //                 containerTable(sumRow(data, totalDay), Colors.green),
-                  //                 containerTable(sumRow(data, totalDay), Colors.green),
-                  //               ],
-                  //             );
-                  //           }).toList(),
-                  //           //TOTAL
-                  //           TableRow(
-                  //             decoration: const BoxDecoration(
-                  //               color: Colors.orange,
-                  //               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                  //             ),
-                  //             children: [
-                  //               textTable('Total'),
-                  //               for (var i = 0; i < totalDay; i++)
-                  //                 containerTable(
-                  //                   sumColumn(listUnitEntry, i),
-                  //                   Dashboard.toJson(listDashboard3[0])['h${i + 1}'] == 'Minggu' ? Colors.red : Colors.transparent,
-                  //                 ),
-                  //               containerTable(sumTotalRow(listUnitEntry, totalDay), Colors.green),
-                  //               containerTable(sumTotalRow(listUnitEntry, totalDay), Colors.green),
-                  //               containerTable(sumTotalRow(listUnitEntry, totalDay), Colors.green),
-                  //               containerTable(sumTotalRow(listUnitEntry, totalDay), Colors.green),
-                  //               containerTable(sumTotalRow(listUnitEntry, totalDay), Colors.green, lastIdx: true),
-                  //             ],
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
                   //*FOOTER
                   Align(
                     alignment: Alignment.bottomRight,
@@ -307,8 +178,7 @@ class _Dashboard3PageState extends State<Dashboard3Page>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text('\u00a9 ', style: TextStyle(fontSize: 10)),
-                          Text(' 2025 IT Basra Corporation',
-                              style: TextStyle(fontSize: 10))
+                          Text(' 2025 IT Basra Corporation', style: TextStyle(fontSize: 10))
                         ],
                       ),
                     ),
@@ -322,10 +192,7 @@ class _Dashboard3PageState extends State<Dashboard3Page>
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                              Format.tanggalFormat(
-                                  DateTime.now().toString().substring(0, 10)),
-                              style: const TextStyle(fontSize: 10)),
+                          Text(Format.tanggalFormat(DateTime.now().toString().substring(0, 10)), style: const TextStyle(fontSize: 10)),
                         ],
                       ),
                     ),
@@ -343,15 +210,10 @@ class _Dashboard3PageState extends State<Dashboard3Page>
           onPressed: () => setState(() => report = value),
           style: ElevatedButton.styleFrom(
             backgroundColor: report == value ? Colors.indigo : Colors.blue[50],
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             side: const BorderSide(color: Colors.indigo),
           ),
-          child: Text(name,
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: report == value ? Colors.white : Colors.indigo)),
+          child: Text(name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: report == value ? Colors.white : Colors.indigo)),
         ),
       ),
     );
@@ -360,15 +222,11 @@ class _Dashboard3PageState extends State<Dashboard3Page>
   Widget contentMenu(List<Dashboard3> listData, TableRow rutTable) {
     return SelectionArea(
       child: Table(
-        border: TableBorder.all(
-            color: Colors.black, borderRadius: BorderRadius.circular(10)),
+        border: TableBorder.all(color: Colors.black, borderRadius: BorderRadius.circular(10)),
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         columnWidths: {
           0: const FlexColumnWidth(1),
-          ...{
-            for (var k in listData)
-              listData.indexOf(k) + 1: const FlexColumnWidth(2)
-          },
+          ...{for (var k in listData) listData.indexOf(k) + 1: const FlexColumnWidth(2)},
           listData.length + 1: const FlexColumnWidth(2),
         },
         children: [
@@ -376,13 +234,11 @@ class _Dashboard3PageState extends State<Dashboard3Page>
           TableRow(
             decoration: const BoxDecoration(
               color: Colors.indigo,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
             ),
             children: [
               headerTable('Hari / Tgl'),
-              for (Dashboard3 k in listData)
-                headerTable((k.eName.toCapitalized)),
+              for (Dashboard3 k in listData) headerTable((k.eName)),
               headerTable('Total'),
             ],
           ),
@@ -395,37 +251,25 @@ class _Dashboard3PageState extends State<Dashboard3Page>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      Dashboard.toJson(listDashboard3[0])['h${i + 1}']
-                          .toString()
-                          .substring(0, 3),
-                      style:
-                          const TextStyle(fontSize: 13, color: Colors.black54),
+                      Dashboard.toJson(listDashboard3[0])['h${i + 1}'].toString().substring(0, 3),
+                      style: const TextStyle(fontSize: 13, color: Colors.black54),
                     ),
                     Text(
                       ' ${i + 1}',
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
                 for (Dashboard3 data in listData)
                   containerTable(
-                    int.parse(Dashboard.toJson(data)['h${i + 1}']) == 0 &&
-                            DateTime(int.parse(thn), int.parse(bln), i + 1)
-                                .isAfter(DateTime.now())
+                    int.parse(Dashboard.toJson(data)['h${i + 1}']) == 0 && DateTime(int.parse(thn), int.parse(bln), i + 1).isAfter(DateTime.now())
                         ? ''
                         : Dashboard.toJson(data)['h${i + 1}'],
-                    warna: Dashboard.toJson(listDashboard3[0])['h${i + 1}'] ==
-                            'Minggu'
-                        ? Colors.red.shade300
-                        : Colors.white,
+                    warna: Dashboard.toJson(listDashboard3[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.white,
                   ),
                 containerTable(
                   sumList(listData, i),
-                  warna: Dashboard.toJson(listDashboard3[0])['h${i + 1}'] ==
-                          'Minggu'
-                      ? Colors.red.shade300
-                      : Colors.green.shade300,
+                  warna: Dashboard.toJson(listDashboard3[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.green.shade300,
                 ),
               ],
             ),
@@ -436,25 +280,17 @@ class _Dashboard3PageState extends State<Dashboard3Page>
                   children: [
                     textTable('Hasil'),
                     for (Dashboard3 data in listData)
-                      containerTable((int.parse(sumModel(
-                                  listIncome.firstWhere(
-                                      (element) => element.eName == data.eName),
-                                  totalDay)) ~/
-                              int.parse(sumModel(
-                                  listUnitEntry.firstWhere(
-                                      (element) => element.eName == data.eName),
-                                  totalDay)))
+                      containerTable((int.parse(sumModel(listIncome.firstWhere((element) => element.eName == data.eName), totalDay)) ~/
+                              int.parse(sumModel(listUnitEntry.firstWhere((element) => element.eName == data.eName), totalDay)))
                           .toString()),
-                    containerTable(sumTotalSPU(
-                        listData, totalDay, listIncome, listUnitEntry)),
+                    containerTable(sumTotalSPU(listData, totalDay, listIncome, listUnitEntry)),
                   ],
                 )
               : TableRow(
                   decoration: BoxDecoration(color: Colors.orange.shade300),
                   children: [
                     textTable('Hasil'),
-                    for (Dashboard3 data in listData)
-                      containerTable(sumModel(data, totalDay)),
+                    for (Dashboard3 data in listData) containerTable(sumModel(data, totalDay)),
                     containerTable(sumTotalList(listData, totalDay)),
                   ],
                 ),
@@ -463,8 +299,7 @@ class _Dashboard3PageState extends State<Dashboard3Page>
             decoration: BoxDecoration(color: Colors.orange.shade300),
             children: [
               textTable('Target'),
-              for (Dashboard3 data in listData)
-                containerTable(data.targetMekanik),
+              for (Dashboard3 data in listData) containerTable(data.targetMekanik),
               containerTable(sumTarget(listData)),
             ],
           ),
@@ -488,12 +323,8 @@ class _Dashboard3PageState extends State<Dashboard3Page>
                   children: [
                     textTable('%'),
                     for (Dashboard3 data in listData)
-                      containerTable(
-                          '${(int.parse(sumModel(data, totalDay)) * 100 ~/ int.parse(data.targetMekanik))}',
-                          percentFormat: true),
-                    containerTable(
-                        '${(int.parse(sumTotalList(listData, totalDay)) * 100 ~/ int.parse(sumTarget(listData)))}',
-                        percentFormat: true),
+                      containerTable('${(int.parse(sumModel(data, totalDay)) * 100 ~/ int.parse(data.targetMekanik))}', percentFormat: true),
+                    containerTable('${(int.parse(sumTotalList(listData, totalDay)) * 100 ~/ int.parse(sumTarget(listData)))}', percentFormat: true),
                   ],
                 ),
           //GAB
@@ -505,19 +336,15 @@ class _Dashboard3PageState extends State<Dashboard3Page>
                     for (Dashboard3 data in listData)
                       containerTable(
                           '${(int.parse(sumModel(listIncome.firstWhere((element) => element.eName == data.eName), totalDay)) ~/ int.parse(sumModel(listUnitEntry.firstWhere((element) => element.eName == data.eName), totalDay))) - int.parse(data.targetMekanik)}'),
-                    containerTable(
-                        '${int.parse(sumTotalSPU(listData, totalDay, listIncome, listUnitEntry)) - int.parse(sumTarget(listData))}'),
+                    containerTable('${int.parse(sumTotalSPU(listData, totalDay, listIncome, listUnitEntry)) - int.parse(sumTarget(listData))}'),
                   ],
                 )
               : TableRow(
                   decoration: BoxDecoration(color: Colors.orange.shade300),
                   children: [
                     textTable('Gab'),
-                    for (Dashboard3 data in listData)
-                      containerTable(
-                          '${int.parse(sumModel(data, totalDay)) - int.parse(data.targetMekanik)}'),
-                    containerTable(
-                        '${int.parse(sumTotalList(listData, totalDay)) - int.parse(sumTarget(listData))}'),
+                    for (Dashboard3 data in listData) containerTable('${int.parse(sumModel(data, totalDay)) - int.parse(data.targetMekanik)}'),
+                    containerTable('${int.parse(sumTotalList(listData, totalDay)) - int.parse(sumTarget(listData))}'),
                   ],
                 ),
           //RUT
@@ -531,13 +358,11 @@ class _Dashboard3PageState extends State<Dashboard3Page>
     return TableRow(
       decoration: BoxDecoration(
         color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
       ),
       children: [
         textTable('Rut Unit'),
-        for (Dashboard3 data in listData)
-          containerTable(averageModel(data, totalDay)),
+        for (Dashboard3 data in listData) containerTable(averageModel(data, totalDay)),
         containerTable(averageTotalList(listData, totalDay)),
       ],
     );
@@ -547,17 +372,13 @@ class _Dashboard3PageState extends State<Dashboard3Page>
     return TableRow(
       decoration: BoxDecoration(
         color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
       ),
       children: [
         textTable('Spu Jasa'),
         for (Dashboard3 data in listData)
           containerTable((int.parse(sumModel(data, totalDay)) ~/
-                  int.parse(sumModel(
-                      listUnitEntry
-                          .firstWhere((element) => element.eName == data.eName),
-                      totalDay)))
+                  int.parse(sumModel(listUnitEntry.firstWhere((element) => element.eName == data.eName), totalDay)))
               .toString()),
         containerTable(averageRUT(listData, totalDay, listUnitEntry)),
       ],
@@ -568,17 +389,13 @@ class _Dashboard3PageState extends State<Dashboard3Page>
     return TableRow(
       decoration: BoxDecoration(
         color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
       ),
       children: [
         textTable('Spu Oli'),
         for (Dashboard3 data in listData)
           containerTable((int.parse(sumModel(data, totalDay)) ~/
-                  int.parse(sumModel(
-                      listUnitEntry
-                          .firstWhere((element) => element.eName == data.eName),
-                      totalDay)))
+                  int.parse(sumModel(listUnitEntry.firstWhere((element) => element.eName == data.eName), totalDay)))
               .toString()),
         containerTable(averageRUT(listData, totalDay, listUnitEntry)),
       ],
@@ -589,17 +406,13 @@ class _Dashboard3PageState extends State<Dashboard3Page>
     return TableRow(
       decoration: BoxDecoration(
         color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
       ),
       children: [
         textTable('Spu Parts'),
         for (Dashboard3 data in listData)
           containerTable((int.parse(sumModel(data, totalDay)) ~/
-                  int.parse(sumModel(
-                      listUnitEntry
-                          .firstWhere((element) => element.eName == data.eName),
-                      totalDay)))
+                  int.parse(sumModel(listUnitEntry.firstWhere((element) => element.eName == data.eName), totalDay)))
               .toString()),
         containerTable(averageRUT(listData, totalDay, listUnitEntry)),
       ],
@@ -610,13 +423,11 @@ class _Dashboard3PageState extends State<Dashboard3Page>
     return TableRow(
       decoration: BoxDecoration(
         color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
       ),
       children: [
         textTable('Average'),
-        for (Dashboard3 data in listData)
-          containerTable(averageModel(data, totalDay).split('.')[0]),
+        for (Dashboard3 data in listData) containerTable(averageModel(data, totalDay).split('.')[0]),
         containerTable(sumRUT(listData, totalDay)),
       ],
     );
@@ -626,13 +437,11 @@ class _Dashboard3PageState extends State<Dashboard3Page>
     return TableRow(
       decoration: BoxDecoration(
         color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
       ),
       children: [
         textTable('Average'),
-        for (Dashboard3 data in listData)
-          containerTable(averageModel(data, totalDay).split('.')[0]),
+        for (Dashboard3 data in listData) containerTable(averageModel(data, totalDay).split('.')[0]),
         containerTable(sumRUT(listData, totalDay)),
       ],
     );
@@ -642,13 +451,11 @@ class _Dashboard3PageState extends State<Dashboard3Page>
     return TableRow(
       decoration: BoxDecoration(
         color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
       ),
       children: [
         textTable('Average'),
-        for (Dashboard3 data in listData)
-          containerTable(averageModel(data, totalDay).split('.')[0]),
+        for (Dashboard3 data in listData) containerTable(averageModel(data, totalDay).split('.')[0]),
         containerTable(sumRUT(listData, totalDay)),
       ],
     );

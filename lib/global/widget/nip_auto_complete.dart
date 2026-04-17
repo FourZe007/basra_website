@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stsj/core/cleanArc/dashboard_service/helpers/format.dart';
 import 'package:stsj/core/models/Activities/salesman.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/global/font.dart';
@@ -74,8 +73,7 @@ class _NIPAutoCompleteState extends State<NIPAutoComplete> {
                       ),
                       subtitle: Text(
                         '${item.id}\n${item.location}',
-                        style:
-                            const TextStyle(fontSize: 12, color: Colors.grey),
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                       onTap: () => onSelected(item),
                     );
@@ -101,7 +99,6 @@ class _NIPAutoCompleteState extends State<NIPAutoComplete> {
           return TextField(
             controller: textEditingController,
             focusNode: focusNode,
-            inputFormatters: [UpperCaseText()],
             textCapitalization: TextCapitalization.characters,
             textAlignVertical: TextAlignVertical.center,
             style: GlobalFont.bigfontR,
@@ -132,8 +129,7 @@ class _NIPAutoCompleteState extends State<NIPAutoComplete> {
             return [];
           }
           return autoCompleteState.salesmanList.where((ModelSalesman salesman) {
-            return salesman.name.startsWith(textEditingValue.text) ||
-                salesman.id.contains(textEditingValue.text);
+            return salesman.name.startsWith(textEditingValue.text) || salesman.id.contains(textEditingValue.text);
           }).toList();
         },
         onSelected: (ModelSalesman selection) {

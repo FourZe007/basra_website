@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stsj/core/cleanArc/dashboard_service/helpers/format.dart';
 import 'package:stsj/global/font.dart';
 
 class WInputTeks extends StatefulWidget {
@@ -18,15 +17,10 @@ class _MyPageState extends State<WInputTeks> {
     return Container(
       height: 35,
       margin: const EdgeInsets.symmetric(horizontal: 5),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15), color: Colors.grey[400]),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Colors.grey[400]),
       child: TextField(
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: widget.hint,
-            contentPadding:
-                const EdgeInsets.only(left: 15, right: 15, bottom: 15)),
-        inputFormatters: [UpperCaseText()],
+        decoration:
+            InputDecoration(border: InputBorder.none, hintText: widget.hint, contentPadding: const EdgeInsets.only(left: 15, right: 15, bottom: 15)),
         controller: widget.controller,
         style: GlobalFont.smallfontR,
         onChanged: (value) => widget.handle(value),

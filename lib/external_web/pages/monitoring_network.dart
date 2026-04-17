@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:stsj/dashboard_powerbi/utilities/global.dart';
+import 'package:stsj/external_web/utilities/global.dart';
 import 'package:stsj/global/widget/app_bar.dart';
 import 'package:stsj/router/router_const.dart';
 import 'dart:ui_web' as ui;
 import 'package:web/web.dart' as web;
 
-class PowerbiView1 extends StatefulWidget {
-  const PowerbiView1({super.key});
+class MonitoringNetwork extends StatefulWidget {
+  const MonitoringNetwork({super.key});
 
   @override
-  State<PowerbiView1> createState() => _PowerbiView1State();
+  State<MonitoringNetwork> createState() => _MonitoringNetworkState();
 }
 
-class _PowerbiView1State extends State<PowerbiView1> {
-  final String viewID = "power-bi-iframe";
+class _MonitoringNetworkState extends State<MonitoringNetwork> {
+  final String viewID = "network";
 
   @override
   void initState() {
@@ -21,10 +21,10 @@ class _PowerbiView1State extends State<PowerbiView1> {
       viewID,
       (int viewId) {
         final element = web.HTMLIFrameElement()
-          ..src = linkBI
+          ..src = spreadSheetNetwork
           ..style.border = 'none'
           ..style.width = '100%'
-          ..style.height = 'calc(100% + 30px)';
+          ..style.height = '100%';
         return element;
       },
     );

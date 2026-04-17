@@ -7,7 +7,9 @@ import 'package:stsj/activity_point/pages/point_vs_target.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/pages/service_dialog_filter.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/dashboard_pemetaan/pages/filter_dashboard.dart';
+import 'package:stsj/external_web/utilities/global.dart';
 import 'package:stsj/router/router_const.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ActivityMenuComponent extends HookWidget {
   const ActivityMenuComponent({super.key});
@@ -303,11 +305,11 @@ class ActivityMenuComponent extends HookWidget {
                         _buildMenuIcon(
                           context,
                           'assets/images/dashboard-2.png',
-                          'Dashboard Marketing',
+                          'Dashboard Sales',
                           RoutesConstant.dashboardMarketing,
                           state,
                         ),
-                        const Text('Dashboard Marketing'),
+                        const Text('Dashboard Sales'),
                         // ~:NEW:~
                       ],
                     ),
@@ -318,6 +320,92 @@ class ActivityMenuComponent extends HookWidget {
                 }
               },
             ),
+
+            // PDCA NETWORK
+            // Builder(
+            //   builder: (context) {
+            //     if (state.getSubHeaderList.contains('110')) {
+            //       print('110 is inside SubHeaderList');
+            //       return Container(
+            //         margin: EdgeInsets.only(right: 50.0),
+            //         child: Column(
+            //           children: [
+            //             // ~:NEW:~
+            //             // Points
+            //             _buildMenuIcon(
+            //               context,
+            //               'assets/images/service.png',
+            //               'Network',
+            //               RoutesConstant.pdcaNetwork,
+            //               state,
+            //             ),
+            //             const Text('            Network            '),
+            //             // ~:NEW:~
+            //           ],
+            //         ),
+            //       );
+            //     } else {
+            //       print('110 is not inside SubHeaderList');
+            //       return const SizedBox();
+            //     }
+            //   },
+            // ),
+            // Builder(
+            //   builder: (context) {
+            //     if (state.getSubHeaderList.contains('110')) {
+            //       print('110 is inside SubHeaderList');
+            //       return Container(
+            //         margin: EdgeInsets.only(right: 50.0),
+            //         child: Column(
+            //           children: [
+            //             // ~:NEW:~
+            //             // Points
+            //             _buildMenuIcon(
+            //               context,
+            //               'assets/images/service.png',
+            //               'Network1',
+            //               RoutesConstant.pdcaNetwork1,
+            //               state,
+            //             ),
+            //             const Text('            Network1            '),
+            //             // ~:NEW:~
+            //           ],
+            //         ),
+            //       );
+            //     } else {
+            //       print('110 is not inside SubHeaderList');
+            //       return const SizedBox();
+            //     }
+            //   },
+            // ),
+            // Builder(
+            //   builder: (context) {
+            //     if (state.getSubHeaderList.contains('110')) {
+            //       print('110 is inside SubHeaderList');
+            //       return Container(
+            //         margin: EdgeInsets.only(right: 50.0),
+            //         child: Column(
+            //           children: [
+            //             // ~:NEW:~
+            //             // Points
+            //             _buildMenuIcon(
+            //               context,
+            //               'assets/images/service.png',
+            //               'Network2',
+            //               RoutesConstant.pdcaNetwork2,
+            //               state,
+            //             ),
+            //             const Text('            Network2            '),
+            //             // ~:NEW:~
+            //           ],
+            //         ),
+            //       );
+            //     } else {
+            //       print('110 is not inside SubHeaderList');
+            //       return const SizedBox();
+            //     }
+            //   },
+            // ),
           ],
         ),
       ),
@@ -663,11 +751,45 @@ class ActivityMenuComponent extends HookWidget {
                           _buildMenuIcon(
                             context,
                             'assets/images/dashboard-2.png',
-                            'Dashboard Marketing',
+                            'Dashboard Sales',
                             RoutesConstant.dashboardMarketing,
                             state,
                           ),
-                          const Text('Dashboard Marketing'),
+                          const Text('Dashboard Sales'),
+                          // ~:NEW:~
+                        ],
+                      );
+                    } else {
+                      print('110 is not inside SubHeaderList');
+                      return const SizedBox();
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+
+          // PDCA Network
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: Builder(
+                  builder: (context) {
+                    if (state.getSubHeaderList.contains('110')) {
+                      print('110 is inside SubHeaderList');
+                      return Column(
+                        children: [
+                          // ~:NEW:~
+                          // Points
+                          _buildMenuIcon(
+                            context,
+                            'assets/images/service.png',
+                            'Network',
+                            RoutesConstant.pdcaNetwork,
+                            state,
+                          ),
+                          const Text('            Network            '),
                           // ~:NEW:~
                         ],
                       );
@@ -752,6 +874,18 @@ class ActivityMenuComponent extends HookWidget {
                         await state.fetchProvinces().then((_) {
                           if (context.mounted) showDialog(context: context, builder: (BuildContext context) => PointVsTarget());
                         });
+                      } else if (tooltip == 'Network') {
+                        try {
+                          await launchUrl(Uri.parse(googleFormNetwork));
+                        } catch (e) {
+                          print(e.toString());
+                        }
+                      } else if (tooltip == 'Network2') {
+                        try {
+                          await launchUrl(Uri.parse(petunjukNetwork));
+                        } catch (e) {
+                          print(e.toString());
+                        }
                       } else {
                         context.goNamed(route);
                       }
@@ -791,6 +925,18 @@ class ActivityMenuComponent extends HookWidget {
                         await state.fetchProvinces().then((_) {
                           if (context.mounted) showDialog(context: context, builder: (BuildContext context) => PointVsTarget());
                         });
+                      } else if (tooltip == 'Network') {
+                        try {
+                          await launchUrl(Uri.parse(googleFormNetwork));
+                        } catch (e) {
+                          print(e.toString());
+                        }
+                      } else if (tooltip == 'Network2') {
+                        try {
+                          await launchUrl(Uri.parse(petunjukNetwork));
+                        } catch (e) {
+                          print(e.toString());
+                        }
                       } else {
                         context.goNamed(route);
                       }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stsj/core/cleanArc/dashboard_service/helpers/format.dart';
 import 'package:stsj/core/models/Report/absent_history.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/global/font.dart';
@@ -112,7 +111,6 @@ class _SalesmanAutoCompleteState extends State<SalesmanAutoComplete> {
           return TextField(
             controller: textEditingController,
             focusNode: focusNode,
-            inputFormatters: [UpperCaseText()],
             textCapitalization: TextCapitalization.characters,
             textAlignVertical: TextAlignVertical.center,
             style: GlobalFont.bigfontR,
@@ -144,12 +142,10 @@ class _SalesmanAutoCompleteState extends State<SalesmanAutoComplete> {
           }
 
           return state.getSipSalesmanList.where((SipSalesmanModel salesman) {
-            return salesman.employeeName.startsWith(textEditingValue.text) ||
-                salesman.employeeID.contains(textEditingValue.text);
+            return salesman.employeeName.startsWith(textEditingValue.text) || salesman.employeeID.contains(textEditingValue.text);
           }).toList();
         },
-        onSelected: (SipSalesmanModel selection) =>
-            widget.setFilter(selection.employeeID),
+        onSelected: (SipSalesmanModel selection) => widget.setFilter(selection.employeeID),
       ),
     );
   }

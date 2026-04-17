@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stsj/core/cleanArc/dashboard_service/helpers/format.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/global/font.dart';
 
@@ -113,7 +112,6 @@ class _PicAutoCompleteState extends State<PicAutoComplete> {
           return TextField(
             controller: textEditingController,
             focusNode: focusNode,
-            inputFormatters: [UpperCaseText()],
             textCapitalization: TextCapitalization.characters,
             textAlignVertical: TextAlignVertical.center,
             style: GlobalFont.bigfontR,
@@ -146,13 +144,11 @@ class _PicAutoCompleteState extends State<PicAutoComplete> {
 
           if (widget.isPicking) {
             return state.pickingPicList.where((String pic) {
-              return pic.startsWith(textEditingValue.text) ||
-                  pic.contains(textEditingValue.text);
+              return pic.startsWith(textEditingValue.text) || pic.contains(textEditingValue.text);
             }).toList();
           } else {
             return state.packingPicList.where((String pic) {
-              return pic.startsWith(textEditingValue.text) ||
-                  pic.contains(textEditingValue.text);
+              return pic.startsWith(textEditingValue.text) || pic.contains(textEditingValue.text);
             }).toList();
           }
         },

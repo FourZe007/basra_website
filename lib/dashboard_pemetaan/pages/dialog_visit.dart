@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:stsj/dashboard-fixup/utilities/extension.dart';
 import 'package:stsj/dashboard-fixup/utilities/format.dart';
 import 'package:stsj/dashboard_pemetaan/models/geo_visit.dart';
 import 'package:stsj/dashboard_pemetaan/services/api.dart';
@@ -171,7 +170,7 @@ class _DialogVisitState extends State<DialogVisit> {
                                         children: [
                                           Text('Tanggal', style: TextStyle(fontSize: 12, color: Colors.black54)),
                                           const SizedBox(width: 20),
-                                          Text(Format.kalenderFormat(data.currentDate).toCapitalized, style: TextStyle(fontSize: 12)),
+                                          Text(Format.kalenderFormat(data.currentDate), style: TextStyle(fontSize: 12)),
                                         ],
                                       ),
                                     ),
