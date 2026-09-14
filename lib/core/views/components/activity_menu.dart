@@ -290,23 +290,20 @@ class ActivityMenuComponent extends HookWidget {
                 }
               },
             ),
-
-            // Dashboard Power BI
+            // Dashboard Sales
             Builder(
               builder: (context) {
-                if (state.getSubHeaderList.contains('110')) {
-                  print('110 is inside SubHeaderList');
+                if (state.getSubHeaderList.contains('114')) {
+                  print('114 is inside SubHeaderList');
                   return Container(
                     margin: EdgeInsets.only(right: 50.0),
                     child: Column(
                       children: [
-                        // ~:NEW:~
-                        // Points
                         _buildMenuIcon(
                           context,
-                          'assets/images/dashboard-2.png',
+                          'assets/images/dashboard.png',
                           'Dashboard Sales',
-                          RoutesConstant.dashboardMarketing,
+                          RoutesConstant.dashboardsales,
                           state,
                         ),
                         const Text('Dashboard Sales'),
@@ -315,7 +312,207 @@ class ActivityMenuComponent extends HookWidget {
                     ),
                   );
                 } else {
-                  print('110 is not inside SubHeaderList');
+                  print('114 is not inside SubHeaderList');
+                  return const SizedBox();
+                }
+              },
+            ),
+
+            // Operational Dealer
+            Builder(
+              builder: (context) {
+                if (state.getSubHeaderList.contains('115')) {
+                  print('115 is inside SubHeaderList');
+                  return Container(
+                    margin: EdgeInsets.only(right: 50.0),
+                    child: Column(
+                      children: [
+                        _buildMenuIcon(
+                          context,
+                          'assets/images/operation-dealer.png',
+                          'Operational Dealer',
+                          RoutesConstant.operationaldealer,
+                          state,
+                        ),
+                        const Text('Operational Dealer'),
+                        // ~:NEW:~
+                      ],
+                    ),
+                  );
+                } else {
+                  print('115 is not inside SubHeaderList');
+                  return const SizedBox();
+                }
+              },
+            ),
+
+            // Dashboard Google Review
+            Builder(
+              builder: (context) {
+                if (state.getSubHeaderList.contains('116')) {
+                  print('116 is inside SubHeaderList');
+                  return Container(
+                    margin: EdgeInsets.only(right: 50.0),
+                    child: Column(
+                      children: [
+                        _buildMenuIcon(
+                          context,
+                          'assets/images/dashboard-3.png',
+                          'Dashboard Google Review',
+                          RoutesConstant.dashboardgooglereview,
+                          state,
+                        ),
+                        const Text('Dashboard Google Review'),
+                        // ~:NEW:~
+                      ],
+                    ),
+                  );
+                } else {
+                  print('116 is not inside SubHeaderList');
+                  return const SizedBox();
+                }
+              },
+            ),
+
+            // Operational Sales Supervisor
+            Builder(
+              builder: (context) {
+                if (state.getSubHeaderList.contains('117')) {
+                  print('117 is inside SubHeaderList');
+                  return Container(
+                    margin: EdgeInsets.only(right: 50.0),
+                    child: Column(
+                      children: [
+                        _buildMenuIcon(
+                          context,
+                          'assets/images/operational-sales-spv.png',
+                          'Operational Sales Supervisor',
+                          RoutesConstant.operationalsalessupervisor,
+                          state,
+                        ),
+                        const Text('Operational Sales Supervisor'),
+                        // ~:NEW:~
+                      ],
+                    ),
+                  );
+                } else {
+                  print('117 is not inside SubHeaderList');
+                  return const SizedBox();
+                }
+              },
+            ),
+
+            // Manpower Condition
+            Builder(
+              builder: (context) {
+                if (state.getSubHeaderList.contains('118')) {
+                  print('118 is inside SubHeaderList');
+                  return Container(
+                    margin: EdgeInsets.only(right: 50.0),
+                    child: Column(
+                      children: [
+                        _buildMenuIcon(
+                          context,
+                          'assets/images/manpower-condition.png',
+                          'Manpower Condition',
+                          RoutesConstant.manpowercondition,
+                          state,
+                        ),
+                        const Text('Manpower Condition'),
+                        // ~:NEW:~
+                      ],
+                    ),
+                  );
+                } else {
+                  print('118 is not inside SubHeaderList');
+                  return const SizedBox();
+                }
+              },
+            ),
+
+            // Network Report
+            Builder(
+              builder: (context) {
+                if (state.getSubHeaderList.contains('119')) {
+                  print('119 is inside SubHeaderList');
+                  return Container(
+                    margin: EdgeInsets.only(right: 50.0),
+                    child: Column(
+                      children: [
+                        _buildMenuIcon(
+                          context,
+                          'assets/images/network-report.png',
+                          'Network Report',
+                          RoutesConstant.networkreport,
+                          state,
+                        ),
+                        const Text('Network Report'),
+                        // ~:NEW:~
+                      ],
+                    ),
+                  );
+                } else {
+                  print('119 is not inside SubHeaderList');
+                  return const SizedBox();
+                }
+              },
+            ),
+
+            // Dashboard Sparepart STSJ
+            Builder(
+              builder: (context) {
+                if (state.getSubHeaderList.contains('120')) {
+                  print('120 is inside SubHeaderList');
+                  return Container(
+                    margin: EdgeInsets.only(right: 50.0),
+                    child: Column(
+                      children: [
+                        // ~:NEW:~
+                        // Aktivitas Sales
+                        _buildMenuIcon(
+                          context,
+                          'assets/images/dashboard-2.png',
+                          'Dashboard Sparepart STSJ',
+                          RoutesConstant.dashboardSparepartstsj,
+                          state,
+                        ),
+                        const Text('Dashboard Sparepart STSJ'),
+                        // ~:NEW:~
+                      ],
+                    ),
+                  );
+                } else {
+                  print('120 is not inside SubHeaderList');
+                  return const SizedBox();
+                }
+              },
+            ),
+
+            // Dashboard Sparepart SAMP
+            Builder(
+              builder: (context) {
+                if (state.getSubHeaderList.contains('121')) {
+                  print('120 is inside SubHeaderList');
+                  return Container(
+                    margin: EdgeInsets.only(right: 50.0),
+                    child: Column(
+                      children: [
+                        // ~:NEW:~
+                        // Aktivitas Sales
+                        _buildMenuIcon(
+                          context,
+                          'assets/images/dashboard-2.png',
+                          'Dashboard Sparepart SAMP',
+                          RoutesConstant.dashboardSparepartsamp,
+                          state,
+                        ),
+                        const Text('Dashboard Sparepart SAMP'),
+                        // ~:NEW:~
+                      ],
+                    ),
+                  );
+                } else {
+                  print('120 is not inside SubHeaderList');
                   return const SizedBox();
                 }
               },
@@ -735,40 +932,6 @@ class ActivityMenuComponent extends HookWidget {
             ],
           ),
 
-          // Dashboard Power BI
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: Builder(
-                  builder: (context) {
-                    if (state.getSubHeaderList.contains('110')) {
-                      print('110 is inside SubHeaderList');
-                      return Column(
-                        children: [
-                          // ~:NEW:~
-                          // Points
-                          _buildMenuIcon(
-                            context,
-                            'assets/images/dashboard-2.png',
-                            'Dashboard Sales',
-                            RoutesConstant.dashboardMarketing,
-                            state,
-                          ),
-                          const Text('Dashboard Sales'),
-                          // ~:NEW:~
-                        ],
-                      );
-                    } else {
-                      print('110 is not inside SubHeaderList');
-                      return const SizedBox();
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-
           // PDCA Network
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -801,6 +964,249 @@ class ActivityMenuComponent extends HookWidget {
                 ),
               ),
             ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              // Dashboard Sales
+              Expanded(
+                child: Builder(
+                  builder: (context) {
+                    if (state.getSubHeaderList.contains('114')) {
+                      print('114 is inside SubHeaderList');
+                      return Column(
+                        children: [
+                          // ~:NEW:~
+                          // Map
+                          _buildMenuIcon(
+                            context,
+                            'assets/images/dashboard.png',
+                            'Dashboard Sales',
+                            RoutesConstant.dashboardsales,
+                            state,
+                          ),
+                          const Text('Dashboard Sales'),
+                          // ~:NEW:~
+                        ],
+                      );
+                    } else {
+                      print('114 is not inside SubHeaderList');
+                      return const SizedBox();
+                    }
+                  },
+                ),
+              ),
+
+              //Operational Dealer
+              Expanded(
+                child: Builder(
+                  builder: (context) {
+                    if (state.getSubHeaderList.contains('115')) {
+                      print('115 is inside SubHeaderList');
+                      return Column(
+                        children: [
+                          // ~:NEW:~
+                          // Aktivitas Sales
+                          _buildMenuIcon(
+                            context,
+                            'assets/images/operation-dealer.png',
+                            'Operational Dealer',
+                            RoutesConstant.operationaldealer,
+                            state,
+                          ),
+                          const Text('Operational Dealer'),
+                          // ~:NEW:~
+                        ],
+                      );
+                    } else {
+                      print('115 is not inside SubHeaderList');
+                      return const SizedBox();
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              // Dashboard Google Review
+              Expanded(
+                child: Builder(
+                  builder: (context) {
+                    if (state.getSubHeaderList.contains('116')) {
+                      print('116 is inside SubHeaderList');
+                      return Column(
+                        children: [
+                          // ~:NEW:~
+                          // Aktivitas Manager
+                          _buildMenuIcon(
+                            context,
+                            'assets/images/dashboard-3.png',
+                            'Dashboard Google Review',
+                            RoutesConstant.dashboardgooglereview,
+                            state,
+                          ),
+                          const Text('Dashboard Google Review'),
+                          // ~:NEW:~
+                        ],
+                      );
+                    } else {
+                      print('116 is not inside SubHeaderList');
+                      return const SizedBox();
+                    }
+                  },
+                ),
+              ),
+
+              // Operational Sales Supervisor
+              Expanded(
+                child: Builder(
+                  builder: (context) {
+                    if (state.getSubHeaderList.contains('117')) {
+                      print('117 is inside SubHeaderList');
+                      return Column(
+                        children: [
+                          // ~:NEW:~
+                          // Dashboard Pemetaan
+                          _buildMenuIcon(
+                            context,
+                            'assets/images/operational-sales-spv.png',
+                            'Operational Sales Supervisor',
+                            RoutesConstant.operationalsalessupervisor,
+                            state,
+                          ),
+                          const Text('Operational Sales Supervisor'),
+                          // ~:NEW:~
+                        ],
+                      );
+                    } else {
+                      print('117 is not inside SubHeaderList');
+                      return const SizedBox();
+                    }
+                  },
+                ),
+              ),
+
+              // Manpower Condition
+              Expanded(
+                child: Builder(
+                  builder: (context) {
+                    if (state.getSubHeaderList.contains('118')) {
+                      print('118 is inside SubHeaderList');
+                      return Column(
+                        children: [
+                          // ~:NEW:~
+                          // Aktivitas Mingguan
+                          _buildMenuIcon(
+                            context,
+                            'assets/images/manpower- condition.png',
+                            'Manpower Condition',
+                            RoutesConstant.manpowercondition,
+                            state,
+                          ),
+                          const Text('Manpower Condition'),
+                          // ~:NEW:~
+                        ],
+                      );
+                    } else {
+                      print('118 is not inside SubHeaderList');
+                      return const SizedBox();
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+
+          // Network Report
+          Builder(
+            builder: (context) {
+              if (state.getSubHeaderList.contains('119')) {
+                print('119 is inside SubHeaderList');
+                return Container(
+                  margin: EdgeInsets.only(right: 50.0),
+                  child: Column(
+                    children: [
+                      // ~:NEW:~
+                      // Aktivitas Sales
+                      _buildMenuIcon(
+                        context,
+                        'assets/images/network-report.png',
+                        'Network Report',
+                        RoutesConstant.networkreport,
+                        state,
+                      ),
+                      const Text('Network Report'),
+                      // ~:NEW:~
+                    ],
+                  ),
+                );
+              } else {
+                print('119 is not inside SubHeaderList');
+                return const SizedBox();
+              }
+            },
+          ),
+
+          // Dashboard Sparepart STSJ
+          Builder(
+            builder: (context) {
+              if (state.getSubHeaderList.contains('120')) {
+                print('120 is inside SubHeaderList');
+                return Container(
+                  margin: EdgeInsets.only(right: 50.0),
+                  child: Column(
+                    children: [
+                      // ~:NEW:~
+                      // Aktivitas Sales
+                      _buildMenuIcon(
+                        context,
+                        'assets/images/dashboard-2.png',
+                        'Dashboard Sparepart STSJ',
+                        RoutesConstant.dashboardSparepartstsj,
+                        state,
+                      ),
+                      const Text('Dashboard Sparepart STSJ'),
+                      // ~:NEW:~
+                    ],
+                  ),
+                );
+              } else {
+                print('120 is not inside SubHeaderList');
+                return const SizedBox();
+              }
+            },
+          ),
+
+          // Dashboard Sparepart SAMP
+          Builder(
+            builder: (context) {
+              if (state.getSubHeaderList.contains('121')) {
+                print('120 is inside SubHeaderList');
+                return Container(
+                  margin: EdgeInsets.only(right: 50.0),
+                  child: Column(
+                    children: [
+                      // ~:NEW:~
+                      // Aktivitas Sales
+                      _buildMenuIcon(
+                        context,
+                        'assets/images/dashboard-2.png',
+                        'Dashboard Sparepart SAMP',
+                        RoutesConstant.dashboardSparepartsamp,
+                        state,
+                      ),
+                      const Text('Dashboard Sparepart SAMP'),
+                      // ~:NEW:~
+                    ],
+                  ),
+                );
+              } else {
+                print('120 is not inside SubHeaderList');
+                return const SizedBox();
+              }
+            },
           ),
         ],
       ),
@@ -864,15 +1270,23 @@ class ActivityMenuComponent extends HookWidget {
                         });
                       } else if (tooltip == 'Dashboard Pemetaan') {
                         await state.fetchProvinces().then((_) {
-                          if (context.mounted) showDialog(context: context, builder: (BuildContext context) => FilterDashboard());
+                          if (context.mounted)
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => FilterDashboard());
                         });
                       } else if (tooltip == 'Points') {
                         await state.fetchProvinces().then((_) {
-                          if (context.mounted) showDialog(context: context, builder: (BuildContext context) => FilterPage());
+                          if (context.mounted)
+                            showDialog(
+                                context: context, builder: (BuildContext context) => FilterPage());
                         });
                       } else if (tooltip == 'Target VS Result') {
                         await state.fetchProvinces().then((_) {
-                          if (context.mounted) showDialog(context: context, builder: (BuildContext context) => PointVsTarget());
+                          if (context.mounted)
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => PointVsTarget());
                         });
                       } else if (tooltip == 'Network') {
                         try {
@@ -915,15 +1329,23 @@ class ActivityMenuComponent extends HookWidget {
                         });
                       } else if (tooltip == 'Dashboard Pemetaan') {
                         await state.fetchProvinces().then((_) {
-                          if (context.mounted) showDialog(context: context, builder: (BuildContext context) => FilterDashboard());
+                          if (context.mounted)
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => FilterDashboard());
                         });
                       } else if (tooltip == 'Points') {
                         await state.fetchProvinces().then((_) {
-                          if (context.mounted) showDialog(context: context, builder: (BuildContext context) => FilterPage());
+                          if (context.mounted)
+                            showDialog(
+                                context: context, builder: (BuildContext context) => FilterPage());
                         });
                       } else if (tooltip == 'Target VS Result') {
                         await state.fetchProvinces().then((_) {
-                          if (context.mounted) showDialog(context: context, builder: (BuildContext context) => PointVsTarget());
+                          if (context.mounted)
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => PointVsTarget());
                         });
                       } else if (tooltip == 'Network') {
                         try {

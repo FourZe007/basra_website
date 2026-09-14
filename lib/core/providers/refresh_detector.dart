@@ -12,15 +12,15 @@ class RefreshDetector {
 
     if (kIsWeb) {
       // Add the `beforeunload` event listener
-      js.context.callMethod('addEventListener', [
-        'beforeunload',
-        js.allowInterop((event) {
-          print("Browser refresh detected!");
-          // if (onRefresh != null) {
-          //   onRefresh();
-          // }
-        }),
-      ]);
+      // js.context.callMethod('addEventListener', [
+      //   'beforeunload',
+      //   js.allowInterop((event) {
+      //     print("Browser refresh detected!");
+      //     // if (onRefresh != null) {
+      //     //   onRefresh();
+      //     // }
+      //   }),
+      // ]);
     } else {
       // Non-web platforms (e.g., mobile, desktop)
       print("This feature is only available on the web.");
@@ -31,7 +31,7 @@ class RefreshDetector {
   void dispose() {
     js.context.callMethod('removeEventListener', [
       'beforeunload',
-      js.allowInterop((_) {}),
+      //js.allowInterop((_) {}),
     ]);
   }
 }

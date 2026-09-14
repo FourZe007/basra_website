@@ -7,7 +7,9 @@ import 'package:stsj/dashboard_pemetaan/models/geo_visit.dart';
 import 'package:stsj/dashboard_pemetaan/services/api.dart';
 
 class DialogVisit extends StatefulWidget {
-  const DialogVisit(this.branch, this.shop, this.tgl1, this.tgl2, this.lat, this.lng, {super.key});
+  const DialogVisit(
+      this.branch, this.shop, this.tgl1, this.tgl2, this.lat, this.lng,
+      {super.key});
   final String branch;
   final String shop;
   final String tgl1;
@@ -49,7 +51,9 @@ class _DialogVisitState extends State<DialogVisit> {
 
   Future<void> getListApi() async {
     try {
-      await ApiPemetaan.getDetailVisit(widget.branch, widget.shop, widget.tgl1, widget.tgl2, '01', widget.lat, widget.lng).then((value) {
+      await ApiPemetaan.getDetailVisit(widget.branch, widget.shop, widget.tgl1,
+              widget.tgl2, '01', widget.lat, widget.lng)
+          .then((value) {
         setState(() {
           loading = false;
           error = false;
@@ -79,7 +83,9 @@ class _DialogVisitState extends State<DialogVisit> {
         : error
             ? Padding(
                 padding: EdgeInsets.all(20),
-                child: Center(child: Text(pesanError, style: TextStyle(fontSize: 12, color: Colors.white))),
+                child: Center(
+                    child: Text(pesanError,
+                        style: TextStyle(fontSize: 12, color: Colors.white))),
               )
             : Stack(
                 children: [
@@ -87,17 +93,24 @@ class _DialogVisitState extends State<DialogVisit> {
                     child: Listener(
                       onPointerSignal: (event) {
                         if (event is PointerScrollEvent) {
-                          _scrollController.animateTo(_scrollController.offset + event.scrollDelta.dy,
-                              duration: Duration(milliseconds: 2), curve: Curves.bounceIn);
+                          _scrollController.animateTo(
+                              _scrollController.offset + event.scrollDelta.dy,
+                              duration: Duration(milliseconds: 2),
+                              curve: Curves.bounceIn);
                         }
                       },
                       child: ScrollConfiguration(
-                        behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse}),
+                        behavior: ScrollConfiguration.of(context).copyWith(
+                            dragDevices: {
+                              PointerDeviceKind.touch,
+                              PointerDeviceKind.mouse
+                            }),
                         child: ListView.builder(
                           controller: _scrollController,
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          padding: EdgeInsets.only(left: 40, top: 40, bottom: 30, right: 20),
+                          padding: EdgeInsets.only(
+                              left: 40, top: 40, bottom: 30, right: 20),
                           itemCount: listVisit.length,
                           itemBuilder: (context, index) {
                             GeoVisit data = listVisit[index];
@@ -105,37 +118,55 @@ class _DialogVisitState extends State<DialogVisit> {
                               aspectRatio: 2 / 4,
                               child: Container(
                                 margin: EdgeInsets.only(right: 20),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Colors.white),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     AspectRatio(
                                       aspectRatio: 4 / 3,
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-                                        child: Image.memory(base64Decode(data.pic), fit: BoxFit.contain),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(8),
+                                            topRight: Radius.circular(8)),
+                                        child: Image.memory(
+                                            base64Decode(data.pic),
+                                            fit: BoxFit.contain),
                                       ),
                                     ),
                                     const SizedBox(height: 8),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
                                       child: Text(
                                         'Detail Informasi',
-                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     const SizedBox(height: 5),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text('Jenis Aktivitas', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                                          Text('Jenis Aktivitas',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54)),
                                           const SizedBox(width: 20),
                                           Flexible(
                                             child: Text(
-                                              data.jenisAktivitas == '' ? '-' : data.jenisAktivitas,
+                                              data.jenisAktivitas == ''
+                                                  ? '-'
+                                                  : data.jenisAktivitas,
                                               style: TextStyle(fontSize: 12),
                                               textAlign: TextAlign.right,
                                             ),
@@ -145,16 +176,24 @@ class _DialogVisitState extends State<DialogVisit> {
                                     ),
                                     const SizedBox(height: 3),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text('Lokasi', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                                          Text('Lokasi',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54)),
                                           const SizedBox(width: 20),
                                           Flexible(
                                             child: Text(
-                                              data.lokasi == '' ? '-' : data.lokasi,
+                                              data.lokasi == ''
+                                                  ? '-'
+                                                  : data.lokasi,
                                               style: TextStyle(fontSize: 12),
                                               textAlign: TextAlign.right,
                                             ),
@@ -164,52 +203,80 @@ class _DialogVisitState extends State<DialogVisit> {
                                     ),
                                     const SizedBox(height: 3),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Tanggal', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                                          Text('Tanggal',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54)),
                                           const SizedBox(width: 20),
-                                          Text(Format.kalenderFormat(data.currentDate), style: TextStyle(fontSize: 12)),
+                                          Text(
+                                              Format.kalenderFormat(
+                                                  data.currentDate),
+                                              style: TextStyle(fontSize: 12)),
                                         ],
                                       ),
                                     ),
                                     const SizedBox(height: 3),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Waktu', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                                          Text('Waktu',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54)),
                                           const SizedBox(width: 20),
-                                          Text(data.currentTime, style: TextStyle(fontSize: 12)),
+                                          Text(data.currentTime,
+                                              style: TextStyle(fontSize: 12)),
                                         ],
                                       ),
                                     ),
                                     const SizedBox(height: 3),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Jumlah Sales', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                                          Text('Jumlah Sales',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54)),
                                           const SizedBox(width: 20),
-                                          Text('${data.salesman} orang', style: TextStyle(fontSize: 12)),
+                                          Text('${data.salesman} orang',
+                                              style: TextStyle(fontSize: 12)),
                                         ],
                                       ),
                                     ),
                                     const SizedBox(height: 3),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text('Unit Display', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                                          Text('Unit Display',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54)),
                                           const SizedBox(width: 20),
                                           Flexible(
                                             child: Text(
-                                              data.unitDisplay == '' ? '-' : data.unitDisplay,
+                                              data.unitDisplay == ''
+                                                  ? '-'
+                                                  : data.unitDisplay,
                                               style: TextStyle(fontSize: 12),
                                               textAlign: TextAlign.right,
                                             ),
@@ -219,52 +286,78 @@ class _DialogVisitState extends State<DialogVisit> {
                                     ),
                                     const SizedBox(height: 3),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Database', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                                          Text('Database',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54)),
                                           const SizedBox(width: 20),
-                                          Text('${data.database}', style: TextStyle(fontSize: 12)),
+                                          Text('${data.database}',
+                                              style: TextStyle(fontSize: 12)),
                                         ],
                                       ),
                                     ),
                                     const SizedBox(height: 3),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Hot Prospek', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                                          Text('Hot Prospek',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54)),
                                           const SizedBox(width: 20),
-                                          Text('${data.hotprospek}', style: TextStyle(fontSize: 12)),
+                                          Text('${data.hotprospek}',
+                                              style: TextStyle(fontSize: 12)),
                                         ],
                                       ),
                                     ),
                                     const SizedBox(height: 3),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Deal', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                                          Text('Deal',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54)),
                                           const SizedBox(width: 20),
-                                          Text('${data.deal}', style: TextStyle(fontSize: 12)),
+                                          Text('${data.deal}',
+                                              style: TextStyle(fontSize: 12)),
                                         ],
                                       ),
                                     ),
                                     const SizedBox(height: 3),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text('Unit Test Ride', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                                          Text('Unit Test Ride',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54)),
                                           const SizedBox(width: 20),
                                           Flexible(
                                             child: Text(
-                                              data.unitTestRide == '' ? '-' : data.unitTestRide,
+                                              data.unitTestRide == ''
+                                                  ? '-'
+                                                  : data.unitTestRide,
                                               style: TextStyle(fontSize: 12),
                                               textAlign: TextAlign.right,
                                             ),
@@ -274,13 +367,19 @@ class _DialogVisitState extends State<DialogVisit> {
                                     ),
                                     const SizedBox(height: 3),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Peserta Test Ride', style: TextStyle(fontSize: 12, color: Colors.black54)),
+                                          Text('Peserta Test Ride',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54)),
                                           const SizedBox(width: 20),
-                                          Text('${data.deal} orang', style: TextStyle(fontSize: 12)),
+                                          Text('${data.deal} orang',
+                                              style: TextStyle(fontSize: 12)),
                                         ],
                                       ),
                                     ),
@@ -296,7 +395,7 @@ class _DialogVisitState extends State<DialogVisit> {
                     ),
                   ),
                   Align(
-                    alignment: AlignmentGeometry.topRight,
+                    alignment: Alignment.topRight,
                     child: Padding(
                       padding: EdgeInsets.only(top: 5, right: 5),
                       child: GestureDetector(
@@ -308,7 +407,7 @@ class _DialogVisitState extends State<DialogVisit> {
                             Icons.close_rounded,
                             size: 25,
                             color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                            weight: 200,
                           ),
                         ),
                       ),

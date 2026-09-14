@@ -185,9 +185,7 @@ class HomeMenuComponent extends HookWidget {
     state.entryLevelName = prefs.getString('EntryLevelName') ?? '';
     state.companyName = prefs.getString('CompanyName') ?? '';
 
-    state
-        .fetchUserAccess(companyCode, state.getEntryLevelId)
-        .then((access) async {
+    state.fetchUserAccess(companyCode, state.getEntryLevelId).then((access) async {
       print('Access length: ${access.length}');
 
       // ~:Get Branches:~
@@ -198,12 +196,14 @@ class HomeMenuComponent extends HookWidget {
         // Note --> disable for a while to display dashboard menu as the initial page
         // Delivery Page is still considered as global page who can be accessed by all users
         String category = '';
+
         for (var userAccess in access) {
           if (userAccess.isAllowView == 1) {
             category = userAccess.category;
             break;
           }
         }
+
         if (category == 'DASHBOARD') {
           state.setStaticMenuNotifier('dashboard');
         } else if (category == 'SALES ACTIVITY') {
@@ -219,7 +219,7 @@ class HomeMenuComponent extends HookWidget {
         }
 
         state.headerList.clear();
-        // state.headerList.addAll(access.map((e) => e.category).toSet().toList());
+        state.headerList.addAll(access.map((e) => e.category).toSet().toList());
         state.headerList.addAll(access.map((e) {
           if (e.isAllowView == 1) {
             return e.category;
@@ -227,6 +227,7 @@ class HomeMenuComponent extends HookWidget {
             return '-';
           }
         }).toList());
+
         // print('Header list length: ${state.headerList.length}');
         if (state.headerList.isEmpty) {
           state.headerList.add('dashboard');
@@ -241,6 +242,7 @@ class HomeMenuComponent extends HookWidget {
             return '-';
           }
         }));
+
         await prefs.setStringList('subheader', state.subHeaderList);
 
         print('~:List of Sub Header:~');

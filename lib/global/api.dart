@@ -371,7 +371,7 @@ class GlobalAPI {
     String endDate,
   ) async {
     var url = Uri.https(
-      'wsip.yamaha-jatim.co.id:2448',
+      'basra.yamaha-jatim.co.id:2448',
       '/api/SIPSales/AttendanceHistory',
     );
 
@@ -428,7 +428,7 @@ class GlobalAPI {
     String isActive,
   ) async {
     var url = Uri.https(
-      'wsip.yamaha-jatim.co.id:2448',
+      'basra.yamaha-jatim.co.id:2448',
       '/api/SIPSales/SIPSalesman',
     );
 
@@ -1732,7 +1732,7 @@ class GlobalAPI {
       final response =
           await http.post(url, body: jsonEncode(mapWeeklyReport), headers: {
         'Content-Type': 'application/json',
-      }).timeout(const Duration(seconds: 60));
+      }).timeout(const Duration(seconds: 240));
 
       if (response.statusCode <= 200) {
         var jsonWeeklyReport = jsonDecode(response.body);

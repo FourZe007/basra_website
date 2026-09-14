@@ -88,8 +88,10 @@ class ApiPoint {
   //   });
   // }
 
-  static Future<List<PointSMHD>> getSMPoint(String user, String cabang, String area, String tgl1, String tgl2) async {
-    var url = Uri.https('wsip.yamaha-jatim.co.id:2448', '/api/SIPSales/BrowseEmployeePointSM');
+  static Future<List<PointSMHD>> getSMPoint(
+      String user, String cabang, String area, String tgl1, String tgl2) async {
+    var url = Uri.https(
+        'wsip.yamaha-jatim.co.id:2448', '/api/SIPSales/BrowseEmployeePointSM');
     http.Response respon;
     try {
       respon = await http.post(
@@ -101,13 +103,18 @@ class ApiPoint {
           'BeginDate': tgl1,
           'EndDate': tgl2,
         }),
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
       ).timeout(const Duration(seconds: 180));
 
       if (respon.statusCode == 200) {
         var jsonDecode = json.decode(respon.body);
         if (jsonDecode['code'] == '100') {
-          List<PointSMHD> list = (jsonDecode['data'] as List).map<PointSMHD>((data) => PointSMHD.fromJson(data)).toList();
+          List<PointSMHD> list = (jsonDecode['data'] as List)
+              .map<PointSMHD>((data) => PointSMHD.fromJson(data))
+              .toList();
 
           return list;
         } else {
@@ -124,8 +131,10 @@ class ApiPoint {
   }
 //!
 
-  static Future<Map<String, dynamic>> prosesUploadTarget(String user, String thn, String bln, List<Klasifikasi> listData) async {
-    var url = Uri.https('wsip.yamaha-jatim.co.id:2448', '/api/SIPSales/ModifyTargetDealerActivity');
+  static Future<Map<String, dynamic>> prosesUploadTarget(
+      String user, String thn, String bln, List<Klasifikasi> listData) async {
+    var url = Uri.https('basra.yamaha-jatim.co.id:2448',
+        '/api/SIPSales/ModifyTargetDealerActivity');
     http.Response respon;
     List<Map<String, dynamic>> tmp = [
       for (Klasifikasi data in listData)
@@ -175,7 +184,8 @@ class ApiPoint {
       ).timeout(const Duration(seconds: 180));
       if (respon.statusCode == 200) {
         var jsonDecode = json.decode(respon.body);
-        if (jsonDecode['Code'] == '100' && jsonDecode['Data'][0]['ResultMessage'] == 'SUKSES') {
+        if (jsonDecode['Code'] == '100' &&
+            jsonDecode['Data'][0]['ResultMessage'] == 'SUKSES') {
           return jsonDecode['Data'][0];
         } else {
           throw (jsonDecode['Msg'] ?? 'UPLOAD GAGAL');
@@ -265,8 +275,10 @@ class ApiPoint {
   //   });
   // }
 
-  static Future<List<ModelManagerActivities>> getManagerAct(String user, String cabang, String area, String tgl) async {
-    var url = Uri.https('wsip.yamaha-jatim.co.id:2448', '/DealerActivity/DealerActivity/BrowseByArea');
+  static Future<List<ModelManagerActivities>> getManagerAct(
+      String user, String cabang, String area, String tgl) async {
+    var url = Uri.https('basra.yamaha-jatim.co.id:2448',
+        '/DealerActivity/DealerActivity/BrowseByArea');
     http.Response respon;
     try {
       respon = await http.post(
@@ -277,13 +289,19 @@ class ApiPoint {
           'SmallArea': area,
           'CurrentDate': tgl,
         }),
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
       ).timeout(const Duration(seconds: 180));
 
       if (respon.statusCode == 200) {
         var jsonDecode = json.decode(respon.body);
         if (jsonDecode['code'] == '100') {
-          return (jsonDecode['data'] as List).map<ModelManagerActivities>((data) => ModelManagerActivities.fromJson(data)).toList();
+          return (jsonDecode['data'] as List)
+              .map<ModelManagerActivities>(
+                  (data) => ModelManagerActivities.fromJson(data))
+              .toList();
         } else {
           throw (jsonDecode['msg'] ?? 'DATA NOT FOUND');
         }
@@ -297,8 +315,10 @@ class ApiPoint {
     }
   }
 
-  static Future<String> getFotoFS(String branch, String shop, String actId, String tgl) async {
-    var url = Uri.https('wsip.yamaha-jatim.co.id:2448', '/DealerActivity/DealerActivity/DealerActivityPic');
+  static Future<String> getFotoFS(
+      String branch, String shop, String actId, String tgl) async {
+    var url = Uri.https('basra.yamaha-jatim.co.id:2448',
+        '/DealerActivity/DealerActivity/DealerActivityPic');
     http.Response respon;
     try {
       respon = await http.post(
@@ -309,7 +329,10 @@ class ApiPoint {
           'ActivityID': actId,
           'CurrentDate': tgl,
         }),
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
       ).timeout(const Duration(seconds: 180));
 
       if (respon.statusCode == 200) {
@@ -328,10 +351,11 @@ class ApiPoint {
       throw (e.toString());
     }
   }
-//!
 
-  static Future<Map<String, dynamic>> updateScore(int? p1, int? p2, int? p3, ModelManagerActivities model, String user) async {
-    var url = Uri.https('wsip.yamaha-jatim.co.id:2448', '/api/SIPSales/InsertEmployeePointSM');
+  static Future<Map<String, dynamic>> updateScore(int? p1, int? p2, int? p3,
+      ModelManagerActivities model, String user) async {
+    var url = Uri.https(
+        'basra.yamaha-jatim.co.id:2448', '/api/SIPSales/InsertEmployeePointSM');
     http.Response respon;
     List<Map<String, dynamic>> tmp = [
       Map.of({
@@ -350,12 +374,16 @@ class ApiPoint {
       respon = await http.post(
         url,
         body: jsonEncode(tmp),
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
       ).timeout(const Duration(seconds: 30));
 
       if (respon.statusCode == 200) {
         var jsonDecode = json.decode(respon.body);
-        if (jsonDecode['code'] == '100' && jsonDecode['data'][0]['resultMessage'] == 'SUKSES') {
+        if (jsonDecode['code'] == '100' &&
+            jsonDecode['data'][0]['resultMessage'] == 'SUKSES') {
           return jsonDecode['data'][0];
         } else {
           throw (jsonDecode['msg'] ?? 'DATA NOT FOUND');
@@ -370,16 +398,22 @@ class ApiPoint {
     }
   }
 
-  static Future<Activity> getActivityCaption(String actId, String branch, String shop, String tgl) async {
+  static Future<Activity> getActivityCaption(
+      String actId, String branch, String shop, String tgl) async {
     var url = actId == '00'
-        ? Uri.https('wsip.yamaha-jatim.co.id:2448', '/DealerActivity/DealerActivity01/Show')
+        ? Uri.https('basra.yamaha-jatim.co.id:2448',
+            '/DealerActivity/DealerActivity01/Show')
         : actId == '01'
-            ? Uri.https('wsip.yamaha-jatim.co.id:2448', '/DealerActivity/DealerActivity02/Show')
+            ? Uri.https('basra.yamaha-jatim.co.id:2448',
+                '/DealerActivity/DealerActivity02/Show')
             : actId == '02'
-                ? Uri.https('wsip.yamaha-jatim.co.id:2448', '/DealerActivity/DealerActivity03/Show_1')
+                ? Uri.https('basra.yamaha-jatim.co.id:2448',
+                    '/DealerActivity/DealerActivity03/Show_1')
                 : actId == '03'
-                    ? Uri.https('wsip.yamaha-jatim.co.id:2448', '/DealerActivity/DealerActivity04/Show')
-                    : Uri.https('wsip.yamaha-jatim.co.id:2448', '/DealerActivity/DealerActivity03/Show_2');
+                    ? Uri.https('basra.yamaha-jatim.co.id:2448',
+                        '/DealerActivity/DealerActivity04/Show')
+                    : Uri.https('basra.yamaha-jatim.co.id:2448',
+                        '/DealerActivity/DealerActivity03/Show_2');
     http.Response respon;
     try {
       respon = await http.post(
@@ -389,12 +423,16 @@ class ApiPoint {
           'Shop': shop,
           'CurrentDate': tgl,
         }),
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
       ).timeout(const Duration(seconds: 180));
 
       if (respon.statusCode == 200) {
         var jsonDecode = json.decode(respon.body);
-        if (jsonDecode['code'] == '100' && (jsonDecode['data'] as List).isNotEmpty) {
+        if (jsonDecode['code'] == '100' &&
+            (jsonDecode['data'] as List).isNotEmpty) {
           Activity list;
           if (actId == '00') {
             list = Activity00.fromJson(jsonDecode['data'][0]);

@@ -16,8 +16,7 @@ class HomePages extends StatefulWidget {
   _HomePagesState createState() => _HomePagesState();
 }
 
-class _HomePagesState extends State<HomePages>
-    with AutomaticKeepAliveClientMixin<HomePages> {
+class _HomePagesState extends State<HomePages> with AutomaticKeepAliveClientMixin<HomePages> {
   bool isLoading = false; // Initialize with a default value
 
   // String NamaUserID = '';
@@ -65,9 +64,7 @@ class _HomePagesState extends State<HomePages>
         await state.fetchSISBranches();
         // .then((_) => state.fetchAreas());
         // print('Provinces List length: ${state.getProvinceList.length}');
-        await state
-            .fetchUserAccess(state.getCompanyName, state.getEntryLevelId)
-            .then((data) async {
+        await state.fetchUserAccess(state.getCompanyName, state.getEntryLevelId).then((data) async {
           state.userAccessList.addAll(data);
 
           // Note --> disable for a while to display dashboard menu as the initial page
@@ -152,8 +149,7 @@ class _HomePagesState extends State<HomePages>
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
+        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
         child: CustomAppBar(),
       ),
       body: Center(
@@ -192,9 +188,7 @@ class _HomePagesState extends State<HomePages>
                         children: [
                           CircleAvatar(
                             radius: screen ? 100 : 80,
-                            backgroundImage: NetworkImage(
-                              'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
-                            ),
+                            backgroundImage: AssetImage('assets/images/stsj.png'),
                           ),
                           SizedBox(height: 10),
                           Text(

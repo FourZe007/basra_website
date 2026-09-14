@@ -1867,7 +1867,7 @@ class MenuState with ChangeNotifier {
     }
 
     String baseUrl =
-        "https://wsip.yamaha-jatim.co.id:2449/Report/ExportXls?PT=BASRA&Param={'PT':'BASRA','ReportName':'$type','Filter1':'$companyName','Filter2':'$userId','Filter3':'$branch','Filter4':'$shop','Filter5':'$locationId','Filter6':'$employeeId','Filter7':'$startDate','Filter8':'$endDate','Filter9':'','Filter10':'','Filter11':'','Filter12':'','Filter13':'','Filter14':'','Filter15':''}";
+        "https://basra.yamaha-jatim.co.id:2449/Report/ExportXls?PT=BASRA&Param={'PT':'BASRA','ReportName':'$type','Filter1':'$companyName','Filter2':'$userId','Filter3':'$branch','Filter4':'$shop','Filter5':'$locationId','Filter6':'$employeeId','Filter7':'$startDate','Filter8':'$endDate','Filter9':'','Filter10':'','Filter11':'','Filter12':'','Filter13':'','Filter14':'','Filter15':''}";
     print('Base URL: $baseUrl');
 
     try {

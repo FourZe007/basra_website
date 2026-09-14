@@ -92,6 +92,8 @@ class _LoginPagesState extends State<LoginPages> {
             state.setStaticMenuNotifier('report');
           } else if (category == 'TOOLS') {
             state.setStaticMenuNotifier('tools');
+          } else if (category == 'POWER BI') {
+            state.setStaticMenuNotifier('powerbi');
           } else {
             state.setStaticMenuNotifier('');
           }
@@ -190,8 +192,12 @@ class _LoginPagesState extends State<LoginPages> {
 
       if (listdatalogin.isNotEmpty && listdatalogin[0].memo == "LOGIN BERHASIL") {
         // ~:Login succeed:~
-        await DataLoginController.setIntoSharedPreferences(listdatalogin[0].userID, listdatalogin[0].entryLevelID, listdatalogin[0].entryLevelName,
-            listdatalogin[0].dataDT[0].pt, listdatalogin[0].employeeid);
+        await DataLoginController.setIntoSharedPreferences(
+            listdatalogin[0].userID,
+            listdatalogin[0].entryLevelID,
+            listdatalogin[0].entryLevelName,
+            listdatalogin[0].dataDT[0].pt,
+            listdatalogin[0].employeeid);
 
         await Auth.saveDataToSharedPreferences(listdatalogin[0].dataDT);
         state.userCompanyAccList.addAll(listdatalogin[0].dataDT);
@@ -368,7 +374,9 @@ class _LoginPagesState extends State<LoginPages> {
                                       suffixIcon: IconButton(
                                         icon: Icon(
                                           // Based on passwordVisible state choose the icon
-                                          _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                                          _passwordVisible
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
                                           color: Theme.of(context).primaryColorDark,
                                         ),
                                         onPressed: () {

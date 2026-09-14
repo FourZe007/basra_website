@@ -21,8 +21,7 @@ class MenuPages extends StatefulWidget {
   State<MenuPages> createState() => _MenuPagesState();
 }
 
-class _MenuPagesState extends State<MenuPages>
-    with AutomaticKeepAliveClientMixin<MenuPages> {
+class _MenuPagesState extends State<MenuPages> with AutomaticKeepAliveClientMixin<MenuPages> {
   late RefreshDetector refreshDetector;
 
   String staticMenu = '';
@@ -63,8 +62,7 @@ class _MenuPagesState extends State<MenuPages>
   Widget computerView(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
+        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
         child: CustomAppBar(goBack: RoutesConstant.homepage),
       ),
       body: Container(
@@ -97,17 +95,14 @@ class _MenuPagesState extends State<MenuPages>
                               if (state.getHeaderList.contains('DASHBOARD')) {
                                 print('Contains Dashboard');
                                 return InkWell(
-                                  onTap: () =>
-                                      setStaticMenu(state, 'dashboard'),
+                                  onTap: () => setStaticMenu(state, 'dashboard'),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.15,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -121,8 +116,7 @@ class _MenuPagesState extends State<MenuPages>
                                     ),
                                     child: Text(
                                       'Dashboard',
-                                      style:
-                                          GlobalFont.mediumgiantfontRBoldWhite,
+                                      style: GlobalFont.mediumgiantfontRBoldWhite,
                                     ),
                                   ),
                                 );
@@ -132,13 +126,11 @@ class _MenuPagesState extends State<MenuPages>
                                   onTap: () => displayDialog(context),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.15,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -152,8 +144,7 @@ class _MenuPagesState extends State<MenuPages>
                                     ),
                                     child: Text(
                                       'Dashboard',
-                                      style:
-                                          GlobalFont.mediumgiantfontRBoldWhite,
+                                      style: GlobalFont.mediumgiantfontRBoldWhite,
                                     ),
                                   ),
                                 );
@@ -197,20 +188,17 @@ class _MenuPagesState extends State<MenuPages>
                           margin: EdgeInsets.only(right: 20.0),
                           child: Builder(
                             builder: (context) {
-                              if (state.getHeaderList
-                                  .contains('SALES ACTIVITY')) {
+                              if (state.getHeaderList.contains('SALES ACTIVITY')) {
                                 print('Contains Sales Activity');
                                 return InkWell(
                                   onTap: () => setStaticMenu(state, 'activity'),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.15,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -224,8 +212,7 @@ class _MenuPagesState extends State<MenuPages>
                                     ),
                                     child: Text(
                                       'Activity',
-                                      style:
-                                          GlobalFont.mediumgiantfontRBoldWhite,
+                                      style: GlobalFont.mediumgiantfontRBoldWhite,
                                     ),
                                   ),
                                 );
@@ -235,13 +222,11 @@ class _MenuPagesState extends State<MenuPages>
                                   onTap: () => displayDialog(context),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.15,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -255,8 +240,7 @@ class _MenuPagesState extends State<MenuPages>
                                     ),
                                     child: Text(
                                       'Activity',
-                                      style:
-                                          GlobalFont.mediumgiantfontRBoldWhite,
+                                      style: GlobalFont.mediumgiantfontRBoldWhite,
                                     ),
                                   ),
                                 );
@@ -270,21 +254,17 @@ class _MenuPagesState extends State<MenuPages>
                           margin: EdgeInsets.only(right: 20.0),
                           child: Builder(
                             builder: (context) {
-                              if (state.getHeaderList
-                                  .contains('AUTHORIZATION')) {
+                              if (state.getHeaderList.contains('AUTHORIZATION')) {
                                 print('Contains Authorization');
                                 return InkWell(
-                                  onTap: () =>
-                                      setStaticMenu(state, 'authorization'),
+                                  onTap: () => setStaticMenu(state, 'authorization'),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.15,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -298,8 +278,7 @@ class _MenuPagesState extends State<MenuPages>
                                     ),
                                     child: Text(
                                       'Authorization',
-                                      style:
-                                          GlobalFont.mediumgiantfontRBoldWhite,
+                                      style: GlobalFont.mediumgiantfontRBoldWhite,
                                     ),
                                   ),
                                 );
@@ -309,13 +288,11 @@ class _MenuPagesState extends State<MenuPages>
                                   onTap: () => displayDialog(context),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.15,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -329,8 +306,7 @@ class _MenuPagesState extends State<MenuPages>
                                     ),
                                     child: Text(
                                       'Authorization',
-                                      style:
-                                          GlobalFont.mediumgiantfontRBoldWhite,
+                                      style: GlobalFont.mediumgiantfontRBoldWhite,
                                     ),
                                   ),
                                 );
@@ -350,13 +326,11 @@ class _MenuPagesState extends State<MenuPages>
                                   onTap: () => setStaticMenu(state, 'report'),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.15,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -370,8 +344,7 @@ class _MenuPagesState extends State<MenuPages>
                                     ),
                                     child: Text(
                                       'Information',
-                                      style:
-                                          GlobalFont.mediumgiantfontRBoldWhite,
+                                      style: GlobalFont.mediumgiantfontRBoldWhite,
                                     ),
                                   ),
                                 );
@@ -381,13 +354,11 @@ class _MenuPagesState extends State<MenuPages>
                                   onTap: () => displayDialog(context),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.15,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -401,8 +372,7 @@ class _MenuPagesState extends State<MenuPages>
                                     ),
                                     child: Text(
                                       'Information',
-                                      style:
-                                          GlobalFont.mediumgiantfontRBoldWhite,
+                                      style: GlobalFont.mediumgiantfontRBoldWhite,
                                     ),
                                   ),
                                 );
@@ -422,13 +392,11 @@ class _MenuPagesState extends State<MenuPages>
                                   onTap: () => setStaticMenu(state, 'tools'),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.15,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -442,8 +410,7 @@ class _MenuPagesState extends State<MenuPages>
                                     ),
                                     child: Text(
                                       'Tools',
-                                      style:
-                                          GlobalFont.mediumgiantfontRBoldWhite,
+                                      style: GlobalFont.mediumgiantfontRBoldWhite,
                                     ),
                                   ),
                                 );
@@ -453,13 +420,11 @@ class _MenuPagesState extends State<MenuPages>
                                   onTap: () => displayDialog(context),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.15,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -473,8 +438,7 @@ class _MenuPagesState extends State<MenuPages>
                                     ),
                                     child: Text(
                                       'Tools',
-                                      style:
-                                          GlobalFont.mediumgiantfontRBoldWhite,
+                                      style: GlobalFont.mediumgiantfontRBoldWhite,
                                     ),
                                   ),
                                 );
@@ -518,6 +482,7 @@ class _MenuPagesState extends State<MenuPages>
                         } else if (value == 'tools') {
                           return ToolsMenuComponent();
                         }
+
                         return Container(
                           width: MediaQuery.of(context).size.width,
                           alignment: Alignment.center,
@@ -577,8 +542,8 @@ class _MenuPagesState extends State<MenuPages>
                         // ======================= Sales Menu ========================
                         Container(
                           width: (deviceWidth <= 450)
-                              ? MediaQuery.of(context).size.width * 0.25
-                              : MediaQuery.of(context).size.width * 0.15,
+                              ? MediaQuery.of(context).size.width * 0.225
+                              : MediaQuery.of(context).size.width * 0.125,
                           margin: EdgeInsets.only(right: 20.0),
                           child: Builder(
                             builder: (context) {
@@ -669,9 +634,7 @@ class _MenuPagesState extends State<MenuPages>
                                     ),
                                   ),
                                   padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        MediaQuery.of(context).size.width *
-                                            0.025,
+                                    horizontal: MediaQuery.of(context).size.width * 0.025,
                                   ),
                                   child: Text(
                                     'Dashboard',
@@ -686,25 +649,22 @@ class _MenuPagesState extends State<MenuPages>
                         // ===================== Activity Menu =======================
                         Container(
                           width: (deviceWidth <= 450)
-                              ? MediaQuery.of(context).size.width * 0.25
-                              : MediaQuery.of(context).size.width * 0.15,
+                              ? MediaQuery.of(context).size.width * 0.225
+                              : MediaQuery.of(context).size.width * 0.125,
                           margin: EdgeInsets.only(right: 20.0),
                           child: Builder(
                             builder: (context) {
-                              if (state.getHeaderList
-                                  .contains('SALES ACTIVITY')) {
+                              if (state.getHeaderList.contains('SALES ACTIVITY')) {
                                 print('Contains Sales Activity');
                                 return InkWell(
                                   onTap: () => setStaticMenu(state, 'activity'),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.125,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -728,13 +688,11 @@ class _MenuPagesState extends State<MenuPages>
                                   onTap: () => displayDialog(context),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.125,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -760,26 +718,22 @@ class _MenuPagesState extends State<MenuPages>
                         // =================== Authorization Menu ====================
                         Container(
                           width: (deviceWidth <= 450)
-                              ? MediaQuery.of(context).size.width * 0.25
-                              : MediaQuery.of(context).size.width * 0.15,
+                              ? MediaQuery.of(context).size.width * 0.225
+                              : MediaQuery.of(context).size.width * 0.125,
                           margin: EdgeInsets.only(right: 20.0),
                           child: Builder(
                             builder: (context) {
-                              if (state.getHeaderList
-                                  .contains('AUTHORIZATION')) {
+                              if (state.getHeaderList.contains('AUTHORIZATION')) {
                                 print('Contains Authorization');
                                 return InkWell(
-                                  onTap: () =>
-                                      setStaticMenu(state, 'authorization'),
+                                  onTap: () => setStaticMenu(state, 'authorization'),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.125,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -803,13 +757,11 @@ class _MenuPagesState extends State<MenuPages>
                                   onTap: () => displayDialog(context),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.125,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -835,8 +787,8 @@ class _MenuPagesState extends State<MenuPages>
                         // ====================== Report Menu ========================
                         Container(
                           width: (deviceWidth <= 450)
-                              ? MediaQuery.of(context).size.width * 0.25
-                              : MediaQuery.of(context).size.width * 0.15,
+                              ? MediaQuery.of(context).size.width * 0.225
+                              : MediaQuery.of(context).size.width * 0.125,
                           margin: EdgeInsets.only(right: 20.0),
                           child: Builder(
                             builder: (context) {
@@ -846,13 +798,11 @@ class _MenuPagesState extends State<MenuPages>
                                   onTap: () => setStaticMenu(state, 'report'),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.125,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -876,13 +826,11 @@ class _MenuPagesState extends State<MenuPages>
                                   onTap: () => displayDialog(context),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.125,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -908,8 +856,8 @@ class _MenuPagesState extends State<MenuPages>
                         // ====================== Tools Menu =========================
                         Container(
                           width: (deviceWidth <= 450)
-                              ? MediaQuery.of(context).size.width * 0.25
-                              : MediaQuery.of(context).size.width * 0.15,
+                              ? MediaQuery.of(context).size.width * 0.225
+                              : MediaQuery.of(context).size.width * 0.125,
                           margin: EdgeInsets.only(right: 20.0),
                           child: Builder(
                             builder: (context) {
@@ -919,13 +867,11 @@ class _MenuPagesState extends State<MenuPages>
                                   onTap: () => setStaticMenu(state, 'tools'),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.125,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -949,13 +895,11 @@ class _MenuPagesState extends State<MenuPages>
                                   onTap: () => displayDialog(context),
                                   hoverColor: Colors.transparent,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15,
+                                    width: MediaQuery.of(context).size.width * 0.125,
                                     alignment: Alignment.center,
                                     decoration: ShapeDecoration(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
@@ -1016,6 +960,7 @@ class _MenuPagesState extends State<MenuPages>
                         } else if (value == 'tools') {
                           return ToolsMenuComponent();
                         }
+
                         return Container(
                           width: MediaQuery.of(context).size.width,
                           alignment: Alignment.center,

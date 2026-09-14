@@ -110,6 +110,28 @@ class ToolsMenuComponent extends HookWidget {
                 }
               },
             ),
+            Builder(
+              builder: (context) {
+                if (provider.getSubHeaderList.contains('406')) {
+                  return Container(
+                    margin: EdgeInsets.only(right: 50.0),
+                    child: Column(
+                      children: [
+                        _buildMenuIcon(
+                          context,
+                          'assets/images/import.png',
+                          'Import Cetak QR',
+                          RoutesConstant.importCetakQR,
+                        ),
+                        const Text('IMPORT CETAK QR'),
+                      ],
+                    ),
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              },
+            ),
           ],
         ),
       ),

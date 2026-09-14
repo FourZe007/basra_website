@@ -27,32 +27,38 @@ class _MyPageState extends State<PImportAlokasiBM> {
   void setTanggal(dynamic value) => setState(() => tanggal = value);
 
   void processExcel() async {
-    setState(() => waitUpload = true);
+    try {
+      setState(() => waitUpload = true);
 
-    list = [];
-    FilePickerResult? picker = await FilePicker.platform
-        .pickFiles(type: FileType.custom, allowedExtensions: ['xlsx']);
+      list = [];
+      FilePickerResult? picker = await FilePicker.platform
+          .pickFiles(type: FileType.custom, allowedExtensions: ['xlsx']);
 
-    if (picker != null) {
-      if (picker.files.first.extension == 'xlsx') {
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        final userid = prefs.getString('UserID') ?? '';
-        readExcel(picker);
-        if (list.isNotEmpty) {
-          await ApiAlokasiBM.uploadExcelAlokasiBM(
-              '51', tanggal.toString().substring(0, 10), userid, list);
+      if (picker != null) {
+        if (picker.files.first.extension == 'xlsx') {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          final userid = prefs.getString('UserID') ?? '';
+          readExcel(picker);
+          if (list.isNotEmpty) {
+            await ApiAlokasiBM.uploadExcelAlokasiBM(
+                '51', tanggal.toString().substring(0, 10), userid, list);
+            if (!mounted) return;
+            wAlertDialogInfo(context, 'INFORMASI', msg);
+          }
+        } else {
+          setState(() => waitUpload = false);
           if (!mounted) return;
-          wAlertDialogInfo(context, 'INFORMASI', msg);
+          wAlertDialogInfo(
+              context, 'PERINGATAN', 'FORMAT FILE EXCEL WAJIB .XLSX');
         }
-      } else {
-        setState(() => waitUpload = false);
-        if (!mounted) return;
-        wAlertDialogInfo(
-            context, 'PERINGATAN', 'FORMAT FILE EXCEL WAJIB .XLSX');
       }
-    }
 
-    setState(() => waitUpload = false);
+      setState(() => waitUpload = false);
+    } catch (e) {
+      setState(() => waitUpload = false);
+      if (!mounted) return;
+      wAlertDialogInfo(context, 'PERINGATAN', e.toString());
+    }
   }
 
   void readExcel(FilePickerResult picker) {

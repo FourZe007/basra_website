@@ -7,6 +7,7 @@ import 'package:stsj/activity_point/pages/manager_activities_2.dart';
 import 'package:stsj/activity_point/pages/point_vs_target.dart';
 import 'package:stsj/aktivitas-subdealer/pages/p_subdealer_history.dart';
 import 'package:stsj/alokasi-bm/pages/p_koreksi_alokasi_bm.dart';
+import 'package:stsj/cetak-qr/page/p_import_cetak_qr.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/dashboardmain.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/models/dashboard.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/pages/dashboard01.dart';
@@ -40,10 +41,16 @@ import 'package:stsj/dashboard-fixup/pages/dashboard5_page.dart';
 import 'package:stsj/dashboard-fixup/pages/import_excel.dart';
 import 'package:stsj/dashboard_pemetaan/pages/filter_dashboard.dart';
 import 'package:stsj/external_web/pages/monitoring_network.dart';
-import 'package:stsj/external_web/pages/powerbi_view1.dart';
+import 'package:stsj/external_web/pages/p_web_bi_mkt_google_review.dart';
+import 'package:stsj/external_web/pages/p_web_bi_mkt_manpower_condition.dart';
+import 'package:stsj/external_web/pages/p_web_bi_mkt_network_report.dart';
+import 'package:stsj/external_web/pages/p_web_bi_mkt_operational_dealer.dart';
+import 'package:stsj/external_web/pages/p_web_bi_mkt_operational_sales_spv.dart';
+import 'package:stsj/external_web/pages/p_web_bi_mkt_unit.dart';
+import 'package:stsj/external_web/pages/p_web_bi_prt_samp.dart';
+import 'package:stsj/external_web/pages/p_web_bi_prt_stsj.dart';
 import 'package:stsj/global/globalVar.dart';
 import 'package:stsj/alokasi-bm/pages/p_import_alokasi_bm.dart';
-
 import 'package:stsj/router/not_found_page.dart';
 import 'package:stsj/router/router_const.dart';
 import 'package:stsj/core/views/Akun/akun_pages.dart';
@@ -447,13 +454,6 @@ class RouterSettings {
             },
           ),
           GoRoute(
-            name: RoutesConstant.dashboardMarketing,
-            path: 'dashboardMarketing',
-            pageBuilder: (context, state) {
-              return MaterialPage(child: PowerbiView1());
-            },
-          ),
-          GoRoute(
             name: RoutesConstant.pdcaNetwork,
             path: 'network',
             pageBuilder: (context, state) {
@@ -500,6 +500,69 @@ class RouterSettings {
             path: 'historyAktivitasSubDealer',
             pageBuilder: (context, state) {
               return MaterialPage(child: PSubDealerHistory());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.importCetakQR,
+            path: 'importCetakQR',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: PImportCetakQR());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.dashboardsales,
+            path: 'dashboardsales',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: PWebBIMktUnit());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.operationaldealer,
+            path: 'operationaldealer',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: PWebBiMktOperationalDealer());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.dashboardgooglereview,
+            path: 'dashboardgooglereview',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: PWebBIMktGoogleReview());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.operationalsalessupervisor,
+            path: 'operationalsalessupervisor',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: PWebBiMktOperationalSalesSpv());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.manpowercondition,
+            path: 'manpowercondition',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: PWebBiMktManpowerCondition());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.networkreport,
+            path: 'networkreport',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: PWebBiMktNetworkReport());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.dashboardSparepartstsj,
+            path: 'dashboardSparepartSTSJ',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: PWebBIPartSTSJ());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.dashboardSparepartsamp,
+            path: 'dashboardSparepartSAMP',
+            pageBuilder: (context, state) {
+              return MaterialPage(child: PWebBIPartSAMP());
             },
           ),
           // ~:NEW:~

@@ -17,7 +17,8 @@ class _MorningBriefingState extends State<MorningBriefing> {
     return SingleChildScrollView(
       child: SelectionArea(
         child: Table(
-          border: TableBorder.all(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+          border: TableBorder.all(
+              color: Colors.black, borderRadius: BorderRadius.circular(10)),
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           columnWidths: const {
             0: FlexColumnWidth(1.7),
@@ -29,7 +30,9 @@ class _MorningBriefingState extends State<MorningBriefing> {
             TableRow(
               decoration: BoxDecoration(
                 color: Colors.grey[350],
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0)),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0)),
               ),
               children: [
                 textTable2('Tanggal', Alignment.center, 0),
@@ -43,34 +46,48 @@ class _MorningBriefingState extends State<MorningBriefing> {
               return TableRow(
                 decoration: BoxDecoration(
                   //color: DateTime.parse(detail.currentDate).isBefore(DateTime.now()) && detail.targetHari == 0 ? Colors.redAccent[100] : Colors.white,
-                  color: detail.targetHari == 0 ? Colors.redAccent[100] : Colors.white,
+                  color: detail.targetHari == 0
+                      ? Colors.redAccent[100]
+                      : Colors.white,
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(idx == widget.listDetail.length ? 10.0 : 0.0),
-                    bottomRight: Radius.circular(idx == widget.listDetail.length ? 10.0 : 0.0),
+                    bottomLeft: Radius.circular(
+                        idx == widget.listDetail.length ? 10.0 : 0.0),
+                    bottomRight: Radius.circular(
+                        idx == widget.listDetail.length ? 10.0 : 0.0),
                   ),
                 ),
                 children: [
-                  textTable2(Format.tanggalFormat(detail.currentDate), Alignment.center, 1),
+                  textTable2(Format.tanggalFormat(detail.currentDate),
+                      Alignment.center, 1),
                   Center(
-                    child: DateTime.parse(detail.currentDate).isAfter(DateTime.now()) || detail.targetHari == 0
+                    child: DateTime.parse(detail.currentDate)
+                                .isAfter(DateTime.now()) ||
+                            detail.targetHari == 0
                         ? SizedBox()
                         : detail.point1 == 1
-                            ? Icon(Icons.check, color: Colors.green, fontWeight: FontWeight.bold)
-                            : Icon(Icons.close, color: Colors.red, fontWeight: FontWeight.bold),
+                            ? Icon(Icons.check,
+                                color: Colors.green, weight: 200)
+                            : Icon(Icons.close, color: Colors.red, weight: 200),
                   ),
                   Center(
-                    child: DateTime.parse(detail.currentDate).isAfter(DateTime.now()) || detail.targetHari == 0
+                    child: DateTime.parse(detail.currentDate)
+                                .isAfter(DateTime.now()) ||
+                            detail.targetHari == 0
                         ? SizedBox()
                         : detail.point2 == 1
-                            ? Icon(Icons.check, color: Colors.green, fontWeight: FontWeight.bold)
-                            : Icon(Icons.close, color: Colors.red, fontWeight: FontWeight.bold),
+                            ? Icon(Icons.check,
+                                color: Colors.green, weight: 200)
+                            : Icon(Icons.close, color: Colors.red, weight: 200),
                   ),
                   Center(
-                    child: DateTime.parse(detail.currentDate).isAfter(DateTime.now()) || detail.targetHari == 0
+                    child: DateTime.parse(detail.currentDate)
+                                .isAfter(DateTime.now()) ||
+                            detail.targetHari == 0
                         ? SizedBox()
                         : detail.point3 == 1
-                            ? Icon(Icons.check, color: Colors.green, fontWeight: FontWeight.bold)
-                            : Icon(Icons.close, color: Colors.red, fontWeight: FontWeight.bold),
+                            ? Icon(Icons.check,
+                                color: Colors.green, weight: 200)
+                            : Icon(Icons.close, color: Colors.red, weight: 200),
                   ),
                 ],
               );

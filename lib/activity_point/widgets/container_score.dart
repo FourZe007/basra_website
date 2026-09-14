@@ -22,18 +22,23 @@ class ContainerScore extends StatelessWidget {
               height: 22.0,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: sValue ? Colors.indigo : Colors.red, width: 2.0),
+                border: Border.all(
+                    color: sValue ? Colors.indigo : Colors.red, width: 2.0),
                 color: sValue ? Colors.indigo : Colors.red,
               ),
               child: Icon(
                 sValue ? Icons.check : Icons.close,
                 size: 18.0,
                 color: Colors.white,
-                fontWeight: FontWeight.bold,
+                weight: 200,
               ),
             ),
             SizedBox(height: 3),
-            Text(kategori, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black54)),
+            Text(kategori,
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54)),
             SizedBox(height: 3),
           ],
         ),

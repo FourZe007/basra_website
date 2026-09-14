@@ -216,9 +216,8 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
+    Provider.of<MenuState>(context, listen: false).resetAbsentHistory();
     preprocessingDate();
   }
 

@@ -29,6 +29,9 @@ class RoutesConstant {
   static String importTargetActivities = 'importTargetActivities';
   static String targetResult = 'targetResult';
   static String dashboardMarketing = 'dashboardMarketing';
+  static String dashboardSparepartstsj = 'dashboardSparepartSTSJ';
+  static String dashboardSparepartsamp = 'dashboardSparepartSAMP';
+  static String dashboardGoogleReview = 'dashboardGoogleReview';
   static String pdcaNetwork = 'pdcaNetwork';
   static String pdcaNetwork1 = 'pdcaNetwork1';
   static String pdcaNetwork2 = 'pdcaNetwork2';
@@ -72,4 +75,12 @@ class RoutesConstant {
   static String importAlokasiBM = "importAlokasiBM";
   static String koreksiAlokasiBM = "koreksiAlokasiBM";
   static String historyAktivitasSubDealer = "historyAktivitasSubDealer";
+  static String linkBIProductivity = "linkBIProductivity";
+  static String dashboardsales = "dashboardsales";
+  static String operationaldealer = "operationaldealer";
+  static String dashboardgooglereview = "dashboardgooglereview";
+  static String operationalsalessupervisor = "operationalsalessupervisor";
+  static String manpowercondition = "manpowercondition";
+  static String networkreport = "networkreport";
+  static String importCetakQR = "importCetakQR";
 }
