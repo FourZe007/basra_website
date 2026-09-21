@@ -89,7 +89,7 @@ class _ServiceDialogFilterState extends State<ServiceDialogFilter> {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: ThemeData(fontFamily: 'Poppins'),
+      data: ThemeData(),
       child: AlertDialog(
         actionsPadding:
             const EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),

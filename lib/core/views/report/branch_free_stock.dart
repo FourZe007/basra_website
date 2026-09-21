@@ -177,47 +177,61 @@ class _BranchFreeStockPageState extends State<BranchFreeStockPage> {
             // ==================================================================
             // =========================== Filter ===============================
             // ==================================================================
-            SizedBox(
+            // ==================================================================
+            // =========================== Filter ===============================
+            // ==================================================================
+            Container(
               width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 8.0,
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF1F5F9),
+                borderRadius: BorderRadius.circular(16.0),
+                border: Border.all(color: const Color(0xFFE2E8F0)),
+              ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Filter Title
-                  InkWell(
-                    onTap: null,
-                    child: Container(
-                      width: 90,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[400],
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Icon(
-                            Icons.filter_alt_rounded,
-                            size: 25.0,
-                            color: Colors.black,
+                  // Filter Badge
+                  Container(
+                    height: 36,
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1E293B),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.filter_alt_rounded,
+                          size: 16.0,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 6.0),
+                        const Text(
+                          'Filter',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
                           ),
-                          Text(
-                            'Filter',
-                            style: GlobalFont.mediumgiantfontR,
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
 
-                  // ~:Divider:~
-                  SizedBox(width: 10),
+                  const SizedBox(width: 12.0),
 
                   // ~:Branch Shop Name:~
                   Expanded(
-                    child: SingleChildScrollView(
-                      physics: BouncingScrollPhysics(),
-                      child: Wrap(
-                        spacing: 10,
+                    child: SizedBox(
+                      height: 36,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
                         children: [
                           // ~:Branch:~
                           ValueListenableBuilder<List<String>>(
@@ -227,18 +241,15 @@ class _BranchFreeStockPageState extends State<BranchFreeStockPage> {
                                 return AnimatedContainer(
                                   duration: const Duration(milliseconds: 500),
                                   width: 250,
-                                  height: 40,
+                                  height: 36,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                    borderRadius: BorderRadius.circular(15.0),
+                                    color: const Color(0xFFCBD5E1),
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   padding: EdgeInsets.symmetric(
                                     horizontal:
                                         MediaQuery.of(context).size.width *
-                                            0.01,
-                                    vertical:
-                                        MediaQuery.of(context).size.height *
                                             0.01,
                                   ),
                                   child: SisBranchShopDropdown(
@@ -254,18 +265,15 @@ class _BranchFreeStockPageState extends State<BranchFreeStockPage> {
                                 return AnimatedContainer(
                                   duration: const Duration(milliseconds: 500),
                                   width: 250,
-                                  height: 40,
+                                  height: 36,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[400],
-                                    borderRadius: BorderRadius.circular(15.0),
+                                    color: const Color(0xFFE2E8F0),
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   padding: EdgeInsets.symmetric(
                                     horizontal:
                                         MediaQuery.of(context).size.width *
-                                            0.01,
-                                    vertical:
-                                        MediaQuery.of(context).size.height *
                                             0.01,
                                   ),
                                   child: SisBranchShopDropdown(
@@ -281,21 +289,39 @@ class _BranchFreeStockPageState extends State<BranchFreeStockPage> {
                             },
                           ),
 
+                          const SizedBox(width: 8.0),
+
                           // ~:Search Button:~
                           InkWell(
                             onTap: () => search(state),
-                            borderRadius: BorderRadius.circular(15.0),
+                            borderRadius: BorderRadius.circular(10.0),
                             child: Container(
-                              height: MediaQuery.of(context).size.height * 0.05,
+                              height: 36,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14.0),
                               decoration: BoxDecoration(
-                                color: Colors.grey[400],
-                                borderRadius: BorderRadius.circular(15.0),
+                                color: const Color(0xFF1E293B),
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                              padding: EdgeInsets.symmetric(horizontal: 10.0),
-                              child: const Icon(
-                                Icons.search_rounded,
-                                size: 25.0,
-                                color: Colors.black,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.search_rounded,
+                                    size: 16.0,
+                                    color: Colors.white,
+                                  ),
+                                  const SizedBox(width: 6.0),
+                                  const Text(
+                                    'Cari',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 13.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -304,8 +330,7 @@ class _BranchFreeStockPageState extends State<BranchFreeStockPage> {
                     ),
                   ),
 
-                  // ~:Divider:~
-                  SizedBox(width: 10),
+                  const SizedBox(width: 12.0),
 
                   // ~:Save Button:~
                   ValueListenableBuilder(
@@ -314,30 +339,47 @@ class _BranchFreeStockPageState extends State<BranchFreeStockPage> {
                       if (value) {
                         return InkWell(
                           onTap: () => saveStockModification(state),
+                          borderRadius: BorderRadius.circular(10.0),
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 500),
-                            width: 70,
-                            height: 40,
+                            height: 36,
+                            padding: const EdgeInsets.symmetric(horizontal: 14.0),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: Colors.grey[400],
-                              borderRadius: BorderRadius.circular(15.0),
+                              color: const Color(0xFF0F172A),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: 10.0),
                             child: Builder(
                               builder: (context) {
                                 if (isSaving) {
-                                  return SizedBox(
-                                    width: 15,
-                                    height: 15,
+                                  return const SizedBox(
+                                    width: 16,
+                                    height: 16,
                                     child: CircularProgressIndicator(
-                                      color: Colors.black,
+                                      color: Colors.white,
+                                      strokeWidth: 2.0,
                                     ),
                                   );
                                 }
-                                return Text(
-                                  'Save',
-                                  style: GlobalFont.mediumgiantfontR,
+                                return Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.save_rounded,
+                                      size: 16.0,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(width: 6.0),
+                                    const Text(
+                                      'Save',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 13.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 );
                               },
                             ),
@@ -346,19 +388,35 @@ class _BranchFreeStockPageState extends State<BranchFreeStockPage> {
                       } else {
                         return InkWell(
                           onTap: null,
+                          borderRadius: BorderRadius.circular(10.0),
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 500),
-                            width: 70,
-                            height: 40,
+                            height: 36,
+                            padding: const EdgeInsets.symmetric(horizontal: 14.0),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(15.0),
+                              color: const Color(0xFF94A3B8), // Disabled grey
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Text(
-                              'Save',
-                              style: GlobalFont.mediumgiantfontR,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.save_rounded,
+                                  size: 16.0,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(width: 6.0),
+                                const Text(
+                                  'Save',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         );

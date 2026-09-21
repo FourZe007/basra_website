@@ -2,6 +2,8 @@ import 'dart:ui_web' as ui;
 import 'package:flutter/material.dart';
 import 'package:stsj/external_web/utilities/global.dart';
 import 'package:web/web.dart' as web;
+import 'package:go_router/go_router.dart';
+import 'package:stsj/router/router_const.dart';
 
 class PWebBiMktOperationalSalesSpv extends StatefulWidget {
   const PWebBiMktOperationalSalesSpv({super.key});
@@ -43,6 +45,17 @@ class _MyPageState extends State<PWebBiMktOperationalSalesSpv> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 1,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            context.replaceNamed(RoutesConstant.menu);
+          },
+        ),
+        title: const Text('Operational Sales Supervisor', style: TextStyle(color: Colors.black)),
+      ),
       body: HtmlElementView(key: UniqueKey(), viewType: viewID),
     );
   }

@@ -1100,6 +1100,16 @@ class MenuState with ChangeNotifier {
     // notifyListeners();
   }
 
+  // Track the active sidebar item by route name (e.g. 'salesDashboard', 'delivery')
+  ValueNotifier<String> sidebarItemNotifier = ValueNotifier('');
+
+  ValueNotifier<String> get getSidebarItemNotifier => sidebarItemNotifier;
+
+  void setSidebarItem(String routeName) {
+    sidebarItemNotifier.value = routeName;
+    notifyListeners();
+  }
+
   // ==================================================================
   // ======================== Weekly Report ===========================
   // ==================================================================

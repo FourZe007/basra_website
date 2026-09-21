@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:stsj/core/providers/Provider.dart';
+import 'package:stsj/global/theme/app_theme.dart';
 import 'package:stsj/router/router_const.dart';
 
 class LeftDrawer extends HookWidget {
@@ -30,21 +33,19 @@ class LeftDrawer extends HookWidget {
 
       return ListTile(
         onTap: () {
-          onMenuItemSelected(
-              index); // Call the callback with the selected index.
+          onMenuItemSelected(index); // Call the callback with the selected index.
           Navigator.of(context).pop(); // Tutup drawer setelah memilih item.
         },
         leading: Icon(
           icon,
-          color:
-              isSelected ? Colors.blue : null, // Ganti warna ikon jika dipilih
+          color: isSelected ? AppColors.accentYellow : AppColors.textSecondary,
         ),
         title: Text(
           label,
           style: TextStyle(
-            color: isSelected
-                ? Colors.blue
-                : null, // Ganti warna teks jika dipilih
+            
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+            color: isSelected ? AppColors.accentYellow : AppColors.textSecondary,
           ),
         ),
       );
@@ -52,41 +53,40 @@ class LeftDrawer extends HookWidget {
 
     return Container(
       height: screenHeight,
-      color: Theme.of(context).cardColor,
+      color: AppColors.softCharcoal,
       child: Drawer(
+        backgroundColor: AppColors.softCharcoal,
         child: ListView(
           children: [
             DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
+              decoration: const BoxDecoration(
+                color: AppColors.secondaryMaroon,
               ),
               child: Stack(
                 children: [
                   Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          left: 0, top: 0), // Atur margin sesuai kebutuhan
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        color: Colors.white,
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      color: AppColors.textPrimary,
                         onPressed: () {
-                          // DataLoginController.removeDataUser();
+                          final state = Provider.of<MenuState>(context, listen: false);
+                          state.setStaticMenuNotifier('report');
                           context.replaceNamed(RoutesConstant.menu);
                         },
-                      ),
                     ),
                   ),
-                  Center(
+                  const Center(
                     child: Text(
                       'REPORT',
                       style: TextStyle(
-                        color: Colors.white,
+                        
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
                         fontSize: 24,
                       ),
                     ),
                   ),
-                  // Tambahkan widget lain di dalam Stack jika diperlukan.
                 ],
               ),
             ),

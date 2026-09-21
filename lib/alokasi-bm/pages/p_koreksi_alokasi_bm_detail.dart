@@ -227,7 +227,7 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
                 searchController.text == '' ? daftarAlokasi : filterSearch)),
             padding: EdgeInsets.zero,
             icon: Icon(Icons.arrow_circle_left,
-                color: Colors.blue[900]!, size: 30),
+                color: const Color.fromARGB(255, 200, 0, 0), size: 30),
           ),
           Expanded(
             child: Padding(
@@ -243,7 +243,7 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
                 searchController.text == '' ? daftarAlokasi : filterSearch)),
             padding: EdgeInsets.zero,
             icon: Icon(Icons.arrow_circle_right,
-                color: Colors.blue[900], size: 30),
+                color: const Color.fromARGB(255, 200, 0, 0), size: 30),
           )
         ]),
         Padding(
@@ -288,7 +288,7 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
                 children: [
                   TableRow(
                       decoration: BoxDecoration(
-                        color: Colors.blue[900],
+                        color: const Color.fromARGB(255, 200, 0, 0),
                         borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(10),
                             topRight: Radius.circular(10)),
@@ -312,7 +312,7 @@ class _MyPageState extends State<PKoreksiAlokasiBMDetail> {
                         wContentTabel('NTT', 0, Alignment.centerRight)
                       ]),
                   TableRow(
-                      decoration: BoxDecoration(color: Colors.blue[100]),
+                      decoration: BoxDecoration(color: const Color.fromARGB(255, 255, 75, 75)),
                       children: [
                         wContentTabel('GRAND TOTAL', 2, Alignment.centerLeft),
                         wContentTabel('', 2, Alignment.centerLeft),

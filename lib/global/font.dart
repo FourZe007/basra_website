@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class GlobalFontFamily {
-  static String fontCeraGR = 'CeraGR';
-  static String fontCourier = 'Courier';
-  static String fontRubik = 'Rubik';
-  static String fontMontserrat = 'Montserrat';
+  static String fontCeraGR = 'Poppins';
+  static String fontCourier = 'Poppins';
+  static String fontRubik = 'Poppins';
+  static String fontMontserrat = 'Poppins';
+  static String fontPoppins = 'Poppins';
 }
 
 class GlobalSize {
@@ -27,7 +28,7 @@ class GlobalSize {
 class GlobalFont {
   // Courier
   static TextStyle mediumfontC = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontCourier,
     fontSize: GlobalSize.mediumbigfont,
     fontWeight: FontWeight.w600,
@@ -41,14 +42,14 @@ class GlobalFont {
   );
 
   static TextStyle bigfontC = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontCourier,
     fontSize: GlobalSize.bigfont,
     backgroundColor: Colors.transparent,
   );
 
   static TextStyle bigfontCBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontCourier,
     fontSize: GlobalSize.bigfont,
     fontWeight: FontWeight.bold,
@@ -71,7 +72,7 @@ class GlobalFont {
   );
 
   static TextStyle mediumgiantfontCBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontCourier,
     fontSize: GlobalSize.mediumgiantfont,
     fontWeight: FontWeight.bold,
@@ -85,7 +86,7 @@ class GlobalFont {
   );
 
   static TextStyle giantfontCBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontCourier,
     fontSize: GlobalSize.giantfont,
     fontWeight: FontWeight.bold,
@@ -99,14 +100,14 @@ class GlobalFont {
   );
 
   static TextStyle mediumgigafontCBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontCourier,
     fontSize: GlobalSize.mediumgigafont1,
     fontWeight: FontWeight.bold,
   );
 
   static TextStyle titleLoginFontW2Bold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontCourier,
     fontSize: GlobalSize.titleMenuFont1,
     fontWeight: FontWeight.bold,
@@ -114,14 +115,14 @@ class GlobalFont {
 
   // Montserrat
   static TextStyle mediumfontM = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontMontserrat,
     fontSize: GlobalSize.mediumbigfont,
     fontWeight: FontWeight.w600,
   );
 
   static TextStyle mediumbigfontMBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontMontserrat,
     fontSize: GlobalSize.mediumbigfont,
     fontWeight: FontWeight.bold,
@@ -136,7 +137,7 @@ class GlobalFont {
   );
 
   static TextStyle mediumbigfontM = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontMontserrat,
     fontSize: GlobalSize.mediumbigfont,
     backgroundColor: Colors.transparent,
@@ -158,7 +159,7 @@ class GlobalFont {
   );
 
   static TextStyle mediumbigfontMItalic = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontMontserrat,
     fontSize: GlobalSize.mediumbigfont,
     fontStyle: FontStyle.italic,
@@ -166,7 +167,7 @@ class GlobalFont {
   );
 
   static TextStyle bigfontMBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontMontserrat,
     fontSize: GlobalSize.bigfont,
     fontWeight: FontWeight.bold,
@@ -182,33 +183,33 @@ class GlobalFont {
   );
 
   static TextStyle bigfontM = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontMontserrat,
     fontSize: GlobalSize.bigfont,
     backgroundColor: Colors.transparent,
   );
 
   static TextStyle mediumgiantfontM = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontMontserrat,
     fontSize: GlobalSize.mediumgiantfont,
   );
 
   static TextStyle mediumgiantfontMBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontMontserrat,
     fontSize: GlobalSize.mediumgiantfont,
     fontWeight: FontWeight.bold,
   );
 
   static TextStyle giantfontM = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontMontserrat,
     fontSize: GlobalSize.giantfont,
   );
 
   static TextStyle giantfontMBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontMontserrat,
     fontSize: GlobalSize.giantfont,
     fontWeight: FontWeight.bold,
@@ -222,7 +223,7 @@ class GlobalFont {
   );
 
   static TextStyle mediumgigafontMBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontMontserrat,
     fontSize: GlobalSize.mediumgigafont1,
     fontWeight: FontWeight.bold,
@@ -236,7 +237,7 @@ class GlobalFont {
   );
 
   static TextStyle gigafontMBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontMontserrat,
     fontSize: GlobalSize.gigafont,
     fontWeight: FontWeight.bold,
@@ -244,26 +245,26 @@ class GlobalFont {
 
   // Rubik
   static TextStyle smallfontR = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: 11,
   );
 
   static TextStyle smallfontRBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: 11,
     fontWeight: FontWeight.w600,
   );
 
   static TextStyle mediumfontR = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.mediumbigfont,
   );
 
   static TextStyle mediumfontRBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.mediumbigfont,
     fontWeight: FontWeight.w600,
@@ -277,14 +278,14 @@ class GlobalFont {
   );
 
   static TextStyle mediumbigfontRBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.mediumbigfont,
     fontWeight: FontWeight.bold,
   );
 
   static TextStyle mediumbigfontR = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.mediumbigfont,
   );
@@ -332,7 +333,7 @@ class GlobalFont {
   );
 
   static TextStyle bigfontR = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.bigfont,
     backgroundColor: Colors.transparent,
@@ -361,7 +362,7 @@ class GlobalFont {
   );
 
   static TextStyle bigfontRBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.bigfont,
     fontWeight: FontWeight.bold,
@@ -369,7 +370,7 @@ class GlobalFont {
   );
 
   static TextStyle mediumgiantfontR = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.mediumgiantfont,
   );
@@ -393,14 +394,14 @@ class GlobalFont {
   );
 
   static TextStyle mediumgiantfontRBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.mediumgiantfont,
     fontWeight: FontWeight.bold,
   );
 
   static TextStyle mediumgiantfontRBoldBlue = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.mediumgiantfont,
     fontWeight: FontWeight.bold,
@@ -414,13 +415,13 @@ class GlobalFont {
   );
 
   static TextStyle giantfontR = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.giantfont,
   );
 
   static TextStyle giantfontRBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.giantfont,
     fontWeight: FontWeight.bold,
@@ -441,20 +442,20 @@ class GlobalFont {
   );
 
   static TextStyle datefont1 = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.dateFont1,
     fontWeight: FontWeight.bold,
   );
 
   static TextStyle mediumgigafontR = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.mediumgigafont1,
   );
 
   static TextStyle mediumgigafontRBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.mediumgigafont1,
     fontWeight: FontWeight.bold,
@@ -468,13 +469,13 @@ class GlobalFont {
   );
 
   static TextStyle gigafontR = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.gigafont,
   );
 
   static TextStyle gigafontRBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.gigafont,
     fontWeight: FontWeight.bold,
@@ -488,34 +489,34 @@ class GlobalFont {
   );
 
   static TextStyle terafontR = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.terafont,
   );
 
   static TextStyle terafontRBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.terafont,
     fontWeight: FontWeight.bold,
   );
 
   static TextStyle petafontRBold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.petafont,
     fontWeight: FontWeight.bold,
   );
 
   static TextStyle titleLoginFontR2Bold = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.titleMenuFont1,
     fontWeight: FontWeight.bold,
   );
 
   static TextStyle datefont2 = TextStyle(
-    color: Colors.black,
+    color: const Color(0xFF0F172A),
     fontFamily: GlobalFontFamily.fontRubik,
     fontSize: GlobalSize.dateFont2,
     fontWeight: FontWeight.bold,

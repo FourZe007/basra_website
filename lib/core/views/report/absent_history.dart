@@ -254,45 +254,56 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
               // ==================================================================
               // =========================== Filter ===============================
               // ==================================================================
-              SizedBox(
+              Container(
                 width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12.0,
+                  vertical: 8.0,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF1F5F9),
+                  borderRadius: BorderRadius.circular(16.0),
+                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                ),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Filter Title
-                    InkWell(
-                      onTap: null,
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[400],
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(
-                              Icons.filter_alt_rounded,
-                              size: 25.0,
-                              color: Colors.black,
+                    // Filter Badge
+                    Container(
+                      height: 36,
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E293B),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.filter_alt_rounded,
+                            size: 16.0,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 6.0),
+                          Text(
+                            'Filter',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 13.0,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
                             ),
-                            Text(
-                              'Filter',
-                              style: GlobalFont.mediumgiantfontR,
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
 
-                    SizedBox(width: 10.0),
+                    const SizedBox(width: 12.0),
 
                     // Filter Content
                     Expanded(
                       child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.05,
+                        height: 36,
                         child: ListView(
                           scrollDirection: Axis.horizontal,
                           children: [
@@ -304,19 +315,15 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
                                     duration: const Duration(milliseconds: 500),
                                     width: MediaQuery.of(context).size.width *
                                         0.125,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05,
+                                    height: 36,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.circular(15.0),
+                                      color: const Color(0xFFE2E8F0),
+                                      borderRadius: BorderRadius.circular(10.0),
                                     ),
                                     padding: EdgeInsets.symmetric(
                                       horizontal:
                                           MediaQuery.of(context).size.width *
-                                              0.01,
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
                                               0.01,
                                     ),
                                     child: SipBranchDropdown(
@@ -332,19 +339,15 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
                                     duration: const Duration(milliseconds: 500),
                                     width: MediaQuery.of(context).size.width *
                                         0.125,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05,
+                                    height: 36,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: Colors.grey[400],
-                                      borderRadius: BorderRadius.circular(15.0),
+                                      color: const Color(0xFFE2E8F0),
+                                      borderRadius: BorderRadius.circular(10.0),
                                     ),
                                     padding: EdgeInsets.symmetric(
                                       horizontal:
                                           MediaQuery.of(context).size.width *
-                                              0.01,
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
                                               0.01,
                                     ),
                                     child: SipBranchDropdown(
@@ -359,8 +362,7 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
                               },
                             ),
 
-                            // ~:Devider:~
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 8.0),
 
                             // ~:Shop:~
                             Consumer<MenuState>(
@@ -370,19 +372,15 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
                                     duration: const Duration(milliseconds: 500),
                                     width: MediaQuery.of(context).size.width *
                                         0.125,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05,
+                                    height: 36,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.circular(15.0),
+                                      color: const Color(0xFFCBD5E1),
+                                      borderRadius: BorderRadius.circular(10.0),
                                     ),
                                     padding: EdgeInsets.symmetric(
                                       horizontal:
                                           MediaQuery.of(context).size.width *
-                                              0.01,
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
                                               0.01,
                                     ),
                                     child: SipShopDropdown(
@@ -399,19 +397,15 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
                                     duration: const Duration(milliseconds: 500),
                                     width: MediaQuery.of(context).size.width *
                                         0.125,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05,
+                                    height: 36,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: Colors.grey[400],
-                                      borderRadius: BorderRadius.circular(15.0),
+                                      color: const Color(0xFFE2E8F0),
+                                      borderRadius: BorderRadius.circular(10.0),
                                     ),
                                     padding: EdgeInsets.symmetric(
                                       horizontal:
                                           MediaQuery.of(context).size.width *
-                                              0.01,
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
                                               0.01,
                                     ),
                                     child: SipShopDropdown(
@@ -427,8 +421,7 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
                               },
                             ),
 
-                            // ~:Devider:~
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 8.0),
 
                             // ~:Location:~
                             Consumer<MenuState>(
@@ -438,19 +431,15 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
                                     duration: const Duration(milliseconds: 500),
                                     width: MediaQuery.of(context).size.width *
                                         0.125,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05,
+                                    height: 36,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.circular(15.0),
+                                      color: const Color(0xFFCBD5E1),
+                                      borderRadius: BorderRadius.circular(10.0),
                                     ),
                                     padding: EdgeInsets.symmetric(
                                       horizontal:
                                           MediaQuery.of(context).size.width *
-                                              0.01,
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
                                               0.01,
                                     ),
                                     child: SipLocationDropdown(
@@ -466,19 +455,15 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
                                     duration: const Duration(milliseconds: 500),
                                     width: MediaQuery.of(context).size.width *
                                         0.125,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05,
+                                    height: 36,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: Colors.grey[400],
-                                      borderRadius: BorderRadius.circular(15.0),
+                                      color: const Color(0xFFE2E8F0),
+                                      borderRadius: BorderRadius.circular(10.0),
                                     ),
                                     padding: EdgeInsets.symmetric(
                                       horizontal:
                                           MediaQuery.of(context).size.width *
-                                              0.01,
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
                                               0.01,
                                     ),
                                     child: SipLocationDropdown(
@@ -493,8 +478,7 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
                               },
                             ),
 
-                            // ~:Devider:~
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 8.0),
 
                             // ~:Salesman Autocomplete:~
                             SalesmanAutoComplete(
@@ -502,102 +486,121 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
                               state.setSelectedSalesman,
                             ),
 
-                            // ~:Devider:~
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 8.0),
 
                             // ~:Date:~
                             InkWell(
                               onTap: () => pickDate(state),
+                              borderRadius: BorderRadius.circular(10.0),
                               child: Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05,
+                                height: 36,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                  color: Colors.grey[400],
-                                  borderRadius: BorderRadius.circular(15.0),
+                                  color: const Color(0xFFE2E8F0),
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 12.0),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(Icons.date_range_rounded),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.003,
+                                    const Icon(
+                                      Icons.date_range_rounded,
+                                      size: 16.0,
+                                      color: Color(0xFF475569),
                                     ),
+                                    const SizedBox(width: 6.0),
                                     Text(
-                                      '$formattedStartDate to $formattedEndDate',
-                                      style: GlobalFont.mediumgiantfontR,
+                                      '$formattedStartDate  →  $formattedEndDate',
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 13.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFF334155),
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
 
-                            // ~:Devider:~
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 8.0),
 
                             // ~:Search Button:~
                             InkWell(
                               onTap: () => search(context, state),
+                              borderRadius: BorderRadius.circular(10.0),
                               child: Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05,
+                                height: 36,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14.0),
                                 decoration: BoxDecoration(
-                                  color: Colors.grey[400],
-                                  borderRadius: BorderRadius.circular(15.0),
+                                  color: const Color(0xFF1E293B),
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                                child: const Icon(
-                                  Icons.search_rounded,
-                                  size: 25.0,
-                                  color: Colors.black,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.search_rounded,
+                                      size: 16.0,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(width: 6.0),
+                                    const Text(
+                                      'Cari',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 13.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
 
-                            // ~:Devider:~
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 8.0),
 
                             // ~:Reset Button is Under Development:~
                             // InkWell(
                             //   onTap: () => state.resetAbsentHistory(),
-                            //   child: Container(
-                            //     height:
-                            //         MediaQuery.of(context).size.height * 0.05,
-                            //     alignment: Alignment.center,
-                            //     decoration: BoxDecoration(
-                            //       color: Colors.grey[400],
-                            //       borderRadius: BorderRadius.circular(15.0),
-                            //     ),
-                            //     padding: EdgeInsets.symmetric(horizontal: 10.0),
-                            //     child: Text(
-                            //       'Reset',
-                            //       style: GlobalFont.mediumgiantfontR,
-                            //     ),
-                            //   ),
+                            //   ...
                             // ),
-                            //
-                            // ~:Devider:~
-                            // SizedBox(width: 10.0),
 
-                            // ~:Export to Download Button:~
+                            // ~:Export Button:~
                             InkWell(
                               onTap: () => showFloatingWidget(context, state),
+                              borderRadius: BorderRadius.circular(10.0),
                               child: AnimatedContainer(
-                                duration: Duration(seconds: 1),
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05,
-                                alignment: Alignment.center,
+                                duration: const Duration(milliseconds: 300),
+                                height: 36,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14.0),
                                 decoration: BoxDecoration(
-                                  color: Colors.grey[400],
-                                  borderRadius: BorderRadius.circular(15.0),
+                                  color: const Color(0xFF334155),
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                                child: Text(
-                                  'Export',
-                                  style: GlobalFont.mediumgiantfontR,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.download_rounded,
+                                      size: 16.0,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(width: 6.0),
+                                    const Text(
+                                      'Export',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 13.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/pages/service_dialog_filter.dart';
 import 'package:stsj/core/providers/Provider.dart';
+import 'package:stsj/global/theme/app_theme.dart';
 import 'package:stsj/router/router_const.dart';
 
 class AuthorizationMenuComponent extends HookWidget {
@@ -56,38 +57,53 @@ class AuthorizationMenuComponent extends HookWidget {
     String route,
   ) {
     final isHovered = ValueNotifier<bool>(false);
-    final tooltipNull = ValueNotifier<bool>(false);
 
     return MouseRegion(
-      onEnter: (_) {
-        isHovered.value = true;
-      },
-      onExit: (_) {
-        isHovered.value = false;
-      },
+      onEnter: (_) => isHovered.value = true,
+      onExit: (_) => isHovered.value = false,
       child: ValueListenableBuilder<bool>(
         valueListenable: isHovered,
         builder: (context, hovered, child) {
           return AnimatedContainer(
-            width: 100.0,
-            height: 100.0,
-            duration: Duration(milliseconds: 100),
-            padding: EdgeInsets.all(hovered ? 10.0 : 0.0),
-            child: IconButton(
-              onPressed: () {
-                tooltipNull.value = true;
-                if (tooltip == 'Dashboard Service') {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => ServiceDialogFilter(),
-                  );
-                } else {
-                  context.goNamed(route);
-                }
-
-                // context.goNamed(route);
-              },
-              icon: Image.asset(imagePath),
+            width: 88.0,
+            height: 88.0,
+            duration: const Duration(milliseconds: 150),
+            decoration: BoxDecoration(
+              color: hovered ? AppColors.secondaryMaroon : AppColors.darkGrey,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: hovered ? AppColors.accentYellow : AppColors.border,
+                width: hovered ? 1.5 : 1.0,
+              ),
+              boxShadow: hovered
+                  ? [
+                      BoxShadow(
+                        color: AppColors.accentYellow.withValues(alpha: 0.15),
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ]
+                  : null,
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () {
+                  if (tooltip == 'Dashboard Service') {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => ServiceDialogFilter(),
+                    );
+                  } else {
+                    context.goNamed(route);
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Image.asset(imagePath, fit: BoxFit.contain),
+                ),
+              ),
             ),
           );
         },

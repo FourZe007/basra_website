@@ -3,8 +3,11 @@ import 'package:stsj/external_web/utilities/global.dart';
 import 'package:stsj/external_web/widget/w_info_user.dart';
 import 'package:stsj/external_web/widget/w_tombol_link_powerbi.dart';
 import 'package:stsj/external_web/widget/w_tombol_logout.dart';
+import 'package:stsj/global/theme/app_theme.dart';
 import 'dart:ui_web' as ui;
 import 'package:web/web.dart' as web;
+import 'package:go_router/go_router.dart';
+import 'package:stsj/router/router_const.dart';
 
 class PWebBIMktUnit extends StatefulWidget {
   const PWebBIMktUnit({super.key});
@@ -74,64 +77,83 @@ class _PowerbiView1State extends State<PWebBIMktUnit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryBackground,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(
-          MediaQuery.of(context).size.height * 0.085,
-        ),
-        child: AppBar(
-          actions: [
-            Expanded(
-              flex: 1,
-              child: WTombolLinkPowerBI(
-                'DAILY',
-                'assets/images/PowerBIDaily.png',
-                linkBIDaily,
-                (currentURL == linkBIDaily || currentURL == linkBIEndMonth)
-                    ? Colors.white
-                    : Color.fromRGBO(34, 137, 221, 1.0),
-                reloadPage,
-              ),
+        preferredSize: const Size.fromHeight(70.0),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: AppColors.softCharcoal,
+            border: Border(
+              bottom: BorderSide(color: AppColors.border, width: 1.0),
             ),
-            Expanded(
-              flex: 1,
-              child: WTombolLinkPowerBI(
-                'MONTHLY',
-                'assets/images/PowerBIEndMonth.png',
-                linkBIProductivity,
-                currentURL == linkBIProductivity ? Colors.white : Color.fromRGBO(34, 137, 221, 1.0),
-                reloadPage,
-              ),
+          ),
+          child: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+              onPressed: () {
+                context.replaceNamed(RoutesConstant.menu);
+              },
             ),
-            Expanded(
-              flex: 1,
-              child: WTombolLinkPowerBI(
-                'SUMMARY',
-                'assets/images/PowerBISummary.png',
-                linkBISummary,
-                currentURL == linkBISummary ? Colors.white : Color.fromRGBO(34, 137, 221, 1.0),
-                reloadPage,
-              ),
+            title: Row(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 140,
+                          child: WTombolLinkPowerBI(
+                            'DAILY',
+                            'assets/images/PowerBIDaily.png',
+                            linkBIDaily,
+                            (currentURL == linkBIDaily || currentURL == linkBIEndMonth)
+                                ? Colors.white
+                                : const Color.fromRGBO(34, 137, 221, 1.0),
+                            reloadPage,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 140,
+                          child: WTombolLinkPowerBI(
+                            'MONTHLY',
+                            'assets/images/PowerBIEndMonth.png',
+                            linkBIProductivity,
+                            currentURL == linkBIProductivity ? Colors.white : const Color.fromRGBO(34, 137, 221, 1.0),
+                            reloadPage,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 140,
+                          child: WTombolLinkPowerBI(
+                            'SUMMARY',
+                            'assets/images/PowerBISummary.png',
+                            linkBISummary,
+                            currentURL == linkBISummary ? Colors.white : const Color.fromRGBO(34, 137, 221, 1.0),
+                            reloadPage,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 140,
+                          child: WTombolLinkPowerBI(
+                            'PSI',
+                            'assets/images/PowerBIPSI.png',
+                            linkBIPSI,
+                            currentURL == linkBIPSI ? Colors.white : const Color.fromRGBO(34, 137, 221, 1.0),
+                            reloadPage,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const WInfoUser(),
+                const WTombolLogout(),
+              ],
             ),
-            Expanded(
-              flex: 1,
-              child: WTombolLinkPowerBI(
-                'PSI',
-                'assets/images/PowerBIPSI.png',
-                linkBIPSI,
-                currentURL == linkBIPSI ? Colors.white : Color.fromRGBO(34, 137, 221, 1.0),
-                reloadPage,
-              ),
-            ),
-            Expanded(flex: 2, child: SizedBox()),
-            Expanded(
-              flex: 1,
-              child: Image.asset('assets/images/stsj.png', width: 50),
-            ),
-            Expanded(flex: 4, child: SizedBox()),
-            WInfoUser(),
-            WTombolLogout(),
-          ],
-          backgroundColor: const Color(0xFF9EDDFF),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
         ),
       ),
       body: HtmlElementView(key: UniqueKey(), viewType: viewID),

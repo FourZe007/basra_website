@@ -8,6 +8,7 @@ import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/core/models/AuthModel/Auth_Model.dart';
 import 'package:stsj/dashboard-fixup/utilities/utils.dart';
 import 'package:stsj/global/function.dart';
+import 'package:stsj/global/theme/app_theme.dart';
 import 'package:stsj/router/router_const.dart';
 
 class HomeMenuComponent extends HookWidget {
@@ -293,58 +294,106 @@ class HomeMenuComponent extends HookWidget {
     final isHovered = ValueNotifier<bool>(false);
 
     if (!shouldShowIcon) {
-      // If shouldShowIcon is false, return an empty SizedBox
-      return SizedBox();
+      return const SizedBox();
     }
 
     return MouseRegion(
-      onEnter: (_) {
-        isHovered.value = true;
-      },
-      onExit: (_) {
-        isHovered.value = false;
-      },
+      onEnter: (_) => isHovered.value = true,
+      onExit: (_) => isHovered.value = false,
       child: ValueListenableBuilder<bool>(
         valueListenable: isHovered,
         builder: (context, hovered, child) {
           final loginpt = context.read<PtModel>();
           final menuState = context.read<MenuState>();
 
-          return SizedBox(
-            width: 200,
-            child: Column(
-              children: [
-                AnimatedContainer(
-                  width: 150.0,
-                  height: 100.0,
-                  duration: Duration(milliseconds: 200),
-                  padding: EdgeInsets.all(hovered ? 10.0 : 0.0),
-                  child: CircleAvatar(
-                    backgroundColor: Color.fromARGB(115, 255, 255, 255),
-                    radius: 10,
-                    child: IconButton(
-                      icon: Image.asset(
-                        imagePath,
-                      ),
-                      // tooltip: tooltip,
-                      onPressed: () => permissionCheck(
-                        context,
-                        loginpt,
-                        menuState,
-                        route,
-                        tooltip,
-                      ),
+          return Container(
+            width: 190,
+            height: 94,
+            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: () => permissionCheck(
+                  context,
+                  loginpt,
+                  menuState,
+                  route,
+                  tooltip,
+                ),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 150),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: hovered ? AppColors.secondaryMaroon : AppColors.darkGrey,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: hovered ? AppColors.accentYellow : AppColors.border,
+                      width: hovered ? 1.5 : 1.0,
                     ),
+                    boxShadow: hovered
+                        ? [
+                            BoxShadow(
+                              color: AppColors.accentYellow.withValues(alpha: 0.15),
+                              blurRadius: 10,
+                              offset: const Offset(0, 3),
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppColors.softCharcoal,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Image.asset(
+                              imagePath,
+                              height: 22,
+                              width: 22,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              tooltip,
+                              style: TextStyle(
+                                
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: hovered ? AppColors.accentYellow : AppColors.textPrimary,
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 14,
+                            color: hovered ? AppColors.accentYellow : AppColors.textMuted,
+                          ),
+                        ],
+                      ),
+                      Text(
+                        desc,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  height: 7,
-                ),
-                Text(
-                  desc,
-                  style: TextStyle(fontSize: 12),
-                )
-              ],
+              ),
             ),
           );
         },

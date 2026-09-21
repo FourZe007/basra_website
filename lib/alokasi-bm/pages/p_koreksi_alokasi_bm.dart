@@ -6,7 +6,6 @@ import 'package:stsj/alokasi-bm/helper/model_alokasi_bm.dart';
 import 'package:stsj/alokasi-bm/pages/p_koreksi_alokasi_bm_detail.dart';
 import 'package:stsj/alokasi-bm/widget/w_list_empty.dart';
 import 'package:stsj/alokasi-bm/widget/w_tanggal.dart';
-import 'package:stsj/alokasi-bm/widget/w_tombol_teks.dart';
 import 'package:stsj/global/widget/app_bar.dart';
 import 'package:stsj/router/router_const.dart';
 
@@ -49,23 +48,60 @@ class _MyPageState extends State<PKoreksiAlokasiBM> {
         child: CustomAppBar(goBack: RoutesConstant.menu),
       ),
       body: Column(children: [
-        SizedBox(height: 15),
-        Row(children: [
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: WTanggal(tanggal, setTanggal),
-            ),
+        SizedBox(height: 12),
+        // ================================================================
+        // ========================= Tools Header =========================
+        // ================================================================
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 12.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF1F5F9),
+            borderRadius: BorderRadius.circular(16.0),
+            border: Border.all(color: const Color(0xFFE2E8F0)),
           ),
-          Expanded(
-            flex: 2,
-            child: waitAPI
-                ? Container()
-                : WTombolTeks('Get Data', Colors.black, getData),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(width: 12.0),
+
+              // Date Field — fixed width
+              SizedBox(
+                width: 200,
+                child: WTanggal(tanggal, setTanggal),
+              ),
+
+              const SizedBox(width: 10.0),
+
+              // Get Data Button
+              SizedBox(
+                width: 140,
+                height: 36,
+                child: ElevatedButton.icon(
+                  onPressed: waitAPI ? null : getData,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    disabledBackgroundColor: Colors.black45,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                  ),
+                  icon: const Icon(Icons.search_rounded, size: 16),
+                  label: const Text(
+                    'Get Data',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          Expanded(flex: 12, child: SizedBox())
-        ]),
+        ),
         SizedBox(height: 10),
         Expanded(
           child: waitAPI

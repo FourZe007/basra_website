@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stsj/core/providers/Provider.dart';
+import 'package:stsj/global/theme/app_theme.dart';
 import 'package:stsj/router/router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -39,13 +40,7 @@ class MyApp extends StatelessWidget {
       ),
       localizationsDelegates: const [GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate],
       supportedLocales: const [Locale('en'), Locale('id')],
-      theme: ThemeData(
-          useMaterial3: true,
-          iconTheme: IconThemeData(color: Colors.black),
-          colorSchemeSeed: const Color(0xFF8EACCD),
-          cardColor: Color.fromARGB(159, 210, 224, 251),
-          fontFamily: 'Roboto',
-          scaffoldBackgroundColor: Color.fromARGB(255, 231, 230, 230)),
+      theme: AppTheme.lightTheme,
     );
   }
 }

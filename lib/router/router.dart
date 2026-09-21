@@ -21,6 +21,7 @@ import 'package:stsj/core/views/activities/image_preview.dart';
 import 'package:stsj/core/views/activities/map.dart';
 import 'package:stsj/core/views/activities/route_details.dart';
 import 'package:stsj/core/views/activities/weekly_activities_report.dart';
+import 'package:stsj/core/views/app_shell.dart';
 import 'package:stsj/core/views/report/absent_history.dart';
 import 'package:stsj/core/views/report/bike_history.dart';
 import 'package:stsj/core/views/report/browse_salesman.dart';
@@ -87,33 +88,38 @@ class RouterSettings {
     initialLocation: '/',
     debugLogDiagnostics: true,
     redirect: redirect,
-    routes: <GoRoute>[
+    routes: <RouteBase>[
       GoRoute(
-        name: RoutesConstant.homepage,
-        path: '/',
-        builder: (context, state) => HomePages(),
+        name: RoutesConstant.login,
+        path: '/login',
+        pageBuilder: (context, state) {
+          return const MaterialPage(child: LoginPages());
+        },
+      ),
+      ShellRoute(
+        builder: (context, state, child) {
+          return AppShell(child: child);
+        },
         routes: [
           GoRoute(
-            name: RoutesConstant.login,
-            path: 'login',
-            pageBuilder: (context, state) {
-              return MaterialPage(child: LoginPages());
-            },
-          ),
-          GoRoute(
-            name: RoutesConstant.account,
-            path: 'account',
-            pageBuilder: (context, state) {
-              return MaterialPage(child: AkunPage());
-            },
-          ),
-          GoRoute(
-            name: RoutesConstant.report,
-            path: 'report',
-            pageBuilder: (context, state) {
-              return MaterialPage(child: ReportPages());
-            },
-          ),
+            name: RoutesConstant.homepage,
+            path: '/',
+            builder: (context, state) => HomePages(),
+            routes: [
+              GoRoute(
+                name: RoutesConstant.account,
+                path: 'account',
+                pageBuilder: (context, state) {
+                  return MaterialPage(child: AkunPage());
+                },
+              ),
+              GoRoute(
+                name: RoutesConstant.report,
+                path: 'report',
+                pageBuilder: (context, state) {
+                  return MaterialPage(child: ReportPages());
+                },
+              ),
           // ~:NEW:~
           GoRoute(
             name: RoutesConstant.fpm1stDashboard,
@@ -567,6 +573,8 @@ class RouterSettings {
           ),
           // ~:NEW:~
         ],
+      ),
+      ],
       ),
     ],
     errorBuilder: (context, state) => const NotFoundScreen(),

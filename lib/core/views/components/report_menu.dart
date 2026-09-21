@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/pages/service_dialog_filter.dart';
 import 'package:stsj/core/providers/Provider.dart';
+import 'package:stsj/global/theme/app_theme.dart';
 import 'package:stsj/router/router_const.dart';
 
 class ReportMenuComponent extends HookWidget {
@@ -15,159 +16,45 @@ class ReportMenuComponent extends HookWidget {
     final state = Provider.of<MenuState>(context);
 
     return SizedBox(
-      width: MediaQuery.of(context).size.width,
+      width: double.infinity,
       child: SingleChildScrollView(
         child: Wrap(
+          spacing: 24.0,
+          runSpacing: 24.0,
+          alignment: WrapAlignment.start,
           children: [
-            // Report
-            Builder(
-              builder: (context) {
-                if (state.getSubHeaderList.contains('300')) {
-                  return Container(
-                    margin: EdgeInsets.only(right: 50.0),
-                    child: Column(
-                      children: [
-                        _buildMenuIcon(
-                          context,
-                          'assets/images/progress-report.png',
-                          'Report',
-                          RoutesConstant.report,
-                          'report',
-                        ),
-                        const Text('Report'),
-                      ],
-                    ),
-                  );
-                } else {
-                  return const SizedBox();
-                }
-              },
-            ),
-
-            // Absent Report
-            Builder(
-              builder: (context) {
-                if (state.getSubHeaderList.contains('304')) {
-                  return Container(
-                    margin: EdgeInsets.only(right: 50.0),
-                    child: Column(
-                      children: [
-                        _buildMenuIcon(
-                          context,
-                          'assets/images/img_dailytask.png',
-                          'Report',
-                          RoutesConstant.absentHistory,
-                          'attendance',
-                        ),
-                        const Text('Riwayat Absensi'),
-                      ],
-                    ),
-                  );
-                } else {
-                  return const SizedBox();
-                }
-              },
-            ),
-
-            // Browse Salesman
-            Builder(
-              builder: (context) {
-                if (state.getSubHeaderList.contains('305')) {
-                  return Container(
-                    margin: EdgeInsets.only(right: 50.0),
-                    child: Column(
-                      children: [
-                        _buildMenuIcon(
-                          context,
-                          'assets/images/salesman.png',
-                          'Report',
-                          RoutesConstant.browseSalesman,
-                          'salesman list',
-                        ),
-                        const Text('Cari Salesman'),
-                      ],
-                    ),
-                  );
-                } else {
-                  return const SizedBox();
-                }
-              },
-            ),
-
-            // Coming Soon
-            // // Bikes History
-            // Builder(
-            //   builder: (context) {
-            //     if (state.getSubHeaderList.contains('301')) {
-            //       return Container(
-            //         margin: EdgeInsets.only(right: 50.0),
-            //         child: Column(
-            //           children: [
-            //             _buildMenuIcon(
-            //               context,
-            //               'assets/images/progress-report.png',
-            //               'Report',
-            //               RoutesConstant.bikesHistory,
-            //             ),
-            //             const Text('Bikes History'),
-            //           ],
-            //         ),
-            //       );
-            //     } else {
-            //       return const SizedBox();
-            //     }
-            //   },
-            // ),
-            //
-            // // Service History
-            // Builder(
-            //   builder: (context) {
-            //     if (state.getSubHeaderList.contains('302')) {
-            //       return Container(
-            //         margin: EdgeInsets.only(right: 50.0),
-            //         child: Column(
-            //           children: [
-            //             _buildMenuIcon(
-            //               context,
-            //               'assets/images/progress-report.png',
-            //               'Report',
-            //               RoutesConstant.serviceHistory,
-            //             ),
-            //             const Text('Service History'),
-            //           ],
-            //         ),
-            //       );
-            //     } else {
-            //       return const SizedBox();
-            //     }
-            //   },
-            // ),
-            //
-            // // MDS Sparepart Stock
-            // Builder(
-            //   builder: (context) {
-            //     if (state.getSubHeaderList.contains('303')) {
-            //       return Container(
-            //         margin: EdgeInsets.only(right: 50.0),
-            //         child: Column(
-            //           children: [
-            //             _buildMenuIcon(
-            //               context,
-            //               'assets/images/progress-report.png',
-            //               'Report',
-            //               RoutesConstant.mdsSparepartStock,
-            //             ),
-            //             const Text('MDS Sparepart Stock'),
-            //           ],
-            //         ),
-            //       );
-            //     } else {
-            //       return const SizedBox();
-            //     }
-            //   },
-            // ),
+            if (state.getSubHeaderList.contains('300'))
+              _buildMenuItem(context, 'assets/images/progress-report.png', 'Report', RoutesConstant.report, 'report'),
+            if (state.getSubHeaderList.contains('304'))
+              _buildMenuItem(context, 'assets/images/new_riwayat_absensi.png', 'Riwayat Absensi', RoutesConstant.absentHistory, 'attendance'),
+            if (state.getSubHeaderList.contains('305'))
+              _buildMenuItem(context, 'assets/images/new_cari_salesman.png', 'Cari Salesman', RoutesConstant.browseSalesman, 'salesman list'),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildMenuItem(
+    BuildContext context,
+    String imagePath,
+    String tooltip,
+    String route,
+    String menuName,
+  ) {
+    return SizedBox(
+      width: 100,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildMenuIcon(context, imagePath, tooltip, route, menuName),
+          const SizedBox(height: 8),
+          Text(
+            tooltip,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 12),
+          ),
+        ],
       ),
     );
   }
@@ -180,44 +67,61 @@ class ReportMenuComponent extends HookWidget {
     String menuName,
   ) {
     final isHovered = ValueNotifier<bool>(false);
-    final tooltipNull = ValueNotifier<bool>(false);
 
     return MouseRegion(
-      onEnter: (_) {
-        isHovered.value = true;
-      },
-      onExit: (_) {
-        isHovered.value = false;
-      },
+      onEnter: (_) => isHovered.value = true,
+      onExit: (_) => isHovered.value = false,
       child: ValueListenableBuilder<bool>(
         valueListenable: isHovered,
         builder: (context, hovered, child) {
           return AnimatedContainer(
-            width: 100.0,
-            height: 100.0,
-            duration: Duration(milliseconds: 100),
-            padding: EdgeInsets.all(hovered ? 10.0 : 0.0),
-            child: IconButton(
-              onPressed: () async {
-                final state = Provider.of<MenuState>(context, listen: false);
-                tooltipNull.value = true;
-                if (tooltip == 'Dashboard Service') {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => ServiceDialogFilter(),
-                  );
-                } else if (tooltip == 'attendance') {
-                  await state.resetAbsentHistory();
-                } else if (tooltip == 'salesman list') {
-                  await state.resetAbsentHistory();
-                  state.setSearchTriggerNotifier(false);
-                }
+            width: 88.0,
+            height: 88.0,
+            duration: const Duration(milliseconds: 150),
+            decoration: BoxDecoration(
+              color: hovered ? AppColors.secondaryMaroon : AppColors.darkGrey,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: hovered ? AppColors.accentYellow : AppColors.border,
+                width: hovered ? 1.5 : 1.0,
+              ),
+              boxShadow: hovered
+                  ? [
+                      BoxShadow(
+                        color: AppColors.accentYellow.withValues(alpha: 0.15),
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ]
+                  : null,
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () async {
+                  final state = Provider.of<MenuState>(context, listen: false);
+                  if (tooltip == 'Dashboard Service') {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => ServiceDialogFilter(),
+                    );
+                  } else if (menuName == 'attendance') {
+                    await state.resetAbsentHistory();
+                  } else if (menuName == 'salesman list') {
+                    await state.resetAbsentHistory();
+                    state.setSearchTriggerNotifier(false);
+                  }
 
-                if (context.mounted) {
-                  context.goNamed(route);
-                }
-              },
-              icon: Image.asset(imagePath),
+                  if (context.mounted) {
+                    context.goNamed(route);
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Image.asset(imagePath, fit: BoxFit.contain),
+                ),
+              ),
             ),
           );
         },

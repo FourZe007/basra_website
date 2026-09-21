@@ -29,7 +29,7 @@ class _Dashboard04State extends State<Dashboard04> with AutomaticKeepAliveClient
   Widget build(BuildContext context) {
     super.build(context);
     return Theme(
-      data: ThemeData(fontFamily: 'Poppins'),
+      data: ThemeData(),
       child: Scaffold(
         key: _scaffoldKey,
         body: ListView(

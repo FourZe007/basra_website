@@ -9,8 +9,7 @@ import 'package:stsj/core/models/AuthModel/Auth_Model.dart';
 import 'package:stsj/core/models/AuthModel/DataAuth.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/dashboard-fixup/utilities/utils.dart';
-import 'package:stsj/global/font.dart';
-
+import 'package:stsj/global/theme/app_theme.dart';
 import 'package:stsj/router/router_const.dart';
 
 class LoginPages extends StatefulWidget {
@@ -29,10 +28,13 @@ class _LoginPagesState extends State<LoginPages> {
   final passwordController = TextEditingController();
 
   bool _passwordVisible = false; // Initialize _passwordVisible as a hook
+  //bool _passwordVisible = false;
 
   bool isLoading = false;
   int statuslogin = 0;
   bool canEntered = false;
+
+  get backgroundColor => null;
 
   bool _onKey(KeyEvent event) {
     final key = event.logicalKey;
@@ -66,7 +68,9 @@ class _LoginPagesState extends State<LoginPages> {
         state.fetchSISBranches();
         print(state.branchList.length);
         print('b');
-        await state.fetchUserAccess(state.getCompanyName, state.getEntryLevelId).then((data) async {
+        await state
+            .fetchUserAccess(state.getCompanyName, state.getEntryLevelId)
+            .then((data) async {
           state.userAccessList.addAll(data);
 
           // SIP - Salesman
@@ -134,7 +138,8 @@ class _LoginPagesState extends State<LoginPages> {
           }));
 
           await prefs.setStringList('subheader', state.subHeaderList);
-          await prefs.setStringList('subheaderallowedit', state.subHeaderAllowEditList);
+          await prefs.setStringList(
+              'subheaderallowedit', state.subHeaderAllowEditList);
 
           print('~:List of Sub Header:~');
           for (var value in state.getSubHeaderList) {
@@ -144,7 +149,8 @@ class _LoginPagesState extends State<LoginPages> {
           print('');
           List<Map<String, String>> temp = [];
           for (Map<String, String> e in dashboardList) {
-            if (state.getSubHeaderList.contains(e['acc']) && e['acc'] != '000') {
+            if (state.getSubHeaderList.contains(e['acc']) &&
+                e['acc'] != '000') {
               print('${e['acc']} added');
               temp.add(e);
             } else if (e['acc'] == '000') {
@@ -164,10 +170,12 @@ class _LoginPagesState extends State<LoginPages> {
       } else {
         // Handle the case where "Status" is not true or data is missing
         print("Data di SharedPreferences kosong atau Status tidak benar.");
+        debugPrint("Data di SharedPreferences kosong atau Status tidak benar.");
       }
     } catch (e) {
       // Handle any exceptions here
       print('Error: ${e.toString()}');
+      debugPrint('Error: ${e.toString()}');
     }
   }
 
@@ -190,7 +198,8 @@ class _LoginPagesState extends State<LoginPages> {
         passwordController.text,
       );
 
-      if (listdatalogin.isNotEmpty && listdatalogin[0].memo == "LOGIN BERHASIL") {
+      if (listdatalogin.isNotEmpty &&
+          listdatalogin[0].memo == "LOGIN BERHASIL") {
         // ~:Login succeed:~
         await DataLoginController.setIntoSharedPreferences(
             listdatalogin[0].userID,
@@ -219,7 +228,7 @@ class _LoginPagesState extends State<LoginPages> {
 
           if (context.mounted) {
             print('Current route: ${GoRouterState.of(context).name}');
-            context.pushReplacementNamed(RoutesConstant.homepage);
+            context.goNamed(RoutesConstant.homepage);
           }
         }
       } else {
@@ -269,210 +278,313 @@ class _LoginPagesState extends State<LoginPages> {
   }
 
   @override
+  void dispose() {
+    ServicesBinding.instance.keyboard.removeHandler(_onKey);
+    idController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final state = Provider.of<MenuState>(context);
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.3,
-          height: MediaQuery.of(context).size.height * 0.7,
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.3), // Warna bayangan
-                spreadRadius: 3, // Menyebar lebar bayangan
-                blurRadius: 7, // Blur bayangan
-              ),
+      backgroundColor: AppColors.primaryBackground,
+      body: Container(
+        width: size.width,
+        height: size.height,
+        decoration: const BoxDecoration(
+          color: AppColors.primaryBackground,
+          gradient: RadialGradient(
+            center: Alignment(0.0, -0.3),
+            radius: 1.2,
+            colors: [
+              AppColors.deepBackground,
+              AppColors.primaryBackground,
             ],
           ),
-          padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.015,
-            vertical: MediaQuery.of(context).size.height * 0.015,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    // Company Logo
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).size.height * 0.03,
-                      ),
-                      child: Image.asset(
-                        'assets/images/stsj.png',
-                        fit: BoxFit.contain,
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.175,
-                      ),
-                    ),
-
-                    Wrap(
-                      runSpacing: MediaQuery.of(context).size.height * 0.025,
-                      children: [
-                        // User Text Fields
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.15,
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.01,
-                          ),
-                          child: Form(
-                            key: formKey,
-                            child: Column(
-                              children: <Widget>[
-                                // Username Text Field
-                                Expanded(
-                                  child: TextFormField(
-                                    textAlignVertical: TextAlignVertical.center,
-                                    controller: idController,
-                                    autofocus: true,
-                                    inputFormatters: [UppercaseTextInputFormatter()],
-                                    decoration: InputDecoration(
-                                      filled: true, //<-- SEE HERE
-                                      fillColor: Colors.white70,
-                                      labelText: "Username", //babel text
-                                      hintText: 'Masukan username perusahaan',
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        borderSide: BorderSide(width: 0.5),
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter userid';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-
-                                SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.015,
-                                ),
-
-                                // Password Text Field
-                                Expanded(
-                                  child: TextFormField(
-                                    inputFormatters: [UppercaseTextInputFormatter()],
-                                    controller: passwordController,
-                                    obscureText: !_passwordVisible,
-                                    decoration: InputDecoration(
-                                      labelText: "Password", //babel text
-                                      hintText: 'Masukan password perusahaan',
-
-                                      filled: true, //<-- SEE HERE
-                                      fillColor: Colors.white70,
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        borderSide: BorderSide(width: 0.5),
-                                      ),
-                                      suffixIcon: IconButton(
-                                        icon: Icon(
-                                          // Based on passwordVisible state choose the icon
-                                          _passwordVisible
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
-                                          color: Theme.of(context).primaryColorDark,
-                                        ),
-                                        onPressed: () {
-                                          // Update the state i.e. toogle the state of passwordVisible variable
-                                          setState(() {
-                                            _passwordVisible = !_passwordVisible;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter password';
-                                      }
-
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        // Login Button
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            padding: WidgetStateProperty.all(
-                              EdgeInsets.symmetric(
-                                horizontal: MediaQuery.of(context).size.width * 0.05,
-                                vertical: MediaQuery.of(context).size.height * 0.025,
-                              ),
-                            ),
-                            backgroundColor: WidgetStateProperty.all(
-                              Theme.of(context).primaryColorLight,
-                            ),
-                          ),
-                          onPressed: () {
-                            // if (formKey.currentState!.validate()) {
-                            //   formKey.currentState!.save();
-                            //   loginHandler(context, state);
-                            // }
-                            loginHandler(context, state);
-                          },
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Builder(
-                              builder: (context) {
-                                if (isLoading) {
-                                  return Center(
-                                    heightFactor: 1,
-                                    widthFactor: 1,
-                                    child: SizedBox(
-                                      width: 25,
-                                      height: 25,
-                                      child: CircularProgressIndicator(
-                                        backgroundColor: Color.fromARGB(255, 4, 101, 237),
-                                        strokeWidth: 5,
-                                      ),
-                                    ),
-                                  );
-                                } else {
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Icon(Icons.login, color: Colors.black),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(
-                                        'Login',
-                                        style: TextStyle(color: Colors.black),
-                                      )
-                                    ],
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: 420,
+                minWidth: 280,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.mutedSurface,
+                  borderRadius: BorderRadius.circular(AppRadii.xl),
+                  border: Border.all(color: AppColors.border, width: 1.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.08),
+                      spreadRadius: 0,
+                      blurRadius: 24,
+                      offset: const Offset(0, 10),
                     ),
                   ],
                 ),
-              ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28,
+                  vertical: 36,
+                ),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Logo & Branding
+                      Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: AppColors.darkGrey,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.border,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Image.asset(
+                            'assets/images/stsj.png',
+                            height: 60,
+                            width: 60,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const SizedBox(height: 4),
+                      const SizedBox(height: 28),
 
-              // ~:Website Version:~
-              Container(
-                width: MediaQuery.of(context).size.width,
-                alignment: Alignment.center,
-                child: Text(
-                  'v1.0.15',
-                  style: GlobalFont.mediumbigfontR,
+                      // Username Field
+                      const Text(
+                        'Username',
+                        style: TextStyle(
+                          
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      TextFormField(
+                        textAlignVertical: TextAlignVertical.center,
+                        controller: idController,
+                        autofocus: true,
+                        style: const TextStyle(
+                          
+                          fontSize: 14,
+                          color: AppColors.textPrimary,
+                        ),
+                        inputFormatters: [UppercaseTextInputFormatter()],
+                        decoration: InputDecoration(
+                          hintStyle: const TextStyle(
+                            
+                            fontSize: 13,
+                            color: AppColors.textMuted,
+                          ),
+                          prefixIcon: const Icon(
+                            Icons.person_outline_rounded,
+                            size: 20,
+                            color: AppColors.textSecondary,
+                          ),
+                          filled: true,
+                          fillColor: AppColors.darkGrey,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppRadii.md),
+                            borderSide:
+                                const BorderSide(color: AppColors.border),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppRadii.md),
+                            borderSide:
+                                const BorderSide(color: AppColors.border),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppRadii.md),
+                            borderSide: const BorderSide(
+                              color: AppColors.accentYellow,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter userid';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 18),
+
+                      // Password Field
+                      const Text(
+                        'Password',
+                        style: TextStyle(
+                          
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      TextFormField(
+                        controller: passwordController,
+                        obscureText: !_passwordVisible,
+                        style: const TextStyle(
+                          
+                          fontSize: 14,
+                          color: AppColors.textPrimary,
+                        ),
+                        inputFormatters: [UppercaseTextInputFormatter()],
+                        decoration: InputDecoration(
+                          hintStyle: const TextStyle(
+                            
+                            fontSize: 13,
+                            color: AppColors.textMuted,
+                          ),
+                          prefixIcon: const Icon(
+                            Icons.lock_outline_rounded,
+                            size: 20,
+                            color: AppColors.textSecondary,
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _passwordVisible
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                              size: 20,
+                              color: AppColors.textSecondary,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _passwordVisible = !_passwordVisible;
+                              });
+                            },
+                          ),
+                          filled: true,
+                          fillColor: AppColors.darkGrey,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppRadii.md),
+                            borderSide:
+                                const BorderSide(color: AppColors.border),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppRadii.md),
+                            borderSide:
+                                const BorderSide(color: AppColors.border),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppRadii.md),
+                            borderSide: const BorderSide(
+                              color: AppColors.accentYellow,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter password';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 28),
+
+                      // Login Button
+                      SizedBox(
+                        height: 48,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.accentYellow,
+                            foregroundColor: AppColors.onAccentYellow,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(AppRadii.md),
+                            ),
+                            elevation: 0,
+                          ),
+                          onPressed: isLoading
+                              ? null
+                              : () {
+                                  if (formKey.currentState!.validate()) {
+                                    loginHandler(context, state);
+                                  }
+                                 },
+                          child: isLoading
+                              ? const SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppColors.onAccentYellow),
+                                  ),
+                                )
+                              : const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.login_rounded,
+                                        size: 20,
+                                        color: AppColors.onAccentYellow),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'Sign In',
+                                      style: TextStyle(
+                                        
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.onAccentYellow,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+
+                      // Version Indicator & Badge
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 7,
+                            height: 7,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.accentMint,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          const Text(
+                            'v1.0.15',
+                            style: TextStyle(
+                              
+                              fontSize: 11,
+                              color: AppColors.textMuted,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -482,7 +594,8 @@ class _LoginPagesState extends State<LoginPages> {
 
 class UppercaseTextInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     return TextEditingValue(
       text: newValue.text.toUpperCase(),
       selection: newValue.selection,

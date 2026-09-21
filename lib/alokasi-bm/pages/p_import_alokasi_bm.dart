@@ -1,4 +1,4 @@
-import 'package:excel/excel.dart';
+import 'package:excel/excel.dart' hide Border;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -6,8 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stsj/alokasi-bm/helper/api_alokasi_bm.dart';
 import 'package:stsj/alokasi-bm/widget/w_alertdialog_info.dart';
 import 'package:stsj/alokasi-bm/widget/w_tanggal.dart';
-import 'package:stsj/alokasi-bm/widget/w_tombol_teks.dart';
-import 'package:stsj/global/font.dart';
 import 'package:stsj/global/widget/app_bar.dart';
 import 'package:stsj/router/router_const.dart';
 import 'package:universal_html/html.dart' as html;
@@ -93,35 +91,96 @@ class _MyPageState extends State<PImportAlokasiBM> {
         child: CustomAppBar(goBack: RoutesConstant.menu),
       ),
       body: Column(children: [
-        SizedBox(height: 15),
-        Row(children: [
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: WTanggal(tanggal, setTanggal),
-            ),
+        SizedBox(height: 12),
+        // ================================================================
+        // ========================= Tools Header =========================
+        // ================================================================
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 12.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF1F5F9),
+            borderRadius: BorderRadius.circular(16.0),
+            border: Border.all(color: const Color(0xFFE2E8F0)),
           ),
-          Expanded(
-            flex: 1,
-            child: waitUpload
-                ? Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    SpinKitDualRing(color: Colors.blue[900]!, size: 30),
-                  ])
-                : WTombolTeks('Upload Alokasi', Colors.black, processExcel),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Tools Badge
+
+              const SizedBox(width: 12.0),
+
+              // Date Field — fixed width
+              SizedBox(
+                width: 200,
+                child: WTanggal(tanggal, setTanggal),
+              ),
+
+              const SizedBox(width: 10.0),
+
+              // Upload Button
+              waitUpload
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SpinKitDualRing(color: Colors.blue[900]!, size: 28),
+                      ],
+                    )
+                  : SizedBox(
+                      width: 160,
+                      height: 36,
+                      child: ElevatedButton.icon(
+                        onPressed: processExcel,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                        ),
+                        icon: const Icon(Icons.upload_file_rounded, size: 16),
+                        label: const Text(
+                          'Upload Alokasi',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+
+              const SizedBox(width: 10.0),
+
+              // Download Button
+              SizedBox(
+                width: 160,
+                height: 36,
+                child: ElevatedButton.icon(
+                  onPressed: () => getFormatExcel("Bagi FS Per BM.xlsx"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue[900],
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                  ),
+                  icon: const Icon(Icons.download_rounded, size: 16),
+                  label: const Text(
+                    'Download Excel',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          Expanded(flex: 6, child: SizedBox()),
-          Expanded(
-            flex: 1,
-            child: ElevatedButton(
-              onPressed: () => getFormatExcel("Bagi FS Per BM.xlsx"),
-              style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(Colors.blue[900])),
-              child: Text('Download Excel', style: GlobalFont.bigfontRWhite),
-            ),
-          ),
-          SizedBox(width: 5)
-        ])
+        ),
       ]),
     );
   }

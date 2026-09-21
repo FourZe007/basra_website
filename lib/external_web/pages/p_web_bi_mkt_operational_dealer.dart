@@ -5,11 +5,14 @@ import 'package:stsj/external_web/utilities/global.dart';
 import 'package:stsj/external_web/widget/w_info_user.dart';
 import 'package:stsj/external_web/widget/w_tombol_link_powerbi.dart';
 import 'package:stsj/external_web/widget/w_tombol_logout.dart';
+import 'package:stsj/global/theme/app_theme.dart';
 import 'package:stsj/external_web/widget/w_web_bi_dashboard_pemetaan.dart';
 import 'package:stsj/external_web/widget/w_web_bi_filter_dashboard_pemetaan.dart';
 import 'package:stsj/external_web/widget/w_web_bi_import_target_dealer.dart';
 import 'package:stsj/external_web/widget/w_web_bi_manager_activity.dart';
 import 'package:web/web.dart' as web;
+import 'package:go_router/go_router.dart';
+import 'package:stsj/router/router_const.dart';
 
 class PWebBiMktOperationalDealer extends StatefulWidget {
   const PWebBiMktOperationalDealer({super.key});
@@ -72,68 +75,87 @@ class _MyPageState extends State<PWebBiMktOperationalDealer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryBackground,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(
-          MediaQuery.of(context).size.height * 0.085,
-        ),
-        child: AppBar(
-          actions: [
-            Expanded(
-              flex: 1,
-              child: WTombolLinkPowerBI(
-                'REPORT',
-                'assets/images/operational-dealer-report.png',
-                linkBIOperationalDealerReport,
-                (currentURL == linkBIOperationalDealerReport)
-                    ? Colors.white
-                    : Color.fromRGBO(34, 137, 221, 1.0),
-                getURlPowerBI,
-              ),
+        preferredSize: const Size.fromHeight(70.0),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: AppColors.softCharcoal,
+            border: Border(
+              bottom: BorderSide(color: AppColors.border, width: 1.0),
             ),
-            Expanded(
-              flex: 1,
-              child: WTombolLinkPowerBI(
-                'ACTIVITY',
-                'assets/images/operational-dealer-activity.png',
-                'ACTIVITY MANAGER',
-                currentURL == 'ACTIVITY MANAGER' ? Colors.white : Color.fromRGBO(34, 137, 221, 1.0),
-                getURLMenuBasra,
-              ),
+          ),
+          child: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+              onPressed: () {
+                context.replaceNamed(RoutesConstant.menu);
+              },
             ),
-            Expanded(
-              flex: 1,
-              child: WTombolLinkPowerBI(
-                'TRACKER',
-                'assets/images/operational-dealer-tracker.png',
-                'DASHBOARD PEMETAAN',
-                currentURL == 'DASHBOARD PEMETAAN'
-                    ? Colors.white
-                    : Color.fromRGBO(34, 137, 221, 1.0),
-                getURLMenuBasra,
-              ),
+            title: Row(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 140,
+                          child: WTombolLinkPowerBI(
+                            'REPORT',
+                            'assets/images/operational-dealer-report.png',
+                            linkBIOperationalDealerReport,
+                            (currentURL == linkBIOperationalDealerReport)
+                                ? Colors.white
+                                : const Color.fromRGBO(34, 137, 221, 1.0),
+                            getURlPowerBI,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 140,
+                          child: WTombolLinkPowerBI(
+                            'ACTIVITY',
+                            'assets/images/operational-dealer-activity.png',
+                            'ACTIVITY MANAGER',
+                            currentURL == 'ACTIVITY MANAGER' ? Colors.white : const Color.fromRGBO(34, 137, 221, 1.0),
+                            getURLMenuBasra,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 140,
+                          child: WTombolLinkPowerBI(
+                            'TRACKER',
+                            'assets/images/operational-dealer-tracker.png',
+                            'DASHBOARD PEMETAAN',
+                            currentURL == 'DASHBOARD PEMETAAN'
+                                ? Colors.white
+                                : const Color.fromRGBO(34, 137, 221, 1.0),
+                            getURLMenuBasra,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 140,
+                          child: WTombolLinkPowerBI(
+                            'TARGET',
+                            'assets/images/operational-dealer-target.png',
+                            'IMPORT TARGET DEALER',
+                            currentURL == 'IMPORT TARGET DEALER'
+                                ? Colors.white
+                                : const Color.fromRGBO(34, 137, 221, 1.0),
+                            getURLMenuBasra,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const WInfoUser(),
+                const WTombolLogout(),
+              ],
             ),
-            Expanded(
-              flex: 1,
-              child: WTombolLinkPowerBI(
-                'TARGET',
-                'assets/images/operational-dealer-target.png',
-                'IMPORT TARGET DEALER',
-                currentURL == 'IMPORT TARGET DEALER'
-                    ? Colors.white
-                    : Color.fromRGBO(34, 137, 221, 1.0),
-                getURLMenuBasra,
-              ),
-            ),
-            Expanded(flex: 2, child: SizedBox()),
-            Expanded(
-              flex: 1,
-              child: Image.asset('assets/images/stsj.png', width: 50),
-            ),
-            Expanded(flex: 4, child: SizedBox()),
-            WInfoUser(),
-            WTombolLogout(),
-          ],
-          backgroundColor: const Color(0xFF9EDDFF),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
         ),
       ),
       body: currentURL == 'ACTIVITY MANAGER'

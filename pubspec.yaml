@@ -89,6 +89,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_inappwebview: ^6.1.5
+  google_fonts: ^8.2.1
 
 dev_dependencies:
   flutter_test:

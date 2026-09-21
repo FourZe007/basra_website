@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/router/router_const.dart';
 
 class LeftDrawerService extends HookWidget {
@@ -63,7 +65,7 @@ class LeftDrawerService extends HookWidget {
               child: Stack(
                 children: [
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment.centerLeft,
                     child: Container(
                       margin: EdgeInsets.only(
                           left: 0, top: 0), // Atur margin sesuai kebutuhan
@@ -71,7 +73,8 @@ class LeftDrawerService extends HookWidget {
                         icon: Icon(Icons.arrow_back),
                         color: Colors.white,
                         onPressed: () {
-                          // DataLoginController.removeDataUser();
+                          final state = Provider.of<MenuState>(context, listen: false);
+                          state.setStaticMenuNotifier('tools');
                           context.replaceNamed(RoutesConstant.menu);
                         },
                       ),
