@@ -12,6 +12,7 @@ import 'package:stsj/global/widget/dropdown/sip_shop_dropdown.dart';
 import 'package:stsj/global/widget/list/absent_list.dart';
 import 'package:stsj/global/widget/static/days_converter.dart';
 import 'package:stsj/global/widget/static/month_converter.dart';
+
 import 'package:stsj/router/router_const.dart';
 
 class AbsentHistoryPage extends StatefulWidget {
@@ -224,422 +225,282 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<MenuState>(context);
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final isMobileLayout = screenWidth < 600;
+
+    // Responsive dropdown width: at least 120px, at most 160px
+    final dropdownW = (screenWidth * 0.125).clamp(120.0, 160.0);
+
+    Widget _filterDropdown({
+      required Widget child,
+      Color bgColor = const Color(0xFFE2E8F0),
+    }) {
+      return Container(
+        width: dropdownW,
+        height: 36,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: child,
+      );
+    }
+
+    // Build the filter widgets list
+    List<Widget> filterWidgets = [
+      // Branch
+      Consumer<MenuState>(builder: (context, value, _) {
+        return _filterDropdown(
+          child: SipBranchDropdown(
+            listData: value.getSipBranchNameList,
+            inputan: value.selectedBranch,
+            hint: 'Cabang',
+            handle: value.getSipBranchNameList.isEmpty ? () {} : state.setSelectedBranch,
+            disable: value.getSipBranchNameList.isEmpty,
+          ),
+          bgColor: value.getSipBranchNameList.isEmpty
+              ? const Color(0xFFE2E8F0)
+              : const Color(0xFFE2E8F0),
+        );
+      }),
+      const SizedBox(width: 8.0, height: 8.0),
+
+      // Shop
+      Consumer<MenuState>(builder: (context, value, _) {
+        return _filterDropdown(
+          child: SipShopDropdown(
+            listData: value.getSipShopNameList,
+            inputan: value.selectedShop,
+            hint: 'Toko',
+            handle: value.getSipShopNameList.isEmpty ? () {} : state.setSelectedShop,
+            branch: state.getSelectedBranch,
+            disable: value.getSipShopNameList.isEmpty,
+          ),
+          bgColor: value.getSipShopNameList.isEmpty
+              ? const Color(0xFFCBD5E1)
+              : const Color(0xFFE2E8F0),
+        );
+      }),
+      const SizedBox(width: 8.0, height: 8.0),
+
+      // Location
+      Consumer<MenuState>(builder: (context, value, _) {
+        return _filterDropdown(
+          child: SipLocationDropdown(
+            listData: value.getSipLocationNameList,
+            inputan: value.selectedLocation,
+            hint: 'Lokasi',
+            handle: value.getSipLocationNameList.isEmpty ? () {} : state.setSelectedLocation,
+            disable: value.getSipLocationNameList.isEmpty,
+          ),
+          bgColor: value.getSipLocationNameList.isEmpty
+              ? const Color(0xFFCBD5E1)
+              : const Color(0xFFE2E8F0),
+        );
+      }),
+      const SizedBox(width: 8.0, height: 8.0),
+
+      // Salesman autocomplete
+      SalesmanAutoComplete(
+        state.getSelectedSalesman,
+        state.setSelectedSalesman,
+      ),
+      const SizedBox(width: 8.0, height: 8.0),
+
+      // Date picker
+      InkWell(
+        onTap: () => pickDate(state),
+        borderRadius: BorderRadius.circular(10.0),
+        child: Container(
+          height: 36,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: const Color(0xFFE2E8F0),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.date_range_rounded,
+                  size: 16.0, color: Color(0xFF475569)),
+              const SizedBox(width: 6.0),
+              Text(
+                '$formattedStartDate  -  $formattedEndDate',
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF334155),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      const SizedBox(width: 8.0, height: 8.0),
+
+      // Search button
+      InkWell(
+        onTap: () => search(context, state),
+        borderRadius: BorderRadius.circular(10.0),
+        child: Container(
+          height: 36,
+          padding: const EdgeInsets.symmetric(horizontal: 14.0),
+          decoration: BoxDecoration(
+            color: const Color(0xFF1E293B),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.search_rounded, size: 16.0, color: Colors.white),
+              SizedBox(width: 6.0),
+              Text(
+                'Cari',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      const SizedBox(width: 8.0, height: 8.0),
+
+      // Export button
+      InkWell(
+        onTap: () => showFloatingWidget(context, state),
+        borderRadius: BorderRadius.circular(10.0),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          height: 36,
+          padding: const EdgeInsets.symmetric(horizontal: 14.0),
+          decoration: BoxDecoration(
+            color: const Color(0xFF334155),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.download_rounded, size: 16.0, color: Colors.white),
+              SizedBox(width: 6.0),
+              Text(
+                'Export',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ];
+
+    Widget _filterBadge({double height = 36, double fontSize = 13}) =>
+        Container(
+          height: height,
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          decoration: BoxDecoration(
+            color: const Color(0xFF1E293B),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.filter_alt_rounded,
+                  size: fontSize - 1, color: Colors.white),
+              const SizedBox(width: 6.0),
+              Text(
+                'Filter',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        );
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
-        child: CustomAppBar(
-          goBack: RoutesConstant.menu,
-        ),
+        preferredSize: const Size.fromHeight(56),
+        child: CustomAppBar(goBack: RoutesConstant.menu),
       ),
-      body: DecoratedBox(
-        decoration: BoxDecoration(
-          color: Colors.white,
-        ),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          margin: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.01,
-            vertical: MediaQuery.of(context).size.height * 0.01,
-          ),
-          padding: EdgeInsets.only(
-            left: MediaQuery.of(context).size.width * 0.01,
-            right: MediaQuery.of(context).size.width * 0.01,
-            top: MediaQuery.of(context).size.height * 0.01,
-          ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
           child: Column(
             children: [
-              // ==================================================================
-              // =========================== Filter ===============================
-              // ==================================================================
+              // ================================================================
+              // Filter bar
+              // ================================================================
               Container(
-                width: MediaQuery.of(context).size.width,
+                width: double.infinity,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 8.0,
-                ),
+                    horizontal: 12.0, vertical: 10.0),
                 decoration: BoxDecoration(
                   color: const Color(0xFFF1F5F9),
                   borderRadius: BorderRadius.circular(16.0),
                   border: Border.all(color: const Color(0xFFE2E8F0)),
                 ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Filter Badge
-                    Container(
-                      height: 36,
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1E293B),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                child: isMobileLayout
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(
-                            Icons.filter_alt_rounded,
-                            size: 16.0,
-                            color: Colors.white,
+                          _filterBadge(height: 32, fontSize: 12),
+                          const SizedBox(height: 10.0),
+                          SizedBox(
+                            height: 48,
+                            child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Row(children: filterWidgets)),
                           ),
-                          const SizedBox(width: 6.0),
-                          Text(
-                            'Filter',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 13.0,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                        ],
+                      )
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          _filterBadge(),
+                          const SizedBox(width: 12.0),
+                          Expanded(
+                            child: SizedBox(
+                              height: 48,
+                              child:
+                                  SingleChildScrollView(scrollDirection: Axis.horizontal, child: Row(children: filterWidgets)),
                             ),
                           ),
                         ],
                       ),
-                    ),
-
-                    const SizedBox(width: 12.0),
-
-                    // Filter Content
-                    Expanded(
-                      child: SizedBox(
-                        height: 36,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            // ~:Branch:~
-                            Consumer<MenuState>(
-                              builder: (context, value, _) {
-                                if (value.getSipBranchNameList.isEmpty) {
-                                  return AnimatedContainer(
-                                    duration: const Duration(milliseconds: 500),
-                                    width: MediaQuery.of(context).size.width *
-                                        0.125,
-                                    height: 36,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFE2E8F0),
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          MediaQuery.of(context).size.width *
-                                              0.01,
-                                    ),
-                                    child: SipBranchDropdown(
-                                      listData: const [],
-                                      inputan: '',
-                                      hint: 'Cabang',
-                                      handle: () {},
-                                      disable: true,
-                                    ),
-                                  );
-                                } else {
-                                  return AnimatedContainer(
-                                    duration: const Duration(milliseconds: 500),
-                                    width: MediaQuery.of(context).size.width *
-                                        0.125,
-                                    height: 36,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFE2E8F0),
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          MediaQuery.of(context).size.width *
-                                              0.01,
-                                    ),
-                                    child: SipBranchDropdown(
-                                      listData: value.getSipBranchNameList,
-                                      inputan: value.selectedBranch,
-                                      hint: 'Cabang',
-                                      handle: state.setSelectedBranch,
-                                      disable: false,
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-
-                            const SizedBox(width: 8.0),
-
-                            // ~:Shop:~
-                            Consumer<MenuState>(
-                              builder: (context, value, _) {
-                                if (value.getSipShopNameList.isEmpty) {
-                                  return AnimatedContainer(
-                                    duration: const Duration(milliseconds: 500),
-                                    width: MediaQuery.of(context).size.width *
-                                        0.125,
-                                    height: 36,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFCBD5E1),
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          MediaQuery.of(context).size.width *
-                                              0.01,
-                                    ),
-                                    child: SipShopDropdown(
-                                      listData: const [],
-                                      inputan: '',
-                                      hint: 'Toko',
-                                      handle: () {},
-                                      branch: '',
-                                      disable: true,
-                                    ),
-                                  );
-                                } else {
-                                  return AnimatedContainer(
-                                    duration: const Duration(milliseconds: 500),
-                                    width: MediaQuery.of(context).size.width *
-                                        0.125,
-                                    height: 36,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFE2E8F0),
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          MediaQuery.of(context).size.width *
-                                              0.01,
-                                    ),
-                                    child: SipShopDropdown(
-                                      listData: value.getSipShopNameList,
-                                      inputan: value.selectedShop,
-                                      hint: 'Toko',
-                                      handle: state.setSelectedShop,
-                                      branch: state.getSelectedBranch,
-                                      disable: false,
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-
-                            const SizedBox(width: 8.0),
-
-                            // ~:Location:~
-                            Consumer<MenuState>(
-                              builder: (context, value, _) {
-                                if (value.getSipLocationNameList.isEmpty) {
-                                  return AnimatedContainer(
-                                    duration: const Duration(milliseconds: 500),
-                                    width: MediaQuery.of(context).size.width *
-                                        0.125,
-                                    height: 36,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFCBD5E1),
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          MediaQuery.of(context).size.width *
-                                              0.01,
-                                    ),
-                                    child: SipLocationDropdown(
-                                      listData: const [],
-                                      inputan: '',
-                                      hint: 'Lokasi',
-                                      handle: () {},
-                                      disable: true,
-                                    ),
-                                  );
-                                } else {
-                                  return AnimatedContainer(
-                                    duration: const Duration(milliseconds: 500),
-                                    width: MediaQuery.of(context).size.width *
-                                        0.125,
-                                    height: 36,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFE2E8F0),
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          MediaQuery.of(context).size.width *
-                                              0.01,
-                                    ),
-                                    child: SipLocationDropdown(
-                                      listData: value.getSipLocationNameList,
-                                      inputan: value.selectedLocation,
-                                      hint: 'Lokasi',
-                                      handle: state.setSelectedLocation,
-                                      disable: false,
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-
-                            const SizedBox(width: 8.0),
-
-                            // ~:Salesman Autocomplete:~
-                            SalesmanAutoComplete(
-                              state.getSelectedSalesman,
-                              state.setSelectedSalesman,
-                            ),
-
-                            const SizedBox(width: 8.0),
-
-                            // ~:Date:~
-                            InkWell(
-                              onTap: () => pickDate(state),
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: Container(
-                                height: 36,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFE2E8F0),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 12.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(
-                                      Icons.date_range_rounded,
-                                      size: 16.0,
-                                      color: Color(0xFF475569),
-                                    ),
-                                    const SizedBox(width: 6.0),
-                                    Text(
-                                      '$formattedStartDate  →  $formattedEndDate',
-                                      style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 13.0,
-                                        fontWeight: FontWeight.w500,
-                                        color: Color(0xFF334155),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(width: 8.0),
-
-                            // ~:Search Button:~
-                            InkWell(
-                              onTap: () => search(context, state),
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: Container(
-                                height: 36,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 14.0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF1E293B),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(
-                                      Icons.search_rounded,
-                                      size: 16.0,
-                                      color: Colors.white,
-                                    ),
-                                    const SizedBox(width: 6.0),
-                                    const Text(
-                                      'Cari',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 13.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(width: 8.0),
-
-                            // ~:Reset Button is Under Development:~
-                            // InkWell(
-                            //   onTap: () => state.resetAbsentHistory(),
-                            //   ...
-                            // ),
-
-                            // ~:Export Button:~
-                            InkWell(
-                              onTap: () => showFloatingWidget(context, state),
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                height: 36,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 14.0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF334155),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(
-                                      Icons.download_rounded,
-                                      size: 16.0,
-                                      color: Colors.white,
-                                    ),
-                                    const SizedBox(width: 6.0),
-                                    const Text(
-                                      'Export',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 13.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ),
 
-              // =================================================================
-              // ========================== Devider ==============================
-              // =================================================================
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.025,
-              ),
+              const SizedBox(height: 12.0),
 
-              // =================================================================
-              // ========================== Content ==============================
-              // =================================================================
+              // ================================================================
+              // Content â€” data grid
+              // ================================================================
               Expanded(
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: double.infinity,
                   alignment: Alignment.center,
                   child: ValueListenableBuilder(
                     valueListenable: state.getSearchTriggerNotifier,
                     builder: (context, value, _) {
                       if (value) {
-                        // print('Widget searchTrigger true');
                         if (state.getSipSalesmanHistoryList.isNotEmpty) {
                           isLoading = false;
-                          // print('Data available');
                           List<SipSalesmanHistoryModel> history =
                               state.getSipSalesmanHistoryList;
-
                           return AbsentList(history);
                         } else {
-                          // print('Data not available, fetching data');
                           isLoading = true;
                           return FutureBuilder<Map<String, dynamic>>(
                             future: state.fetchSipSalesmanHistory(
@@ -657,43 +518,30 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
                                 return Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    CircularProgressIndicator(
-                                      color: Colors.black,
-                                    ),
-                                    SizedBox(height: 10.0),
-                                    Text(
-                                      'Loading...',
-                                      style: GlobalFont.bigfontR,
-                                    ),
+                                    const CircularProgressIndicator(
+                                        color: Colors.black),
+                                    const SizedBox(height: 10.0),
+                                    Text('Loading...',
+                                        style: GlobalFont.bigfontR),
                                   ],
                                 );
                               } else if (snapshot.hasError) {
                                 isLoading = false;
-                                return Center(
-                                  child: Text('Terjadi kesalahan.'),
-                                );
+                                return const Center(
+                                    child: Text('Terjadi kesalahan.'));
                               } else if (!snapshot.hasData) {
                                 isLoading = false;
-                                return Center(
-                                  child: Text('Data tidak tersedia.'),
-                                );
+                                return const Center(
+                                    child: Text('Data tidak tersedia.'));
                               } else {
                                 isLoading = false;
                                 if (snapshot.data!['status'] == 'success') {
                                   List<SipSalesmanHistoryModel> history =
                                       snapshot.data!['data'];
-
                                   return AbsentList(history);
                                 } else {
-                                  if (snapshot.data!['status'] == 'failed') {
-                                    return Center(
-                                      child: Text('Data tidak tersedia.'),
-                                    );
-                                  } else {
-                                    return Center(
-                                      child: Text('Terjadi kesalahan.'),
-                                    );
-                                  }
+                                  return const Center(
+                                      child: Text('Data tidak tersedia.'));
                                 }
                               }
                             },
@@ -701,17 +549,13 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
                         }
                       } else {
                         isLoading = false;
-                        // print('Widget searchTrigger false');
                         if (state.getSipSalesmanHistoryList.isNotEmpty) {
-                          // print('Data available');
                           List<SipSalesmanHistoryModel> history =
                               state.getSipSalesmanHistoryList;
-
                           return AbsentList(history);
                         } else {
-                          return Center(
-                            child: Text('Data tidak tersedia.'),
-                          );
+                          return const Center(
+                              child: Text('Data tidak tersedia.'));
                         }
                       }
                     },

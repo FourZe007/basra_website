@@ -71,7 +71,7 @@ class _MyWidgetState extends State<FilterDatesV2> {
                 String _rangeCount = '';
                 return Container(
                   height: 500,
-                  width: 500,
+                  width: MediaQuery.of(context).size.width < 550 ? MediaQuery.of(context).size.width * 0.9 : 500,
                   child: Column(
                     children: <Widget>[
                       setText

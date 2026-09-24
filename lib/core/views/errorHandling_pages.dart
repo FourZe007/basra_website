@@ -21,7 +21,7 @@ class _ErrorWidgetComponentState extends State<ErrorWidgetComponent> {
     return Scaffold(
       body: Center(
         child: Container(
-          width: 400,
+          constraints: BoxConstraints(maxWidth: 400),
           height: 300,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -23,7 +23,7 @@ class OtorisasiMutasiPages extends HookWidget {
         backgroundColor: Color.fromARGB(255, 231, 230, 230),
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(
-            MediaQuery.of(context).size.height * 0.065,
+            56,
           ),
           child: CustomAppBar(goBack: RoutesConstant.menu),
         ),

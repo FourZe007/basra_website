@@ -20,85 +20,84 @@ class AbsentList extends StatefulWidget {
 class _AbsentListState extends State<AbsentList> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      child: SfDataGrid(
-        source: AbsentDataSource(absentData: widget.historyDetailList),
-        columnWidthMode: ColumnWidthMode.fill,
-        checkboxShape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.grey),
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        columns: <GridColumn>[
-          GridColumn(
-            columnName: 'branch',
-            // width: MediaQuery.of(context).size.width * 0.15,
-            label: Container(
-              padding: EdgeInsets.all(16.0),
-              alignment: Alignment.center,
-              child: Text('Toko'),
-            ),
-          ),
-          GridColumn(
-            columnName: 'placement',
-            // width: MediaQuery.of(context).size.width * 0.15,
-            label: Container(
-              padding: EdgeInsets.all(16.0),
-              alignment: Alignment.center,
-              child: Text('Penempatan'),
-            ),
-          ),
-          GridColumn(
-            columnName: 'date',
-            // width: MediaQuery.of(context).size.width * 0.1,
-            label: Container(
-              padding: EdgeInsets.all(16.0),
-              alignment: Alignment.center,
-              child: Text('Tanggal'),
-            ),
-          ),
-          GridColumn(
-            columnName: 'id',
-            // width: MediaQuery.of(context).size.width * 0.1,
-            label: Container(
-              padding: EdgeInsets.all(16.0),
-              alignment: Alignment.center,
-              child: Text('NIP'),
-            ),
-          ),
-          GridColumn(
-            columnName: 'name',
-            // width: MediaQuery.of(context).size.width * 0.2,
-            label: Container(
-              padding: EdgeInsets.all(16.0),
-              alignment: Alignment.center,
-              child: Text(
-                'Nama',
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ),
-          GridColumn(
-            columnName: 'time',
-            // width: MediaQuery.of(context).size.width * 0.1,
-            label: Container(
-              padding: EdgeInsets.all(16.0),
-              alignment: Alignment.center,
-              child: Text('Clock-In'),
-            ),
-          ),
-          GridColumn(
-            columnName: 'photo',
-            // width: MediaQuery.of(context).size.width * 0.1,
-            label: Container(
-              padding: EdgeInsets.all(16.0),
-              alignment: Alignment.center,
-              child: Text('Foto'),
-            ),
-          ),
-        ],
+    final isMobile = MediaQuery.sizeOf(context).width < 800;
+
+    return SfDataGrid(
+      source: AbsentDataSource(absentData: widget.historyDetailList),
+      columnWidthMode:
+          isMobile ? ColumnWidthMode.auto : ColumnWidthMode.fill,
+      checkboxShape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.grey),
+        borderRadius: BorderRadius.circular(20.0),
       ),
+      columns: <GridColumn>[
+        GridColumn(
+          columnName: 'branch',
+          minimumWidth: 120,
+          label: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: Alignment.center,
+            child: Text('Toko'),
+          ),
+        ),
+        GridColumn(
+          columnName: 'placement',
+          minimumWidth: 120,
+          label: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: Alignment.center,
+            child: Text('Penempatan'),
+          ),
+        ),
+        GridColumn(
+          columnName: 'date',
+          minimumWidth: 100,
+          label: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: Alignment.center,
+            child: Text('Tanggal'),
+          ),
+        ),
+        GridColumn(
+          columnName: 'id',
+          minimumWidth: 100,
+          label: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: Alignment.center,
+            child: Text('NIP'),
+          ),
+        ),
+        GridColumn(
+          columnName: 'name',
+          minimumWidth: 150,
+          label: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: Alignment.center,
+            child: Text(
+              'Nama',
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
+        GridColumn(
+          columnName: 'time',
+          minimumWidth: 100,
+          label: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: Alignment.center,
+            child: Text('Clock-In'),
+          ),
+        ),
+        GridColumn(
+          columnName: 'photo',
+          minimumWidth: 80,
+          label: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: Alignment.center,
+            child: Text('Foto'),
+          ),
+        ),
+      ],
     );
   }
 }

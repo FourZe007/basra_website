@@ -161,7 +161,7 @@ class _ManagerActivitiesPageState extends State<ManagerActivitiesPage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
+            Size.fromHeight(56),
         child: CustomAppBar(
           goBack: RoutesConstant.menu,
         ),
@@ -608,7 +608,7 @@ class _ManagerActivitiesPageState extends State<ManagerActivitiesPage> {
               width: MediaQuery.of(context).size.width,
               height: (deviceWidth <= 450)
                   ? MediaQuery.of(context).size.height * 0.0425
-                  : MediaQuery.of(context).size.height * 0.065,
+                  : 56,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
@@ -617,7 +617,7 @@ class _ManagerActivitiesPageState extends State<ManagerActivitiesPage> {
                     child: Container(
                       height: (deviceWidth <= 450)
                           ? MediaQuery.of(context).size.height * 0.0425
-                          : MediaQuery.of(context).size.height * 0.065,
+                          : 56,
                       decoration: BoxDecoration(
                         color: Colors.grey[400],
                         borderRadius: BorderRadius.circular(15.0),
@@ -652,7 +652,7 @@ class _ManagerActivitiesPageState extends State<ManagerActivitiesPage> {
                       // width: state.isFilterOpen
                       //     ? MediaQuery.of(context).size.width * 0.5
                       //     : 0.0,
-                      // height: MediaQuery.of(context).size.height * 0.065,
+                      // height: 56,
                       child: Wrap(
                         spacing: 10.0,
                         children: [

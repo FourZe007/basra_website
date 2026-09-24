@@ -11,6 +11,7 @@ import 'package:stsj/global/theme/app_theme.dart';
 import 'package:stsj/core/views/app_shell.dart';
 import 'package:stsj/dashboard-fixup/utilities/utils.dart';
 import 'package:stsj/router/router_const.dart';
+import 'package:stsj/static/screenConstant.dart';
 
 class CustomAppBar extends StatefulWidget {
   const CustomAppBar({
@@ -184,7 +185,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     print('CustomAppbar Current route: ${GoRouterState.of(context).name}');
 
     double screenWidth = MediaQuery.of(context).size.width;
-    bool screen = screenWidth >= 768; // Or import screenHeight.screen if needed
+    bool screen = screenWidth >= kMobileBreakpoint;
 
     if (widget.isRoutes) {
       final canGoBack = router != RoutesConstant.homepage &&
@@ -199,7 +200,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         shape: const Border(
           bottom: BorderSide(color: AppColors.border, width: 1.0),
         ),
-        toolbarHeight: MediaQuery.of(context).size.height * 0.065,
+        toolbarHeight: 56,
         leading: (!screen)
             ? Container(
                 margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -295,7 +296,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         shape: const Border(
           bottom: BorderSide(color: AppColors.border, width: 1.0),
         ),
-        toolbarHeight: MediaQuery.of(context).size.height * 0.065,
+        toolbarHeight: 56,
         leading: _buildBackButton(
           onTap: () => Navigator.of(context).pop(),
         ),

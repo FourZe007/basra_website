@@ -256,7 +256,7 @@ class _PickingPageState extends State<PickingPage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
+            Size.fromHeight(56),
         child: CustomAppBar(
           goBack: RoutesConstant.menu,
         ),

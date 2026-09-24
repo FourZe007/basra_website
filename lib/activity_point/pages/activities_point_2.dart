@@ -44,11 +44,11 @@ class _ActivitiesPoint2State extends State<ActivitiesPoint2> {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
+        preferredSize: Size.fromHeight(56),
         child: AppBar(
           centerTitle: true,
           backgroundColor: const Color(0xFF9EDDFF),
-          toolbarHeight: MediaQuery.of(context).size.height * 0.065,
+          toolbarHeight: 56,
           leading: IconButton(
             icon: Icon(Icons.arrow_back, size: 25),
             onPressed: () => Navigator.pop(context),

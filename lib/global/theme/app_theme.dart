@@ -28,9 +28,9 @@ class AppColors {
   // Sidebar Red Theme (Enterprise Brand Red)
   // ==========================================
   static const Color sidebarBackground =
-      Color(0xFFB91C1C); // Deep rich enterprise red (Red-700)
+      Color(0xFF811821); // Deep rich enterprise red (Red-700)
   static const Color sidebarBackgroundDark =
-      Color(0xFF991B1B); // Darker red for header/footer (Red-800)
+      Color(0xFF67131A); // Darker red for header/footer (Red-800)
   static const Color sidebarBorder =
       Color(0x33FFFFFF); // 20% white subtle divider
   static const Color sidebarActiveItem =
@@ -52,18 +52,18 @@ class AppColors {
   // 10% — Red Accent (Yamaha / STSJ Professional Brand Red)
   // ==========================================
   static const Color primaryRed =
-      Color(0xFFDC2626); // Brand Primary Red (Red-600)
+      Color(0xFF811821); // Brand Primary Red (Red-600)
   static const Color accentYellow =
-      Color(0xFFDC2626); // Primary action, CTA buttons, active indicators (Red alias)
+      Color(0xFF811821); // Primary action, CTA buttons, active indicators (Red alias)
   static const Color accentYellowHover =
-      Color(0xFFB91C1C); // Hover state (Red-700)
+      Color(0xFF67131A); // Hover state (Red-700)
   static const Color accentYellowPressed =
-      Color(0xFF991B1B); // Pressed / active state (Red-800)
+      Color(0xFF4D0E13); // Pressed / active state (Red-800)
   static const Color onAccentYellow =
       Color(0xFFFFFFFF); // High contrast text on red background (Pure White)
 
   // Secondary Accents & Status Alerts
-  static const Color accentDeepRed = Color(0xFFB91C1C);
+  static const Color accentDeepRed = Color(0xFF811821);
   static const Color accentMint =
       Color(0xFF0D9488); // Status Positive / Success Teal
   static const Color accentGreen = Color(0xFF16A34A);

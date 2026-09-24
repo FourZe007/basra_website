@@ -263,7 +263,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
+        preferredSize: Size.fromHeight(56),
         child: CustomAppBar(
           goBack: RoutesConstant.menu,
         ),
@@ -758,7 +758,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
               // ==================================================================
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : MediaQuery.of(context).size.height * 0.065,
+                height: (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : 56,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
@@ -766,7 +766,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                     InkWell(
                       onTap: null,
                       child: Container(
-                        height: (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : MediaQuery.of(context).size.height * 0.065,
+                        height: (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : 56,
                         decoration: BoxDecoration(
                           color: Colors.grey[400],
                           borderRadius: BorderRadius.circular(15.0),
@@ -803,7 +803,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                         // width: editPointState.isFilterOpen
                         //     ? MediaQuery.of(context).size.width * 0.5
                         //     : 0.0,
-                        // height: MediaQuery.of(context).size.height * 0.065,
+                        // height: 56,
                         child: Wrap(
                           spacing: 10.0,
                           children: [
@@ -816,7 +816,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                     width: (deviceWidth <= 450) ? MediaQuery.of(context).size.width * 0.3 : MediaQuery.of(context).size.width * 0.16,
                                     height: (deviceWidth <= 450)
                                         ? MediaQuery.of(context).size.height * 0.0425
-                                        : MediaQuery.of(context).size.height * 0.065,
+                                        : 56,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       color: Colors.grey,
@@ -841,7 +841,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                     width: (deviceWidth <= 450) ? MediaQuery.of(context).size.width * 0.3 : MediaQuery.of(context).size.width * 0.16,
                                     height: (deviceWidth <= 450)
                                         ? MediaQuery.of(context).size.height * 0.0425
-                                        : MediaQuery.of(context).size.height * 0.065,
+                                        : 56,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       color: Colors.grey[400],
@@ -873,7 +873,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                     width: (deviceWidth <= 450) ? MediaQuery.of(context).size.width * 0.3 : MediaQuery.of(context).size.width * 0.16,
                                     height: (deviceWidth <= 450)
                                         ? MediaQuery.of(context).size.height * 0.0425
-                                        : MediaQuery.of(context).size.height * 0.065,
+                                        : 56,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       color: Colors.grey,
@@ -898,7 +898,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                                     width: (deviceWidth <= 450) ? MediaQuery.of(context).size.width * 0.3 : MediaQuery.of(context).size.width * 0.16,
                                     height: (deviceWidth <= 450)
                                         ? MediaQuery.of(context).size.height * 0.0425
-                                        : MediaQuery.of(context).size.height * 0.065,
+                                        : 56,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       color: (editPointState.getAreaList.length > 1 && province != '') ? Colors.grey[400] : Colors.grey,
@@ -932,7 +932,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                               },
                               child: Container(
                                 height:
-                                    (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : MediaQuery.of(context).size.height * 0.065,
+                                    (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : 56,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   color: Colors.grey[400],
@@ -976,7 +976,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                               },
                               child: Container(
                                 height:
-                                    (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : MediaQuery.of(context).size.height * 0.065,
+                                    (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : 56,
                                 decoration: BoxDecoration(
                                   color: Colors.grey[400],
                                   borderRadius: BorderRadius.circular(15.0),
@@ -1007,7 +1007,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                               },
                               child: Container(
                                 height:
-                                    (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : MediaQuery.of(context).size.height * 0.065,
+                                    (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : 56,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   color: Colors.grey[400],
@@ -1047,7 +1047,7 @@ class _EditActivitiesPointState extends State<EditActivitiesPoint> {
                               },
                               child: Container(
                                 height:
-                                    (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : MediaQuery.of(context).size.height * 0.065,
+                                    (deviceWidth <= 450) ? MediaQuery.of(context).size.height * 0.0425 : 56,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   color: Colors.grey[400],

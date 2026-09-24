@@ -40,7 +40,7 @@ class _MonitoringNetworkState extends State<MonitoringNetwork> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
+        preferredSize: Size.fromHeight(56),
         child: CustomAppBar(
           goBack: RoutesConstant.menu,
         ),

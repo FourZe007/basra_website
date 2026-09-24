@@ -31,7 +31,7 @@ class OpenMap extends StatelessWidget {
           return Scaffold(
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(
-                MediaQuery.of(context).size.height * 0.065,
+                56,
               ),
               child: CustomAppBar(
                 goBack: RoutesConstant.managerActivities,

@@ -306,8 +306,13 @@ class HomeMenuComponent extends HookWidget {
           final loginpt = context.read<PtModel>();
           final menuState = context.read<MenuState>();
 
+          final screenWidth = MediaQuery.sizeOf(context).width;
+          final cardWidth = screenWidth < 450 
+              ? (screenWidth - 48) / 2 // Fit 2 columns on small phones
+              : 190.0;
+
           return Container(
-            width: 190,
+            width: cardWidth,
             height: 94,
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             child: Material(

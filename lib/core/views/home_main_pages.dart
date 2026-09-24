@@ -107,7 +107,7 @@ class _HomePagesState extends State<HomePages> with AutomaticKeepAliveClientMixi
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
+        preferredSize: Size.fromHeight(56),
         child: const CustomAppBar(),
       ),
       body: Center(

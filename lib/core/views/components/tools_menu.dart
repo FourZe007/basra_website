@@ -26,11 +26,11 @@ class ToolsMenuComponent extends HookWidget {
             if (provider.getSubHeaderList.contains('400'))
               _buildMenuItem(context, 'assets/images/service.png', 'Service', RoutesConstant.service),
             if (provider.getSubHeaderList.contains('401'))
-              _buildMenuItem(context, 'assets/images/new_freestock.png', 'Free Stock', RoutesConstant.branchFreeStock),
+              _buildMenuItem(context, 'assets/images/stock.png', 'Free Stock', RoutesConstant.branchFreeStock),
             if (provider.getSubHeaderList.contains('402'))
-              _buildMenuItem(context, 'assets/images/new_import_alokasi.png', 'Import Alokasi Per BM', RoutesConstant.importAlokasiBM),
+              _buildMenuItem(context, 'assets/images/import.png', 'Import Alokasi Per BM', RoutesConstant.importAlokasiBM),
             if (provider.getSubHeaderList.contains('403'))
-              _buildMenuItem(context, 'assets/images/new_koreksi_alokasi_perbm.png', 'Koleksi Alokasi Per BM', RoutesConstant.koreksiAlokasiBM),
+              _buildMenuItem(context, 'assets/images/edit.png', 'Koleksi Alokasi Per BM', RoutesConstant.koreksiAlokasiBM),
             if (provider.getSubHeaderList.contains('406'))
               _buildMenuItem(context, 'assets/images/import.png', 'Import Cetak QR', RoutesConstant.importCetakQR),
           ],

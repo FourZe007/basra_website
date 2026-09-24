@@ -122,7 +122,7 @@ class _ManagerActivities2State extends State<ManagerActivities2> {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
+        preferredSize: Size.fromHeight(56),
         child: CustomAppBar(
           goBack: RoutesConstant.menu,
         ),

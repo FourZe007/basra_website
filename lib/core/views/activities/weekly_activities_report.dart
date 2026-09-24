@@ -241,7 +241,7 @@ class _WeeklyActivitiesReportState extends State<WeeklyActivitiesReport> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.065),
+            Size.fromHeight(56),
         child: CustomAppBar(
           goBack: RoutesConstant.menu,
         ),
@@ -740,7 +740,7 @@ class _WeeklyActivitiesReportState extends State<WeeklyActivitiesReport> {
               width: MediaQuery.of(context).size.width,
               height: (deviceWidth <= 450)
                   ? MediaQuery.of(context).size.height * 0.0425
-                  : MediaQuery.of(context).size.height * 0.065,
+                  : 56,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [

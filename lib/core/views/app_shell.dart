@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/core/views/components/collapsible_sidebar.dart';
 import 'package:stsj/global/theme/app_theme.dart';
-import 'package:stsj/static/screenConstant.dart' as screenHeight;
+import 'package:stsj/static/screenConstant.dart';
 
 final GlobalKey<ScaffoldState> appShellScaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -24,10 +24,9 @@ class _AppShellState extends State<AppShell> {
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<MenuState>(context);
-    double screenWidth = MediaQuery.of(context).size.width;
-    bool isDesktop = screenWidth >= screenHeight.screen;
+    bool isDesktopLayout = MediaQuery.sizeOf(context).width >= kTabletBreakpoint;
 
-    return isDesktop
+    return isDesktopLayout
         ? _desktopView(context, state)
         : _mobileView(context, state);
   }

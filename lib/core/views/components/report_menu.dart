@@ -26,9 +26,9 @@ class ReportMenuComponent extends HookWidget {
             if (state.getSubHeaderList.contains('300'))
               _buildMenuItem(context, 'assets/images/progress-report.png', 'Report', RoutesConstant.report, 'report'),
             if (state.getSubHeaderList.contains('304'))
-              _buildMenuItem(context, 'assets/images/new_riwayat_absensi.png', 'Riwayat Absensi', RoutesConstant.absentHistory, 'attendance'),
+              _buildMenuItem(context, 'assets/images/img_dailytask.png', 'Riwayat Absensi', RoutesConstant.absentHistory, 'attendance'),
             if (state.getSubHeaderList.contains('305'))
-              _buildMenuItem(context, 'assets/images/new_cari_salesman.png', 'Cari Salesman', RoutesConstant.browseSalesman, 'salesman list'),
+              _buildMenuItem(context, 'assets/images/salesman.png', 'Cari Salesman', RoutesConstant.browseSalesman, 'salesman list'),
           ],
         ),
       ),
