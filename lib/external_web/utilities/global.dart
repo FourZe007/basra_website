@@ -22,7 +22,7 @@ String linkBIManpowerCondition =
     "https://datastudio.google.com/embed/u/0/reporting/e5c1c00b-467a-4058-b915-fc6829d74243/page/p_4kpnpgrj5d";
 
 String linkBINetworkReport =
-    "https://docs.google.com/spreadsheets/d/1ZA42YNAe5Lch3Z_pRA6NbaW94CkQOxUPqTU3ug8NEF0/edit?usp=sharing";
+    "https://app.powerbi.com/view?r=eyJrIjoiMDk5Zjk3ZmUtYjQ1OS00MTlkLThhNTgtN2ZkNWI4ZWNhZDY0IiwidCI6ImRmYzEwN2Q2LWUyNTgtNDIxZS1iMDU1LTVmYWIyOTA4NjlhMCJ9";
 
 String linkBISparepartSTSJ =
     'https://app.powerbi.com/view?r=eyJrIjoiMTc5YTJhNDktOGVmMS00ZmRkLWI0YTctZDc0MzlkMmY3ZDIzIiwidCI6ImFkZTM4N2I3LTY5YjctNGJhNC05NTA2LWU3M2Y2YjI0MjMzNSJ9';
