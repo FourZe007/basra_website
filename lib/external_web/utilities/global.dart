@@ -1,3 +1,5 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 String linkBIDaily =
     'https://app.powerbi.com/view?r=eyJrIjoiMjRmNzYzYzctZWNmYi00YzljLWEwZmEtNGM0MGQ0MjkyOTA2IiwidCI6ImRmYzEwN2Q2LWUyNTgtNDIxZS1iMDU1LTVmYWIyOTA4NjlhMCJ9';
 String linkBIEndMonth =
@@ -9,6 +11,18 @@ String linkBIPSI =
 String linkBISummary =
     "https://app.powerbi.com/view?r=eyJrIjoiY2Q5ZDEwOTAtZjk1OS00MWMxLWIyMWUtOWU5MTQ3ZjUwMDI2IiwidCI6ImRmYzEwN2Q2LWUyNTgtNDIxZS1iMDU1LTVmYWIyOTA4NjlhMCJ9";
 
+String linkBISalesProcess =
+    'https://app.powerbi.com/view?r=eyJrIjoiZjVjYzZmNGUtYWVkNS00MGNiLTgyODItNTUwZTE0OGIyNzJhIiwidCI6ImRmYzEwN2Q2LWUyNTgtNDIxZS1iMDU1LTVmYWIyOTA4NjlhMCJ9';
+
+/// Access level (EntryLevelID / "Hak Akses") of the SPV AREA role.
+/// SPV AREA users only see "Sales Process" in Dashboard Sales and no
+/// "TARGET" segment in Operational Dealer.
+const String spvAreaLevelId = '55';
+
+Future<bool> isSpvArea() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('EntryLevelID') == spvAreaLevelId;
+}
 String linkBIOperationalDealerReport =
     "https://docs.google.com/spreadsheets/d/1WFWO4ebAyF5VSNtzrw2YDduBlQ9FuMvfllRRE_i5keE/edit?usp=sharing";
 

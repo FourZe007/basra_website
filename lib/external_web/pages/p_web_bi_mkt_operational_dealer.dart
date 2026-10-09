@@ -27,6 +27,7 @@ class _MyPageState extends State<PWebBiMktOperationalDealer> {
       tgldashboardpemetaan2 = '',
       viewID = "operationaldealer-iframe";
   int modeDashboardPemetaan = 0;
+  bool _isSpvArea = false;
   List<GeoHD> listDashboardPemetaan = [];
 
   void setModeDashboardPemetaan(String value, tgl1, tgl2, List<GeoHD> list) {
@@ -65,6 +66,9 @@ class _MyPageState extends State<PWebBiMktOperationalDealer> {
     currentURL = linkBIOperationalDealerReport;
     getURlPowerBI(currentURL);
     super.initState();
+    isSpvArea().then((value) {
+      if (mounted && value != _isSpvArea) setState(() => _isSpvArea = value);
+    });
   }
 
   @override
@@ -133,6 +137,7 @@ class _MyPageState extends State<PWebBiMktOperationalDealer> {
                             getURLMenuBasra,
                           ),
                         ),
+                        if (!_isSpvArea)
                         SizedBox(
                           width: 140,
                           child: WTombolLinkPowerBI(

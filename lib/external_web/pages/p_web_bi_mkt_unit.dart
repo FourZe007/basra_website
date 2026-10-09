@@ -19,6 +19,7 @@ class PWebBIMktUnit extends StatefulWidget {
 class _PowerbiView1State extends State<PWebBIMktUnit> {
   String currentURL = '';
   final String viewID = "unit-iframe";
+  bool _isSpvArea = false;
 
   void checkBeginMonth() {
     var date = DateTime.now();
@@ -47,6 +48,8 @@ class _PowerbiView1State extends State<PWebBIMktUnit> {
           currentURL = linkBIProductivity;
         } else if (url == linkBISummary) {
           currentURL = linkBISummary;
+        } else if (url == linkBISalesProcess) {
+          currentURL = linkBISalesProcess;
         } else {
           currentURL = linkBIPSI;
         }
@@ -67,6 +70,12 @@ class _PowerbiView1State extends State<PWebBIMktUnit> {
     isEndMonth ? currentURL = linkBIEndMonth : currentURL = linkBIDaily;
     reloadPage(currentURL);
     super.initState();
+    isSpvArea().then((value) {
+      if (value && mounted) {
+        _isSpvArea = true;
+        reloadPage(linkBISalesProcess);
+      }
+    });
   }
 
   @override
@@ -101,45 +110,66 @@ class _PowerbiView1State extends State<PWebBIMktUnit> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
+                        if (!_isSpvArea) ...[
+                          SizedBox(
+                            width: 140,
+                            child: WTombolLinkPowerBI(
+                              'DAILY',
+                              'assets/images/PowerBIDaily.png',
+                              linkBIDaily,
+                              (currentURL == linkBIDaily ||
+                                      currentURL == linkBIEndMonth)
+                                  ? Colors.white
+                                  : const Color.fromRGBO(34, 137, 221, 1.0),
+                              reloadPage,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 140,
+                            child: WTombolLinkPowerBI(
+                              'MONTHLY',
+                              'assets/images/PowerBIEndMonth.png',
+                              linkBIProductivity,
+                              currentURL == linkBIProductivity
+                                  ? Colors.white
+                                  : const Color.fromRGBO(34, 137, 221, 1.0),
+                              reloadPage,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 140,
+                            child: WTombolLinkPowerBI(
+                              'SUMMARY',
+                              'assets/images/PowerBISummary.png',
+                              linkBISummary,
+                              currentURL == linkBISummary
+                                  ? Colors.white
+                                  : const Color.fromRGBO(34, 137, 221, 1.0),
+                              reloadPage,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 140,
+                            child: WTombolLinkPowerBI(
+                              'PSI',
+                              'assets/images/PowerBIPSI.png',
+                              linkBIPSI,
+                              currentURL == linkBIPSI
+                                  ? Colors.white
+                                  : const Color.fromRGBO(34, 137, 221, 1.0),
+                              reloadPage,
+                            ),
+                          ),
+                        ],
                         SizedBox(
-                          width: 140,
+                          width: 160,
                           child: WTombolLinkPowerBI(
-                            'DAILY',
-                            'assets/images/PowerBIDaily.png',
-                            linkBIDaily,
-                            (currentURL == linkBIDaily || currentURL == linkBIEndMonth)
+                            'SALES PROCESS',
+                            'assets/images/Sales_Process_Icon.jpg',
+                            linkBISalesProcess,
+                            currentURL == linkBISalesProcess
                                 ? Colors.white
                                 : const Color.fromRGBO(34, 137, 221, 1.0),
-                            reloadPage,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 140,
-                          child: WTombolLinkPowerBI(
-                            'MONTHLY',
-                            'assets/images/PowerBIEndMonth.png',
-                            linkBIProductivity,
-                            currentURL == linkBIProductivity ? Colors.white : const Color.fromRGBO(34, 137, 221, 1.0),
-                            reloadPage,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 140,
-                          child: WTombolLinkPowerBI(
-                            'SUMMARY',
-                            'assets/images/PowerBISummary.png',
-                            linkBISummary,
-                            currentURL == linkBISummary ? Colors.white : const Color.fromRGBO(34, 137, 221, 1.0),
-                            reloadPage,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 140,
-                          child: WTombolLinkPowerBI(
-                            'PSI',
-                            'assets/images/PowerBIPSI.png',
-                            linkBIPSI,
-                            currentURL == linkBIPSI ? Colors.white : const Color.fromRGBO(34, 137, 221, 1.0),
                             reloadPage,
                           ),
                         ),
