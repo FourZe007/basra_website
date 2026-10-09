@@ -165,7 +165,7 @@ class _PowerbiView1State extends State<PWebBIMktUnit> {
                           width: 160,
                           child: WTombolLinkPowerBI(
                             'SALES PROCESS',
-                            'assets/images/Sales_Process_Icon.jpg',
+                            'assets/images/Sales_Process_Icon.png',
                             linkBISalesProcess,
                             currentURL == linkBISalesProcess
                                 ? Colors.white
