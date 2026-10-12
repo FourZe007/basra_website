@@ -36,8 +36,14 @@ class _HomePagesState extends State<HomePages> with AutomaticKeepAliveClientMixi
         state.userId = prefs.getString("UserID") ?? '';
         state.entryLevelId = prefs.getString("EntryLevelID") ?? '';
         state.entryLevelName = prefs.getString("EntryLevelName") ?? '';
-        state.password = prefs.getString("Password") ?? '';
-        state.companyName = prefs.getString('CompanyName') ?? '';
+        final currentPt = prefs.getString('CompanyName') ?? '';
+        state.setCompanyName(currentPt);
+        if (mounted) {
+          final loginpt = Provider.of<PtModel>(context, listen: false);
+          if (currentPt.isNotEmpty && loginpt.getPT.isEmpty) {
+            loginpt.setPT(currentPt);
+          }
+        }
 
         await state.fetchSISDriver();
         await state.fetchProvinces();

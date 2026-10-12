@@ -104,14 +104,18 @@ class MenuState with ChangeNotifier {
   Future<void> readCompanyAuthorization() async {
     final prefs = await SharedPreferences.getInstance();
     companyAuthorization.clear();
-    if (prefs.getBool('STSJ')!) companyAuthorization.add('STSJ');
-    if (prefs.getBool('SS')!) companyAuthorization.add('SS');
-    if (prefs.getBool('SP')!) companyAuthorization.add('SP');
-    if (prefs.getBool('SPAA')!) companyAuthorization.add('SPAA');
-    if (prefs.getBool('SAMP')!) companyAuthorization.add('SAMP');
-    if (prefs.getBool('ST')!) companyAuthorization.add('ST');
-    if (prefs.getBool('RSSM')!) companyAuthorization.add('RSSM');
-    if (prefs.getBool('Spr')!) companyAuthorization.add('Spr');
+    if (prefs.getBool('STSJ') ?? false) companyAuthorization.add('STSJ');
+    if (prefs.getBool('SS') ?? false) companyAuthorization.add('SS');
+    if (prefs.getBool('SP') ?? false) companyAuthorization.add('SP');
+    if (prefs.getBool('SPAA') ?? false) companyAuthorization.add('SPAA');
+    if (prefs.getBool('SAMP') ?? false) companyAuthorization.add('SAMP');
+    if (prefs.getBool('ST') ?? false) companyAuthorization.add('ST');
+    if (prefs.getBool('RSSM') ?? false) companyAuthorization.add('RSSM');
+    if ((prefs.getBool('Spr') ?? false) || (prefs.getBool('SPr') ?? false)) {
+      companyAuthorization.add('Spr');
+      companyAuthorization.add('SPr');
+    }
+    notifyListeners();
   }
 
   // =================================================================
@@ -131,6 +135,11 @@ class MenuState with ChangeNotifier {
 
   String companyName = '';
   String get getCompanyName => companyName;
+
+  void setCompanyName(String value) {
+    companyName = value;
+    notifyListeners();
+  }
 
   String branchId = '';
   String get getBranchId => branchId;

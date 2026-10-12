@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/pages/service_dialog_filter.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/dashboard-fixup/pages/fpm_dialog_filter.dart';
+import 'package:stsj/dashboard-fixup/utilities/utils.dart';
+import 'package:stsj/global/function.dart';
 import 'package:stsj/global/theme/app_theme.dart';
 import 'package:stsj/router/router_const.dart';
 
@@ -191,13 +193,30 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
     }
   }
 
+  static const List<String> _companyCodes = [
+    'STSJ', 'RSSM', 'SAMP', 'SPAA', 'SS', 'ST', 'SP', 'SPr'
+  ];
+
+  static const Map<String, String> _companyFullNames = {
+    'STSJ': 'SURYA TIMUR SAKTI JATIM',
+    'RSSM': 'RODA SAKTI SURYA MEGAH',
+    'SAMP': 'SAPTA AJI MANUNGGAL PRIMA',
+    'SPAA': 'SURYA PERKASA ANUGRAH ABADI',
+    'SS': 'SURYA SEJAHTERA',
+    'ST': 'SURYA TERANG',
+    'SP': 'SURYA PRIMA',
+    'SPr': 'SURYA PRATAMA',
+    'Spr': 'SURYA PRATAMA',
+  };
+
   Map<String, bool> _companyAccess = {};
 
   Future<void> _loadCompanyName() async {
     final prefs = await SharedPreferences.getInstance();
     if (mounted) {
+      final savedCompany = prefs.getString('CompanyName') ?? '';
       setState(() {
-        _companyName = prefs.getString('CompanyName') ?? '';
+        _companyName = savedCompany;
         _companyAccess = {
           'STSJ': prefs.getBool('STSJ') ?? false,
           'RSSM': prefs.getBool('RSSM') ?? false,
@@ -206,9 +225,19 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
           'SS': prefs.getBool('SS') ?? false,
           'ST': prefs.getBool('ST') ?? false,
           'SP': prefs.getBool('SP') ?? false,
-          'SPr': prefs.getBool('Spr') ?? false,
+          'SPr': (prefs.getBool('Spr') ?? false) || (prefs.getBool('SPr') ?? false),
+          'Spr': (prefs.getBool('Spr') ?? false) || (prefs.getBool('SPr') ?? false),
         };
       });
+
+      final loginpt = Provider.of<PtModel>(context, listen: false);
+      if (loginpt.getPT.isEmpty && savedCompany.isNotEmpty) {
+        loginpt.setPT(savedCompany);
+      }
+      final menuState = Provider.of<MenuState>(context, listen: false);
+      if (menuState.getCompanyName.isEmpty && savedCompany.isNotEmpty) {
+        menuState.setCompanyName(savedCompany);
+      }
     }
   }
 
@@ -232,6 +261,16 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       'Spr':  'assets/images/SPr.png',
     };
     return map[code] ?? 'assets/images/stsj.png';
+  }
+
+  /// Check whether a company is authorized for the current user
+  bool _isCompanyAuthorized(String code, MenuState state) {
+    if (_companyAccess[code] == true) return true;
+    if (code == 'SPr' && (_companyAccess['Spr'] == true || _companyAccess['SPr'] == true)) return true;
+    if (state.getCompanyAuthorization.contains(code)) return true;
+    if (code == 'SPr' && state.getCompanyAuthorization.contains('Spr')) return true;
+    if (state.getUserCompanyAccList.any((e) => e.pt.toUpperCase() == code.toUpperCase())) return true;
+    return false;
   }
 
   /// Determine whether a sidebar item is accessible given the current
@@ -259,26 +298,28 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     for (var data in state.getUserCompanyAccList) {
-      if (data.pt == companyCode) {
+      if (data.pt.toUpperCase() == companyCode.toUpperCase()) {
         state.entryLevelId = data.accessId;
         prefs.setString('EntryLevelID', data.accessId);
         prefs.setString('EntryLevelName', data.accessName);
-        prefs.setString('CompanyName', companyCode);
       }
     }
+    await prefs.setString('CompanyName', companyCode);
 
     state.entryLevelId = prefs.getString('EntryLevelID') ?? '';
     state.entryLevelName = prefs.getString('EntryLevelName') ?? '';
-    state.companyName = prefs.getString('CompanyName') ?? '';
+    state.setCompanyName(companyCode);
 
     setState(() {
-      _companyName = state.companyName;
+      _companyName = companyCode;
     });
 
     final access = await state.fetchUserAccess(companyCode, state.getEntryLevelId);
     await state.fetchSipSalesBranches(companyCode);
+    await state.readCompanyAuthorization();
 
     if (access.isNotEmpty) {
+      state.userAccessList.clear();
       state.userAccessList.addAll(access);
 
       String category = '';
@@ -329,6 +370,16 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
 
       await prefs.setStringList('subheader', state.subHeaderList);
 
+      List<Map<String, String>> temp = [];
+      for (Map<String, String> e in dashboardList) {
+        if (state.getSubHeaderList.contains(e['acc']) && e['acc'] != '000') {
+          temp.add(e);
+        } else if (e['acc'] == '000') {
+          temp.add(e);
+        }
+      }
+      state.setFilteredDashboardList(temp);
+
       // Pre-open the new active category
       final activeMenu = state.getStaticMenuNotifier.value;
       setState(() {
@@ -343,13 +394,31 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       });
 
       // Route to menu if not already there
-      context.goNamed('menu');
+      if (context.mounted) {
+        context.goNamed('menu');
+        GlobalFunction.showSnackbar(
+          context,
+          'Berhasil beralih ke perusahaan $companyCode',
+        );
+      }
+    } else {
+      if (context.mounted) {
+        GlobalFunction.showSnackbar(
+          context,
+          'Mohon maaf, menu ini tidak dapat anda akses.',
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<MenuState>(context);
+    final loginpt = Provider.of<PtModel>(context);
+
+    final currentCompany = loginpt.getPT.isNotEmpty
+        ? loginpt.getPT
+        : (state.getCompanyName.isNotEmpty ? state.getCompanyName : _companyName);
 
     return AnimatedContainer(
       duration: _animDuration,
@@ -369,7 +438,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
         child: Column(
           children: [
             // ── Company badge ─────────────────────────────────────────────────
-            _buildCompanyBadge(context),
+            _buildCompanyBadge(context, state, currentCompany),
 
             const Divider(color: AppColors.border, height: 1, thickness: 1),
             const Divider(color: AppColors.sidebarBorder, height: 1, thickness: 1),
@@ -416,16 +485,24 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
 
   // ── Company badge ──────────────────────────────────────────────────────────
 
-  Widget _buildCompanyBadge(BuildContext context) {
+  Widget _buildCompanyBadge(
+    BuildContext context,
+    MenuState state,
+    String currentCompany,
+  ) {
+    final effectiveCompany = currentCompany.isNotEmpty ? currentCompany : 'STSJ';
+    final fullName = _companyFullNames[effectiveCompany] ?? effectiveCompany;
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          // Return to company-selection page
-          context.goNamed(RoutesConstant.homepage);
+          _showCompanySwitcherDialog(context, state, effectiveCompany);
         },
         child: Tooltip(
-          message: _expanded ? '' : _companyName.isNotEmpty ? _companyName : 'Switch Company',
+          message: _expanded
+              ? ''
+              : '$effectiveCompany\n$fullName\n(Klik untuk ganti perusahaan)',
           child: AnimatedContainer(
             duration: _animDuration,
             height: 64,
@@ -444,7 +521,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                     border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1.0),
                   ),
                   child: Image.asset(
-                    _logoForCompany(_companyName),
+                    _logoForCompany(effectiveCompany),
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -458,11 +535,10 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          _companyName.isNotEmpty ? _companyName : 'BASRA',
+                          effectiveCompany,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                            
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
@@ -471,7 +547,6 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                         const Text(
                           'Tap to switch',
                           style: TextStyle(
-                            
                             fontSize: 9.5,
                             color: Colors.white70,
                           ),
@@ -490,6 +565,265 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
           ),
         ),
       ),
+    );
+  }
+
+  void _showCompanySwitcherDialog(
+    BuildContext context,
+    MenuState state,
+    String currentCompany,
+  ) {
+    showDialog(
+      context: context,
+      builder: (dialogCtx) {
+        return Dialog(
+          backgroundColor: AppColors.raisinBlack,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: const BorderSide(color: AppColors.borderMedium, width: 1.0),
+          ),
+          child: Container(
+            width: 480,
+            constraints: const BoxConstraints(maxHeight: 600),
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Dialog Header
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.sidebarBackgroundDark,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(
+                        Icons.swap_horiz_rounded,
+                        color: AppColors.accentYellow,
+                        size: 22,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Ganti Perusahaan',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            'Pilih perusahaan untuk beralih akses',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close_rounded, size: 20, color: AppColors.textMuted),
+                      onPressed: () => Navigator.of(dialogCtx).pop(),
+                      splashRadius: 18,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const Divider(color: AppColors.border, height: 1),
+                const SizedBox(height: 12),
+
+                // Company List
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: _companyCodes.map((code) {
+                        final isCurrent = code.toUpperCase() == currentCompany.toUpperCase();
+                        final isAuthorized = _isCompanyAuthorized(code, state);
+                        final fullName = _companyFullNames[code] ?? code;
+
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          decoration: BoxDecoration(
+                            color: isCurrent
+                                ? AppColors.sidebarBackgroundDark.withValues(alpha: 0.7)
+                                : isAuthorized
+                                    ? AppColors.darkGrey
+                                    : AppColors.mutedSurface.withValues(alpha: 0.3),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: isCurrent
+                                  ? AppColors.accentYellow
+                                  : isAuthorized
+                                      ? AppColors.border
+                                      : AppColors.border.withValues(alpha: 0.3),
+                              width: isCurrent ? 1.5 : 1.0,
+                            ),
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: () {
+                                if (isCurrent) {
+                                  Navigator.of(dialogCtx).pop();
+                                } else if (isAuthorized) {
+                                  Navigator.of(dialogCtx).pop();
+                                  _permissionCheck(context, state, code);
+                                } else {
+                                  GlobalFunction.showSnackbar(
+                                    context,
+                                    'Anda tidak memiliki akses untuk PT $code',
+                                  );
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                child: Row(
+                                  children: [
+                                    // Company Logo
+                                    Container(
+                                      width: 36,
+                                      height: 36,
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: Colors.white.withValues(alpha: 0.2),
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: Image.asset(
+                                        _logoForCompany(code),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    // Company Name & Full Name
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                code,
+                                                style: TextStyle(
+                                                  fontSize: 13.5,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: isAuthorized
+                                                      ? Colors.white
+                                                      : Colors.white.withValues(alpha: 0.4),
+                                                ),
+                                              ),
+                                              if (isCurrent) ...[
+                                                const SizedBox(width: 8),
+                                                Container(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColors.accentYellow.withValues(alpha: 0.2),
+                                                    borderRadius: BorderRadius.circular(6),
+                                                    border: Border.all(color: AppColors.accentYellow, width: 0.8),
+                                                  ),
+                                                  child: const Text(
+                                                    'Aktif',
+                                                    style: TextStyle(
+                                                      fontSize: 10,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: AppColors.accentYellow,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ],
+                                          ),
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            fullName,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 11,
+                                              color: isAuthorized
+                                                  ? AppColors.textSecondary
+                                                  : AppColors.textMuted.withValues(alpha: 0.5),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    // Trailing Icon
+                                    if (isCurrent)
+                                      const Icon(
+                                        Icons.check_circle_rounded,
+                                        color: AppColors.accentYellow,
+                                        size: 20,
+                                      )
+                                    else if (!isAuthorized)
+                                      Icon(
+                                        Icons.lock_outline_rounded,
+                                        color: Colors.white.withValues(alpha: 0.3),
+                                        size: 18,
+                                      )
+                                    else
+                                      const Icon(
+                                        Icons.arrow_forward_ios_rounded,
+                                        color: Colors.white54,
+                                        size: 14,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+                const Divider(color: AppColors.border, height: 1),
+                const SizedBox(height: 12),
+
+                // Footer Actions
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.of(dialogCtx).pop();
+                        context.goNamed(RoutesConstant.homepage);
+                      },
+                      icon: const Icon(Icons.home_outlined, size: 16),
+                      label: const Text('Ke Halaman Utama', style: TextStyle(fontSize: 12)),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        side: const BorderSide(color: AppColors.border),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(dialogCtx).pop(),
+                      child: const Text('Tutup', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

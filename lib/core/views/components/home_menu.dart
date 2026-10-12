@@ -181,17 +181,20 @@ class HomeMenuComponent extends HookWidget {
         prefs.setString('CompanyName', companyCode);
       }
     }
+    await prefs.setString('CompanyName', companyCode);
 
     state.entryLevelId = prefs.getString('EntryLevelID') ?? '';
     state.entryLevelName = prefs.getString('EntryLevelName') ?? '';
-    state.companyName = prefs.getString('CompanyName') ?? '';
+    state.setCompanyName(companyCode);
 
     state.fetchUserAccess(companyCode, state.getEntryLevelId).then((access) async {
       print('Access length: ${access.length}');
 
       // ~:Get Branches:~
       await state.fetchSipSalesBranches(companyCode);
+      await state.readCompanyAuthorization();
       if (access.isNotEmpty) {
+        state.userAccessList.clear();
         state.userAccessList.addAll(access);
 
         // Note --> disable for a while to display dashboard menu as the initial page
