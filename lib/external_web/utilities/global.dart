@@ -17,11 +17,12 @@ String linkBISalesProcess =
 /// Access level (EntryLevelID / "Hak Akses") of the SPV AREA role.
 /// SPV AREA users only see "Sales Process" in Dashboard Sales and no
 /// "TARGET" segment in Operational Dealer.
-const String spvAreaLevelId = '55';
-
 Future<bool> isSpvArea() async {
   final prefs = await SharedPreferences.getInstance();
-  return prefs.getString('EntryLevelID') == spvAreaLevelId;
+  final entryLevel = prefs.getString('EntryLevelID');
+  
+  // Menggunakan operator || (ATAU) dan membandingkan dengan teks (String)
+  return entryLevel == '55' || entryLevel == '211';
 }
 String linkBIOperationalDealerReport =
     "https://docs.google.com/spreadsheets/d/1WFWO4ebAyF5VSNtzrw2YDduBlQ9FuMvfllRRE_i5keE/edit?usp=sharing";
