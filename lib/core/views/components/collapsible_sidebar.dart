@@ -210,11 +210,24 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
   };
 
   Map<String, bool> _companyAccess = {};
+  String _entryLevelId = '';
+
+  static final Set<String> _salesActivityRouteNames = _catalog
+      .firstWhere((c) => c.categoryKey == 'SALES ACTIVITY')
+      .items
+      .map((i) => i.routeName)
+      .toSet();
+
+  bool _isAllowedSalesActivity(String level) {
+    final l = level.trim();
+    return l == '53' || l == '00';
+  }
 
   Future<void> _loadCompanyName() async {
     final prefs = await SharedPreferences.getInstance();
     if (mounted) {
       final savedCompany = prefs.getString('CompanyName') ?? '';
+      _entryLevelId = prefs.getString('EntryLevelID') ?? '';
       setState(() {
         _companyName = savedCompany;
         _companyAccess = {
@@ -237,6 +250,9 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       final menuState = Provider.of<MenuState>(context, listen: false);
       if (menuState.getCompanyName.isEmpty && savedCompany.isNotEmpty) {
         menuState.setCompanyName(savedCompany);
+      }
+      if (menuState.getEntryLevelId.isEmpty && _entryLevelId.isNotEmpty) {
+        menuState.entryLevelId = _entryLevelId;
       }
     }
   }
@@ -280,10 +296,23 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
     if (item.accessCode == 'SAMP_FPM') {
       return state.getCompanyAuthorization.contains('SAMP');
     }
+    // Sales Activity items are restricted to EntryLevelID 53 and 00 only.
+    if (_salesActivityRouteNames.contains(item.routeName)) {
+      final level = (state.getEntryLevelId.isNotEmpty ? state.getEntryLevelId : _entryLevelId).trim();
+      if (!_isAllowedSalesActivity(level)) {
+        return false;
+      }
+    }
     return state.getSubHeaderList.contains(item.accessCode);
   }
 
   bool _isCategoryAccessible(_SidebarCategory cat, MenuState state) {
+    if (cat.categoryKey == 'SALES ACTIVITY') {
+      final level = (state.getEntryLevelId.isNotEmpty ? state.getEntryLevelId : _entryLevelId).trim();
+      if (!_isAllowedSalesActivity(level)) {
+        return false;
+      }
+    }
     return state.getHeaderList.contains(cat.categoryKey);
   }
 
@@ -306,7 +335,8 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
     }
     await prefs.setString('CompanyName', companyCode);
 
-    state.entryLevelId = prefs.getString('EntryLevelID') ?? '';
+    _entryLevelId = prefs.getString('EntryLevelID') ?? '';
+    state.entryLevelId = _entryLevelId;
     state.entryLevelName = prefs.getString('EntryLevelName') ?? '';
     state.setCompanyName(companyCode);
 
@@ -325,6 +355,9 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       String category = '';
       for (var userAccess in access) {
         if (userAccess.isAllowView == 1) {
+          if (userAccess.category == 'SALES ACTIVITY' && !_isAllowedSalesActivity(_entryLevelId)) {
+            continue;
+          }
           category = userAccess.category;
           break;
         }
@@ -456,6 +489,12 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: _catalog.map((cat) {
+                            if (cat.categoryKey == 'SALES ACTIVITY') {
+                              final level = (state.getEntryLevelId.isNotEmpty ? state.getEntryLevelId : _entryLevelId).trim();
+                              if (!_isAllowedSalesActivity(level)) {
+                                return const SizedBox.shrink();
+                              }
+                            }
                             return _buildCategory(
                               context: context,
                               cat: cat,

@@ -56,7 +56,10 @@ class _MenuPagesState extends State<MenuPages>
         if (activeMenu == 'dashboard' || activeMenu == '') {
           content = DashboardMenuComponent();
         } else if (activeMenu == 'activity') {
-          content = const ActivityMenuComponent();
+          final level = state.getEntryLevelId.trim();
+          content = (level == '53' || level == '00')
+              ? const ActivityMenuComponent()
+              : DashboardMenuComponent();
         } else if (activeMenu == 'authorization') {
           content = const AuthorizationMenuComponent();
         } else if (activeMenu == 'report') {

@@ -19,6 +19,10 @@ class ActivityMenuComponent extends HookWidget {
   Widget build(BuildContext context) {
     useEffect(() => null);
     final state = Provider.of<MenuState>(context);
+    final level = state.getEntryLevelId.trim();
+    if (level != '53' && level != '00') {
+      return const SizedBox.shrink();
+    }
     
     return SizedBox(
       width: double.infinity,
