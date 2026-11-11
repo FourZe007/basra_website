@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +24,8 @@ class Dashboard2Page extends StatefulWidget {
   State<Dashboard2Page> createState() => _Dashboard2PageState();
 }
 
-class _Dashboard2PageState extends State<Dashboard2Page> with BasePage, AutomaticKeepAliveClientMixin<Dashboard2Page> {
+class _Dashboard2PageState extends State<Dashboard2Page>
+    with BasePage, AutomaticKeepAliveClientMixin<Dashboard2Page> {
   late List<Dashboard2> listDashboard2;
   late String tgl, bln, thn;
   late int totalDay;
@@ -54,7 +56,8 @@ class _Dashboard2PageState extends State<Dashboard2Page> with BasePage, Automati
     thn = state.getFpmDateFilter.substring(0, 4);
     bln = state.getFpmDateFilter.substring(5, 7);
     tgl = state.getFpmDateFilter.substring(8, 10);
-    totalDay = DateTime(int.parse(thn), int.parse(bln) + 1, 0).day; //Ambil tanggal mundur dari bulan selanjutnya
+    totalDay = DateTime(int.parse(thn), int.parse(bln) + 1, 0)
+        .day; //Ambil tanggal mundur dari bulan selanjutnya
     listInt = Iterable<int>.generate(totalDay, (i) => i + 1).toList();
   }
 
@@ -84,7 +87,7 @@ class _Dashboard2PageState extends State<Dashboard2Page> with BasePage, Automati
     return Scaffold(
       backgroundColor: Colors.blue[50]!.withAlpha(200),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(56),
+        preferredSize: const Size.fromHeight(56),
         child: CustomAppBar(
           goBack: RoutesConstant.menu,
         ),
@@ -95,339 +98,542 @@ class _Dashboard2PageState extends State<Dashboard2Page> with BasePage, Automati
             ? Container()
             : Stack(
                 children: [
-                  ListView(
-                    padding: const EdgeInsets.all(20),
-                    children: [
-                      const Center(
-                        child: Text(
-                          'DAILY REPORT BENGKEL',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          listDashboard2[0].bsName,
-                          style: const TextStyle(fontSize: 15),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          'PERIODE ${listBulan[int.parse(bln) - 1]} $thn',
-                          style: const TextStyle(fontSize: 15),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      SelectionArea(
-                        child: Table(
-                          border: TableBorder.all(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                          columnWidths: {
-                            0: const FlexColumnWidth(2.7),
-                            ...{for (var k in listInt) k: const FlexColumnWidth(1)},
-                            // ...Map.fromIterable(
-                            //   listInt,
-                            //   key: (k) => k,
-                            //   value: (v) => FlexColumnWidth(1),
-                            // )
-                            totalDay + 1: const FlexColumnWidth(1.3)
-                          },
-                          children: [
-                            //JUDUL
-                            TableRow(
-                              decoration: const BoxDecoration(
-                                color: Colors.indigo,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                ),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final hPad = constraints.maxWidth < 600 ? 12.0 : 20.0;
+                      final availWidth = constraints.maxWidth - (hPad * 2);
+                      final minTableWidth =
+                          math.max(availWidth, totalDay * 36.0 + 180.0);
+
+                      return ListView(
+                        padding: EdgeInsets.fromLTRB(hPad, 20, hPad, 40),
+                        children: [
+                          const Center(
+                            child: Text(
+                              'DAILY REPORT BENGKEL',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
-                              children: [
-                                headerTable(''),
-                                for (var i = 0; i < totalDay; i++)
-                                  Column(
-                                    children: [
-                                      Text(
-                                        Dashboard.toJson(listDashboard2[0])['h${i + 1}'].toString().substring(0, 3),
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      Text(
-                                        (i + 1).toString(),
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                headerTable('∑'),
-                              ],
+                              textAlign: TextAlign.center,
                             ),
-                            //TIDAK FOR UNTUK KONTROL BORDER RADIUS
-                            //SA
-                            TableRow(
-                              children: [
-                                textTable(listDashboard2[1].rowName),
-                                for (var i = 0; i < totalDay; i++)
-                                  containerTable(
-                                    Dashboard.toJson(listDashboard2[1])['h${i + 1}'],
-                                    warna: Dashboard.toJson(listDashboard2[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.transparent,
-                                  ),
-                                containerTable(
-                                  sumModel(listDashboard2[1], totalDay),
-                                  warna: Colors.green.shade300,
-                                )
-                              ],
-                            ),
-                            //Mekanik
-                            TableRow(
-                              children: [
-                                textTable(listDashboard2[2].rowName),
-                                for (var i = 0; i < totalDay; i++)
-                                  containerTable(
-                                    Dashboard.toJson(listDashboard2[2])['h${i + 1}'],
-                                    warna: Dashboard.toJson(listDashboard2[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.transparent,
-                                  ),
-                                containerTable(sumModel(listDashboard2[2], totalDay), warna: Colors.green.shade300)
-                              ],
-                            ),
-                            //HariKerja
-                            TableRow(
-                              children: [
-                                textTable(listDashboard2[3].rowName),
-                                for (var i = 0; i < totalDay; i++)
-                                  containerTable(
-                                    Dashboard.toJson(listDashboard2[3])['h${i + 1}'],
-                                    warna: Dashboard.toJson(listDashboard2[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.transparent,
-                                  ),
-                                containerTable(
-                                  sumModel(listDashboard2[3], totalDay),
-                                  warna: Colors.green.shade300,
-                                )
-                              ],
-                            ),
-                            //Target UE
-                            TableRow(
-                              children: [
-                                textTable(listDashboard2[4].rowName),
-                                for (var i = 0; i < totalDay; i++)
-                                  containerTable(
-                                    Dashboard.toJson(listDashboard2[4])['h${i + 1}'],
-                                    warna: Dashboard.toJson(listDashboard2[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.transparent,
-                                  ),
-                                containerTable(
-                                  sumModel(listDashboard2[4], totalDay),
-                                  warna: Colors.green.shade300,
-                                )
-                              ],
-                            ),
-                            //RUT
-                            TableRow(
-                              children: [
-                                textTable(listDashboard2[5].rowName),
-                                for (var i = 0; i < totalDay; i++)
-                                  containerTable(
-                                    Dashboard.toJson(listDashboard2[5])['h${i + 1}'],
-                                    warna: Dashboard.toJson(listDashboard2[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.transparent,
-                                  ),
-                                containerTable(averageModel(listDashboard2[5], totalDay), warna: Colors.green.shade300, lastIdx: true)
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Text(
-                        ' Unit Entry',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SelectionArea(
-                        child: Table(
-                          border: TableBorder.all(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(10),
                           ),
-                          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                          columnWidths: {
-                            0: const FlexColumnWidth(2.7),
-                            ...{for (var k in listInt) k: const FlexColumnWidth(1)},
-                            totalDay + 1: const FlexColumnWidth(1.3)
-                          },
-                          children: [
-                            //Honda
-                            TableRow(
-                              children: [
-                                textTable(listDashboard2[6].rowName),
-                                for (var i = 0; i < totalDay; i++)
-                                  containerTable(
-                                    int.parse(Dashboard.toJson(listDashboard2[6])['h${i + 1}']) == 0 &&
-                                            DateTime(int.parse(thn), int.parse(bln), i + 1).isAfter(
-                                              DateTime.now(),
-                                            )
-                                        ? ''
-                                        : Dashboard.toJson(listDashboard2[6])['h${i + 1}'],
-                                    warna: Dashboard.toJson(listDashboard2[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.transparent,
-                                  ),
-                                containerTable(
-                                  sumModel(listDashboard2[6], totalDay),
-                                  warna: Colors.green.shade300,
-                                  firstIdx: true,
-                                )
-                              ],
+                          Center(
+                            child: Text(
+                              listDashboard2[0].bsName,
+                              style: const TextStyle(fontSize: 15),
+                              textAlign: TextAlign.center,
                             ),
-                            //Yamaha
-                            TableRow(
-                              children: [
-                                textTable(listDashboard2[7].rowName),
-                                for (var i = 0; i < totalDay; i++)
-                                  containerTable(
-                                    int.parse(Dashboard.toJson(listDashboard2[7])['h${i + 1}']) == 0 &&
-                                            DateTime(int.parse(thn), int.parse(bln), i + 1).isAfter(
-                                              DateTime.now(),
-                                            )
-                                        ? ''
-                                        : Dashboard.toJson(listDashboard2[7])['h${i + 1}'],
-                                    warna: Dashboard.toJson(listDashboard2[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.transparent,
-                                  ),
-                                containerTable(
-                                  sumModel(listDashboard2[7], totalDay),
-                                  warna: Colors.green.shade300,
-                                )
-                              ],
+                          ),
+                          Center(
+                            child: Text(
+                              'PERIODE ${listBulan[int.parse(bln) - 1]} $thn',
+                              style: const TextStyle(fontSize: 15),
+                              textAlign: TextAlign.center,
                             ),
-                            //Suzuki
-                            TableRow(
-                              children: [
-                                textTable(listDashboard2[8].rowName),
-                                for (var i = 0; i < totalDay; i++)
-                                  containerTable(
-                                    int.parse(Dashboard.toJson(listDashboard2[8])['h${i + 1}']) == 0 &&
-                                            DateTime(int.parse(thn), int.parse(bln), i + 1).isAfter(
-                                              DateTime.now(),
+                          ),
+                          const SizedBox(height: 15),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: SizedBox(
+                              width: minTableWidth,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SelectionArea(
+                                    child: Table(
+                                      border: TableBorder.all(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      defaultVerticalAlignment:
+                                          TableCellVerticalAlignment.middle,
+                                      columnWidths: {
+                                        0: const FlexColumnWidth(2.7),
+                                        ...{
+                                          for (var k in listInt)
+                                            k: const FlexColumnWidth(1)
+                                        },
+                                        totalDay + 1: const FlexColumnWidth(1.3)
+                                      },
+                                      children: [
+                                        //JUDUL
+                                        TableRow(
+                                          decoration: const BoxDecoration(
+                                            color: Colors.indigo,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                            ),
+                                          ),
+                                          children: [
+                                            headerTable(''),
+                                            for (var i = 0; i < totalDay; i++)
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 4,
+                                                  horizontal: 2,
+                                                ),
+                                                child: FittedBox(
+                                                  fit: BoxFit.scaleDown,
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Text(
+                                                        Dashboard.toJson(
+                                                                listDashboard2[
+                                                                    0])['h${i + 1}']
+                                                            .toString()
+                                                            .substring(0, 3),
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        (i + 1).toString(),
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            headerTable('∑'),
+                                          ],
+                                        ),
+                                        //SA
+                                        TableRow(
+                                          children: [
+                                            textTable(
+                                                listDashboard2[1].rowName),
+                                            for (var i = 0; i < totalDay; i++)
+                                              containerTable(
+                                                Dashboard.toJson(
+                                                        listDashboard2[1])[
+                                                    'h${i + 1}'],
+                                                warna: Dashboard.toJson(
+                                                            listDashboard2[0])[
+                                                        'h${i + 1}'] ==
+                                                    'Minggu'
+                                                    ? Colors.red.shade300
+                                                    : Colors.transparent,
+                                              ),
+                                            containerTable(
+                                              sumModel(
+                                                  listDashboard2[1], totalDay),
+                                              warna: Colors.green.shade300,
                                             )
-                                        ? ''
-                                        : Dashboard.toJson(listDashboard2[8])['h${i + 1}'],
-                                    warna: Dashboard.toJson(listDashboard2[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.transparent,
-                                  ),
-                                containerTable(
-                                  sumModel(listDashboard2[8], totalDay),
-                                  warna: Colors.green.shade300,
-                                )
-                              ],
-                            ),
-                            //Kawazaki
-                            TableRow(
-                              children: [
-                                textTable(listDashboard2[9].rowName),
-                                for (var i = 0; i < totalDay; i++)
-                                  containerTable(
-                                    int.parse(Dashboard.toJson(listDashboard2[9])['h${i + 1}']) == 0 &&
-                                            DateTime(int.parse(thn), int.parse(bln), i + 1).isAfter(
-                                              DateTime.now(),
+                                          ],
+                                        ),
+                                        //Mekanik
+                                        TableRow(
+                                          children: [
+                                            textTable(
+                                                listDashboard2[2].rowName),
+                                            for (var i = 0; i < totalDay; i++)
+                                              containerTable(
+                                                Dashboard.toJson(
+                                                        listDashboard2[2])[
+                                                    'h${i + 1}'],
+                                                warna: Dashboard.toJson(
+                                                            listDashboard2[0])[
+                                                        'h${i + 1}'] ==
+                                                    'Minggu'
+                                                    ? Colors.red.shade300
+                                                    : Colors.transparent,
+                                              ),
+                                            containerTable(
+                                                sumModel(listDashboard2[2],
+                                                    totalDay),
+                                                warna: Colors.green.shade300)
+                                          ],
+                                        ),
+                                        //HariKerja
+                                        TableRow(
+                                          children: [
+                                            textTable(
+                                                listDashboard2[3].rowName),
+                                            for (var i = 0; i < totalDay; i++)
+                                              containerTable(
+                                                Dashboard.toJson(
+                                                        listDashboard2[3])[
+                                                    'h${i + 1}'],
+                                                warna: Dashboard.toJson(
+                                                            listDashboard2[0])[
+                                                        'h${i + 1}'] ==
+                                                    'Minggu'
+                                                    ? Colors.red.shade300
+                                                    : Colors.transparent,
+                                              ),
+                                            containerTable(
+                                              sumModel(
+                                                  listDashboard2[3], totalDay),
+                                              warna: Colors.green.shade300,
                                             )
-                                        ? ''
-                                        : Dashboard.toJson(listDashboard2[9])['h${i + 1}'],
-                                    warna: Dashboard.toJson(listDashboard2[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.transparent,
-                                  ),
-                                containerTable(
-                                  sumModel(listDashboard2[9], totalDay),
-                                  warna: Colors.green.shade300,
-                                )
-                              ],
-                            ),
-                            //Vespa
-                            TableRow(
-                              children: [
-                                textTable(listDashboard2[10].rowName),
-                                for (var i = 0; i < totalDay; i++)
-                                  containerTable(
-                                    int.parse(Dashboard.toJson(listDashboard2[10])['h${i + 1}']) == 0 &&
-                                            DateTime(int.parse(thn), int.parse(bln), i + 1).isAfter(
-                                              DateTime.now(),
+                                          ],
+                                        ),
+                                        //Target UE
+                                        TableRow(
+                                          children: [
+                                            textTable(
+                                                listDashboard2[4].rowName),
+                                            for (var i = 0; i < totalDay; i++)
+                                              containerTable(
+                                                Dashboard.toJson(
+                                                        listDashboard2[4])[
+                                                    'h${i + 1}'],
+                                                warna: Dashboard.toJson(
+                                                            listDashboard2[0])[
+                                                        'h${i + 1}'] ==
+                                                    'Minggu'
+                                                    ? Colors.red.shade300
+                                                    : Colors.transparent,
+                                              ),
+                                            containerTable(
+                                              sumModel(
+                                                  listDashboard2[4], totalDay),
+                                              warna: Colors.green.shade300,
                                             )
-                                        ? ''
-                                        : Dashboard.toJson(listDashboard2[10])['h${i + 1}'],
-                                    warna: Dashboard.toJson(listDashboard2[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.transparent,
+                                          ],
+                                        ),
+                                        //RUT
+                                        TableRow(
+                                          children: [
+                                            textTable(
+                                                listDashboard2[5].rowName),
+                                            for (var i = 0; i < totalDay; i++)
+                                              containerTable(
+                                                Dashboard.toJson(
+                                                        listDashboard2[5])[
+                                                    'h${i + 1}'],
+                                                warna: Dashboard.toJson(
+                                                            listDashboard2[0])[
+                                                        'h${i + 1}'] ==
+                                                    'Minggu'
+                                                    ? Colors.red.shade300
+                                                    : Colors.transparent,
+                                              ),
+                                            containerTable(
+                                                averageModel(listDashboard2[5],
+                                                    totalDay),
+                                                warna: Colors.green.shade300,
+                                                lastIdx: true)
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                containerTable(
-                                  sumModel(listDashboard2[10], totalDay),
-                                  warna: Colors.green.shade300,
-                                )
-                              ],
-                            ),
-                            //Other
-                            TableRow(
-                              children: [
-                                textTable(listDashboard2[11].rowName),
-                                for (var i = 0; i < totalDay; i++)
-                                  containerTable(
-                                    int.parse(Dashboard.toJson(listDashboard2[11])['h${i + 1}']) == 0 &&
-                                            DateTime(int.parse(thn), int.parse(bln), i + 1).isAfter(
-                                              DateTime.now(),
+                                  const SizedBox(height: 12),
+                                  const Text(
+                                    ' Unit Entry',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  SelectionArea(
+                                    child: Table(
+                                      border: TableBorder.all(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      defaultVerticalAlignment:
+                                          TableCellVerticalAlignment.middle,
+                                      columnWidths: {
+                                        0: const FlexColumnWidth(2.7),
+                                        ...{
+                                          for (var k in listInt)
+                                            k: const FlexColumnWidth(1)
+                                        },
+                                        totalDay + 1: const FlexColumnWidth(1.3)
+                                      },
+                                      children: [
+                                        //Honda
+                                        TableRow(
+                                          children: [
+                                            textTable(
+                                                listDashboard2[6].rowName),
+                                            for (var i = 0; i < totalDay; i++)
+                                              containerTable(
+                                                int.parse(Dashboard.toJson(
+                                                                listDashboard2[
+                                                                    6])[
+                                                            'h${i + 1}']) ==
+                                                        0 &&
+                                                        DateTime(
+                                                                int.parse(thn),
+                                                                int.parse(bln),
+                                                                i + 1)
+                                                            .isAfter(
+                                                          DateTime.now(),
+                                                        )
+                                                    ? ''
+                                                    : Dashboard.toJson(
+                                                            listDashboard2[6])[
+                                                        'h${i + 1}'],
+                                                warna: Dashboard.toJson(
+                                                            listDashboard2[0])[
+                                                        'h${i + 1}'] ==
+                                                    'Minggu'
+                                                    ? Colors.red.shade300
+                                                    : Colors.transparent,
+                                              ),
+                                            containerTable(
+                                              sumModel(
+                                                  listDashboard2[6], totalDay),
+                                              warna: Colors.green.shade300,
+                                              firstIdx: true,
                                             )
-                                        ? ''
-                                        : Dashboard.toJson(listDashboard2[11])['h${i + 1}'],
-                                    warna: Dashboard.toJson(listDashboard2[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.transparent,
+                                          ],
+                                        ),
+                                        //Yamaha
+                                        TableRow(
+                                          children: [
+                                            textTable(
+                                                listDashboard2[7].rowName),
+                                            for (var i = 0; i < totalDay; i++)
+                                              containerTable(
+                                                int.parse(Dashboard.toJson(
+                                                                listDashboard2[
+                                                                    7])[
+                                                            'h${i + 1}']) ==
+                                                        0 &&
+                                                        DateTime(
+                                                                int.parse(thn),
+                                                                int.parse(bln),
+                                                                i + 1)
+                                                            .isAfter(
+                                                          DateTime.now(),
+                                                        )
+                                                    ? ''
+                                                    : Dashboard.toJson(
+                                                            listDashboard2[7])[
+                                                        'h${i + 1}'],
+                                                warna: Dashboard.toJson(
+                                                            listDashboard2[0])[
+                                                        'h${i + 1}'] ==
+                                                    'Minggu'
+                                                    ? Colors.red.shade300
+                                                    : Colors.transparent,
+                                              ),
+                                            containerTable(
+                                              sumModel(
+                                                  listDashboard2[7], totalDay),
+                                              warna: Colors.green.shade300,
+                                            )
+                                          ],
+                                        ),
+                                        //Suzuki
+                                        TableRow(
+                                          children: [
+                                            textTable(
+                                                listDashboard2[8].rowName),
+                                            for (var i = 0; i < totalDay; i++)
+                                              containerTable(
+                                                int.parse(Dashboard.toJson(
+                                                                listDashboard2[
+                                                                    8])[
+                                                            'h${i + 1}']) ==
+                                                        0 &&
+                                                        DateTime(
+                                                                int.parse(thn),
+                                                                int.parse(bln),
+                                                                i + 1)
+                                                            .isAfter(
+                                                          DateTime.now(),
+                                                        )
+                                                    ? ''
+                                                    : Dashboard.toJson(
+                                                            listDashboard2[8])[
+                                                        'h${i + 1}'],
+                                                warna: Dashboard.toJson(
+                                                            listDashboard2[0])[
+                                                        'h${i + 1}'] ==
+                                                    'Minggu'
+                                                    ? Colors.red.shade300
+                                                    : Colors.transparent,
+                                              ),
+                                            containerTable(
+                                              sumModel(
+                                                  listDashboard2[8], totalDay),
+                                              warna: Colors.green.shade300,
+                                            )
+                                          ],
+                                        ),
+                                        //Kawazaki
+                                        TableRow(
+                                          children: [
+                                            textTable(
+                                                listDashboard2[9].rowName),
+                                            for (var i = 0; i < totalDay; i++)
+                                              containerTable(
+                                                int.parse(Dashboard.toJson(
+                                                                listDashboard2[
+                                                                    9])[
+                                                            'h${i + 1}']) ==
+                                                        0 &&
+                                                        DateTime(
+                                                                int.parse(thn),
+                                                                int.parse(bln),
+                                                                i + 1)
+                                                            .isAfter(
+                                                          DateTime.now(),
+                                                        )
+                                                    ? ''
+                                                    : Dashboard.toJson(
+                                                            listDashboard2[9])[
+                                                        'h${i + 1}'],
+                                                warna: Dashboard.toJson(
+                                                            listDashboard2[0])[
+                                                        'h${i + 1}'] ==
+                                                    'Minggu'
+                                                    ? Colors.red.shade300
+                                                    : Colors.transparent,
+                                              ),
+                                            containerTable(
+                                              sumModel(
+                                                  listDashboard2[9], totalDay),
+                                              warna: Colors.green.shade300,
+                                            )
+                                          ],
+                                        ),
+                                        //Vespa
+                                        TableRow(
+                                          children: [
+                                            textTable(
+                                                listDashboard2[10].rowName),
+                                            for (var i = 0; i < totalDay; i++)
+                                              containerTable(
+                                                int.parse(Dashboard.toJson(
+                                                                listDashboard2[
+                                                                    10])[
+                                                            'h${i + 1}']) ==
+                                                        0 &&
+                                                        DateTime(
+                                                                int.parse(thn),
+                                                                int.parse(bln),
+                                                                i + 1)
+                                                            .isAfter(
+                                                          DateTime.now(),
+                                                        )
+                                                    ? ''
+                                                    : Dashboard.toJson(
+                                                            listDashboard2[10])[
+                                                        'h${i + 1}'],
+                                                warna: Dashboard.toJson(
+                                                            listDashboard2[0])[
+                                                        'h${i + 1}'] ==
+                                                    'Minggu'
+                                                    ? Colors.red.shade300
+                                                    : Colors.transparent,
+                                              ),
+                                            containerTable(
+                                              sumModel(
+                                                  listDashboard2[10], totalDay),
+                                              warna: Colors.green.shade300,
+                                            )
+                                          ],
+                                        ),
+                                        //Other
+                                        TableRow(
+                                          children: [
+                                            textTable(
+                                                listDashboard2[11].rowName),
+                                            for (var i = 0; i < totalDay; i++)
+                                              containerTable(
+                                                int.parse(Dashboard.toJson(
+                                                                listDashboard2[
+                                                                    11])[
+                                                            'h${i + 1}']) ==
+                                                        0 &&
+                                                        DateTime(
+                                                                int.parse(thn),
+                                                                int.parse(bln),
+                                                                i + 1)
+                                                            .isAfter(
+                                                          DateTime.now(),
+                                                        )
+                                                    ? ''
+                                                    : Dashboard.toJson(
+                                                            listDashboard2[11])[
+                                                        'h${i + 1}'],
+                                                warna: Dashboard.toJson(
+                                                            listDashboard2[0])[
+                                                        'h${i + 1}'] ==
+                                                    'Minggu'
+                                                    ? Colors.red.shade300
+                                                    : Colors.transparent,
+                                              ),
+                                            containerTable(
+                                              sumModel(
+                                                  listDashboard2[11], totalDay),
+                                              warna: Colors.green.shade300,
+                                            )
+                                          ],
+                                        ),
+                                        //Total
+                                        TableRow(
+                                          decoration: BoxDecoration(
+                                            color: Colors.orange.shade300,
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10),
+                                            ),
+                                          ),
+                                          children: [
+                                            textTable('UE Total'),
+                                            for (var i = 0; i < totalDay; i++)
+                                              containerTable(
+                                                sumList([
+                                                  listDashboard2[6],
+                                                  listDashboard2[7],
+                                                  listDashboard2[8],
+                                                  listDashboard2[9],
+                                                  listDashboard2[10],
+                                                  listDashboard2[11]
+                                                ], i),
+                                                warna: Dashboard.toJson(
+                                                            listDashboard2[0])[
+                                                        'h${i + 1}'] ==
+                                                    'Minggu'
+                                                    ? Colors.red.shade300
+                                                    : Colors.transparent,
+                                              ),
+                                            containerTable(
+                                              sumTotalList([
+                                                listDashboard2[6],
+                                                listDashboard2[7],
+                                                listDashboard2[8],
+                                                listDashboard2[9],
+                                                listDashboard2[10],
+                                                listDashboard2[11]
+                                              ], totalDay),
+                                              warna: Colors.green.shade300,
+                                              lastIdx: true,
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                containerTable(
-                                  sumModel(listDashboard2[11], totalDay),
-                                  warna: Colors.green.shade300,
-                                )
-                              ],
-                            ),
-                            //Total
-                            TableRow(
-                              decoration: BoxDecoration(
-                                color: Colors.orange.shade300,
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                ),
+                                ],
                               ),
-                              children: [
-                                textTable('UE Total'),
-                                for (var i = 0; i < totalDay; i++)
-                                  containerTable(
-                                    sumList([
-                                      listDashboard2[6],
-                                      listDashboard2[7],
-                                      listDashboard2[8],
-                                      listDashboard2[9],
-                                      listDashboard2[10],
-                                      listDashboard2[11]
-                                    ], i),
-                                    warna: Dashboard.toJson(listDashboard2[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.transparent,
-                                  ),
-                                containerTable(
-                                  sumTotalList([
-                                    listDashboard2[6],
-                                    listDashboard2[7],
-                                    listDashboard2[8],
-                                    listDashboard2[9],
-                                    listDashboard2[10],
-                                    listDashboard2[11]
-                                  ], totalDay),
-                                  warna: Colors.green.shade300,
-                                  lastIdx: true,
-                                )
-                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
+                          ),
+                        ],
+                      );
+                    },
                   ),
                   //*FOOTER
                   Align(

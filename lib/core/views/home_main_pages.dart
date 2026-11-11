@@ -52,13 +52,14 @@ class _HomePagesState extends State<HomePages> with AutomaticKeepAliveClientMixi
           state.userAccessList.addAll(data);
 
           String category = '';
+          final isLevel50 = state.getEntryLevelId.trim() == '50';
           for (var userAccess in data) {
             if (userAccess.isAllowView == 1) {
               category = userAccess.category;
               break;
             }
           }
-          if (category == 'DASHBOARD') {
+          if (isLevel50 || category == 'DASHBOARD') {
             state.setStaticMenuNotifier('dashboard');
           } else if (category == 'SALES ACTIVITY') {
             state.setStaticMenuNotifier('activity');

@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,9 +25,16 @@ class Dashboard3Page extends StatefulWidget {
   State<Dashboard3Page> createState() => _Dashboard3PageState();
 }
 
-class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, AutomaticKeepAliveClientMixin<Dashboard3Page> {
+class _Dashboard3PageState extends State<Dashboard3Page>
+    with BasePage, AutomaticKeepAliveClientMixin<Dashboard3Page> {
   late List<Dashboard3> listDashboard3;
-  late List<Dashboard3> listUnitEntry, listJasa, listOli, listSparepart, listRetail, listIncome, listSPU;
+  late List<Dashboard3> listUnitEntry,
+      listJasa,
+      listOli,
+      listSparepart,
+      listRetail,
+      listIncome,
+      listSPU;
   late String tgl, bln, thn;
   late int totalDay;
   late List<int> listInt;
@@ -65,7 +73,8 @@ class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, Automati
     thn = state.getFpmDateFilter.substring(0, 4);
     bln = state.getFpmDateFilter.substring(5, 7);
     tgl = state.getFpmDateFilter.substring(8, 10);
-    totalDay = DateTime(int.parse(thn), int.parse(bln) + 1, 0).day; //Ambil tanggal mundur dari bulan selanjutnya
+    totalDay = DateTime(int.parse(thn), int.parse(bln) + 1, 0)
+        .day; //Ambil tanggal mundur dari bulan selanjutnya
     listInt = Iterable<int>.generate(totalDay, (i) => i + 1).toList();
   }
 
@@ -111,7 +120,7 @@ class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, Automati
     return Scaffold(
       backgroundColor: Colors.blue[50]!.withAlpha(200),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(56),
+        preferredSize: const Size.fromHeight(56),
         child: CustomAppBar(
           goBack: RoutesConstant.menu,
         ),
@@ -122,51 +131,85 @@ class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, Automati
             ? Container()
             : Stack(
                 children: [
-                  ListView(
-                    padding: const EdgeInsets.all(20),
-                    children: [
-                      const Center(child: Text('DAILY REPORT MEKANIK', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
-                      Center(child: Text(listDashboard3[0].bsName, style: const TextStyle(fontSize: 15))),
-                      Center(
-                        child: Text(
-                          'PERIODE ${listBulan[int.parse(bln) - 1]} $thn',
-                          style: const TextStyle(fontSize: 15),
-                        ),
-                      ),
-                      const SizedBox(height: 25),
-                      //MENU
-                      Row(
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final hPad = constraints.maxWidth < 600 ? 12.0 : 20.0;
+                      final availWidth = constraints.maxWidth - (hPad * 2);
+
+                      return ListView(
+                        padding: EdgeInsets.fromLTRB(hPad, 20, hPad, 40),
                         children: [
-                          buttonMenu(Report.unitEntry, 'Unit Entry'),
-                          const SizedBox(width: 10),
-                          buttonMenu(Report.jasa, 'Jasa'),
-                          const SizedBox(width: 10),
-                          buttonMenu(Report.oli, 'Oli'),
-                          const SizedBox(width: 10),
-                          buttonMenu(Report.spareparts, 'Spareparts'),
-                          const SizedBox(width: 10),
-                          buttonMenu(Report.retail, 'Retail'),
-                          const SizedBox(width: 10),
-                          buttonMenu(Report.income, 'Income Service'),
-                          const SizedBox(width: 10),
-                          buttonMenu(Report.spu, 'SPU'),
+                          const Center(
+                            child: Text(
+                              'DAILY REPORT MEKANIK',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Center(
+                            child: Text(
+                              listDashboard3[0].bsName,
+                              style: const TextStyle(fontSize: 15),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Center(
+                            child: Text(
+                              'PERIODE ${listBulan[int.parse(bln) - 1]} $thn',
+                              style: const TextStyle(fontSize: 15),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          //MENU (Responsive Wrap)
+                          Wrap(
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: [
+                              buttonMenu(Report.unitEntry, 'Unit Entry'),
+                              buttonMenu(Report.jasa, 'Jasa'),
+                              buttonMenu(Report.oli, 'Oli'),
+                              buttonMenu(Report.spareparts, 'Spareparts'),
+                              buttonMenu(Report.retail, 'Retail'),
+                              buttonMenu(Report.income, 'Income Service'),
+                              buttonMenu(Report.spu, 'SPU'),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          report == Report.unitEntry
+                              ? contentMenu(listUnitEntry,
+                                  rutUnitEntry(listUnitEntry), availWidth)
+                              : report == Report.jasa
+                                  ? contentMenu(
+                                      listJasa, rutJasa(listJasa), availWidth)
+                                  : report == Report.oli
+                                      ? contentMenu(
+                                          listOli, rutOli(listOli), availWidth)
+                                      : report == Report.spareparts
+                                          ? contentMenu(
+                                              listSparepart,
+                                              rutSparepart(listSparepart),
+                                              availWidth)
+                                          : report == Report.retail
+                                              ? contentMenu(
+                                                  listRetail,
+                                                  rutRetail(listRetail),
+                                                  availWidth)
+                                              : report == Report.income
+                                                  ? contentMenu(
+                                                      listIncome,
+                                                      rutIncome(listIncome),
+                                                      availWidth)
+                                                  : contentMenu(
+                                                      listSPU,
+                                                      rutSPU(listSPU),
+                                                      availWidth)
                         ],
-                      ),
-                      const SizedBox(height: 10),
-                      report == Report.unitEntry
-                          ? contentMenu(listUnitEntry, rutUnitEntry(listUnitEntry)) //UNITENTRY
-                          : report == Report.jasa
-                              ? contentMenu(listJasa, rutJasa(listJasa)) //JASA
-                              : report == Report.oli
-                                  ? contentMenu(listOli, rutOli(listOli)) //OLI
-                                  : report == Report.spareparts
-                                      ? contentMenu(listSparepart, rutSparepart(listSparepart)) //SPAREPART
-                                      : report == Report.retail
-                                          ? contentMenu(listRetail, rutRetail(listRetail)) //RETAIL
-                                          : report == Report.income
-                                              ? contentMenu(listIncome, rutIncome(listIncome)) //INCOME
-                                              : contentMenu(listSPU, rutSPU(listSPU)) //SPU
-                    ],
+                      );
+                    },
                   ),
                   //*FOOTER
                   Align(
@@ -178,7 +221,10 @@ class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, Automati
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text('\u00a9 ', style: TextStyle(fontSize: 10)),
-                          Text(' 2025 IT Basra Corporation', style: TextStyle(fontSize: 10))
+                          Text(
+                            ' 2025 IT Basra Corporation',
+                            style: TextStyle(fontSize: 10),
+                          )
                         ],
                       ),
                     ),
@@ -192,7 +238,12 @@ class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, Automati
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(Format.tanggalFormat(DateTime.now().toString().substring(0, 10)), style: const TextStyle(fontSize: 10)),
+                          Text(
+                            Format.tanggalFormat(
+                              DateTime.now().toString().substring(0, 10),
+                            ),
+                            style: const TextStyle(fontSize: 10),
+                          ),
                         ],
                       ),
                     ),
@@ -210,146 +261,215 @@ class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, Automati
           onPressed: () => setState(() => report = value),
           style: ElevatedButton.styleFrom(
             backgroundColor: report == value ? Colors.indigo : Colors.blue[50],
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             side: const BorderSide(color: Colors.indigo),
           ),
-          child: Text(name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: report == value ? Colors.white : Colors.indigo)),
+          child: Text(
+            name,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: report == value ? Colors.white : Colors.indigo,
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget contentMenu(List<Dashboard3> listData, TableRow rutTable) {
-    return SelectionArea(
-      child: Table(
-        border: TableBorder.all(color: Colors.black, borderRadius: BorderRadius.circular(10)),
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        columnWidths: {
-          0: const FlexColumnWidth(1),
-          ...{for (var k in listData) listData.indexOf(k) + 1: const FlexColumnWidth(2)},
-          listData.length + 1: const FlexColumnWidth(2),
-        },
-        children: [
-          //HEADER
-          TableRow(
-            decoration: const BoxDecoration(
-              color: Colors.indigo,
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+  Widget contentMenu(
+      List<Dashboard3> listData, TableRow rutTable, double availWidth) {
+    final minTableWidth =
+        math.max(availWidth, (listData.length + 2) * 115.0);
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: SizedBox(
+        width: minTableWidth,
+        child: SelectionArea(
+          child: Table(
+            border: TableBorder.all(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(10),
             ),
+            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+            columnWidths: {
+              0: const FlexColumnWidth(1.2),
+              ...{
+                for (var k in listData)
+                  listData.indexOf(k) + 1: const FlexColumnWidth(2)
+              },
+              listData.length + 1: const FlexColumnWidth(2),
+            },
             children: [
-              headerTable('Hari / Tgl'),
-              for (Dashboard3 k in listData) headerTable((k.eName)),
-              headerTable('Total'),
-            ],
-          ),
-          //BODY
-          for (var i = 0; i < totalDay; i++)
-            TableRow(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      Dashboard.toJson(listDashboard3[0])['h${i + 1}'].toString().substring(0, 3),
-                      style: const TextStyle(fontSize: 13, color: Colors.black54),
-                    ),
-                    Text(
-                      ' ${i + 1}',
-                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                for (Dashboard3 data in listData)
-                  containerTable(
-                    int.parse(Dashboard.toJson(data)['h${i + 1}']) == 0 && DateTime(int.parse(thn), int.parse(bln), i + 1).isAfter(DateTime.now())
-                        ? ''
-                        : Dashboard.toJson(data)['h${i + 1}'],
-                    warna: Dashboard.toJson(listDashboard3[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.white,
+              //HEADER
+              TableRow(
+                decoration: const BoxDecoration(
+                  color: Colors.indigo,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
                   ),
-                containerTable(
-                  sumList(listData, i),
-                  warna: Dashboard.toJson(listDashboard3[0])['h${i + 1}'] == 'Minggu' ? Colors.red.shade300 : Colors.green.shade300,
                 ),
-              ],
-            ),
-          //HASIL
-          report == Report.spu
-              ? TableRow(
-                  decoration: BoxDecoration(color: Colors.orange.shade300),
+                children: [
+                  headerTable('Hari / Tgl'),
+                  for (Dashboard3 k in listData) headerTable((k.eName)),
+                  headerTable('Total'),
+                ],
+              ),
+              //BODY
+              for (var i = 0; i < totalDay; i++)
+                TableRow(
                   children: [
-                    textTable('Hasil'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 4,
+                        horizontal: 4,
+                      ),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              Dashboard.toJson(listDashboard3[0])['h${i + 1}']
+                                  .toString()
+                                  .substring(0, 3),
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            Text(
+                              ' ${i + 1}',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     for (Dashboard3 data in listData)
-                      containerTable((int.parse(sumModel(listIncome.firstWhere((element) => element.eName == data.eName), totalDay)) ~/
-                              int.parse(sumModel(listUnitEntry.firstWhere((element) => element.eName == data.eName), totalDay)))
-                          .toString()),
-                    containerTable(sumTotalSPU(listData, totalDay, listIncome, listUnitEntry)),
-                  ],
-                )
-              : TableRow(
-                  decoration: BoxDecoration(color: Colors.orange.shade300),
-                  children: [
-                    textTable('Hasil'),
-                    for (Dashboard3 data in listData) containerTable(sumModel(data, totalDay)),
-                    containerTable(sumTotalList(listData, totalDay)),
+                      containerTable(
+                        int.parse(Dashboard.toJson(data)['h${i + 1}']) == 0 &&
+                                DateTime(int.parse(thn), int.parse(bln), i + 1)
+                                    .isAfter(DateTime.now())
+                            ? ''
+                            : Dashboard.toJson(data)['h${i + 1}'],
+                        warna: Dashboard.toJson(listDashboard3[0])['h${i + 1}'] ==
+                                'Minggu'
+                            ? Colors.red.shade300
+                            : Colors.white,
+                      ),
+                    containerTable(
+                      sumList(listData, i),
+                      warna: Dashboard.toJson(listDashboard3[0])['h${i + 1}'] ==
+                              'Minggu'
+                          ? Colors.red.shade300
+                          : Colors.green.shade300,
+                    ),
                   ],
                 ),
-          //TARGET
-          TableRow(
-            decoration: BoxDecoration(color: Colors.orange.shade300),
-            children: [
-              textTable('Target'),
-              for (Dashboard3 data in listData) containerTable(data.targetMekanik),
-              containerTable(sumTarget(listData)),
+              //HASIL
+              report == Report.spu
+                  ? TableRow(
+                      decoration: BoxDecoration(color: Colors.orange.shade300),
+                      children: [
+                        textTable('Hasil'),
+                        for (Dashboard3 data in listData)
+                          containerTable((int.parse(sumModel(
+                                      listIncome.firstWhere(
+                                          (element) => element.eName == data.eName),
+                                      totalDay)) ~/
+                                  int.parse(sumModel(
+                                      listUnitEntry.firstWhere(
+                                          (element) => element.eName == data.eName),
+                                      totalDay)))
+                              .toString()),
+                        containerTable(sumTotalSPU(
+                            listData, totalDay, listIncome, listUnitEntry)),
+                      ],
+                    )
+                  : TableRow(
+                      decoration: BoxDecoration(color: Colors.orange.shade300),
+                      children: [
+                        textTable('Hasil'),
+                        for (Dashboard3 data in listData)
+                          containerTable(sumModel(data, totalDay)),
+                        containerTable(sumTotalList(listData, totalDay)),
+                      ],
+                    ),
+              //TARGET
+              TableRow(
+                decoration: BoxDecoration(color: Colors.orange.shade300),
+                children: [
+                  textTable('Target'),
+                  for (Dashboard3 data in listData)
+                    containerTable(data.targetMekanik),
+                  containerTable(sumTarget(listData)),
+                ],
+              ),
+              //%
+              report == Report.spu
+                  ? TableRow(
+                      decoration: BoxDecoration(color: Colors.orange.shade300),
+                      children: [
+                        textTable('%'),
+                        for (Dashboard3 data in listData)
+                          containerTable(
+                              '${(int.parse(sumModel(listIncome.firstWhere((element) => element.eName == data.eName), totalDay)) ~/ int.parse(sumModel(listUnitEntry.firstWhere((element) => element.eName == data.eName), totalDay)) * 100 ~/ int.parse(data.targetMekanik))}',
+                              percentFormat: true),
+                        containerTable(
+                            '${(int.parse(sumTotalSPU(listData, totalDay, listIncome, listUnitEntry)) * 100 ~/ int.parse(sumTarget(listData)))}',
+                            percentFormat: true),
+                      ],
+                    )
+                  : TableRow(
+                      decoration: BoxDecoration(color: Colors.orange.shade300),
+                      children: [
+                        textTable('%'),
+                        for (Dashboard3 data in listData)
+                          containerTable(
+                              '${(int.parse(sumModel(data, totalDay)) * 100 ~/ int.parse(data.targetMekanik))}',
+                              percentFormat: true),
+                        containerTable(
+                            '${(int.parse(sumTotalList(listData, totalDay)) * 100 ~/ int.parse(sumTarget(listData)))}',
+                            percentFormat: true),
+                      ],
+                    ),
+              //GAB
+              report == Report.spu
+                  ? TableRow(
+                      decoration: BoxDecoration(color: Colors.orange.shade300),
+                      children: [
+                        textTable('Gab'),
+                        for (Dashboard3 data in listData)
+                          containerTable(
+                              '${(int.parse(sumModel(listIncome.firstWhere((element) => element.eName == data.eName), totalDay)) ~/ int.parse(sumModel(listUnitEntry.firstWhere((element) => element.eName == data.eName), totalDay))) - int.parse(data.targetMekanik)}'),
+                        containerTable(
+                            '${int.parse(sumTotalSPU(listData, totalDay, listIncome, listUnitEntry)) - int.parse(sumTarget(listData))}'),
+                      ],
+                    )
+                  : TableRow(
+                      decoration: BoxDecoration(color: Colors.orange.shade300),
+                      children: [
+                        textTable('Gab'),
+                        for (Dashboard3 data in listData)
+                          containerTable(
+                              '${int.parse(sumModel(data, totalDay)) - int.parse(data.targetMekanik)}'),
+                        containerTable(
+                            '${int.parse(sumTotalList(listData, totalDay)) - int.parse(sumTarget(listData))}'),
+                      ],
+                    ),
+              //RUT
+              rutTable,
             ],
           ),
-          //%
-          report == Report.spu
-              ? TableRow(
-                  decoration: BoxDecoration(color: Colors.orange.shade300),
-                  children: [
-                    textTable('%'),
-                    for (Dashboard3 data in listData)
-                      containerTable(
-                          '${(int.parse(sumModel(listIncome.firstWhere((element) => element.eName == data.eName), totalDay)) ~/ int.parse(sumModel(listUnitEntry.firstWhere((element) => element.eName == data.eName), totalDay)) * 100 ~/ int.parse(data.targetMekanik))}',
-                          percentFormat: true),
-                    containerTable(
-                        '${(int.parse(sumTotalSPU(listData, totalDay, listIncome, listUnitEntry)) * 100 ~/ int.parse(sumTarget(listData)))}',
-                        percentFormat: true),
-                  ],
-                )
-              : TableRow(
-                  decoration: BoxDecoration(color: Colors.orange.shade300),
-                  children: [
-                    textTable('%'),
-                    for (Dashboard3 data in listData)
-                      containerTable('${(int.parse(sumModel(data, totalDay)) * 100 ~/ int.parse(data.targetMekanik))}', percentFormat: true),
-                    containerTable('${(int.parse(sumTotalList(listData, totalDay)) * 100 ~/ int.parse(sumTarget(listData)))}', percentFormat: true),
-                  ],
-                ),
-          //GAB
-          report == Report.spu
-              ? TableRow(
-                  decoration: BoxDecoration(color: Colors.orange.shade300),
-                  children: [
-                    textTable('Gab'),
-                    for (Dashboard3 data in listData)
-                      containerTable(
-                          '${(int.parse(sumModel(listIncome.firstWhere((element) => element.eName == data.eName), totalDay)) ~/ int.parse(sumModel(listUnitEntry.firstWhere((element) => element.eName == data.eName), totalDay))) - int.parse(data.targetMekanik)}'),
-                    containerTable('${int.parse(sumTotalSPU(listData, totalDay, listIncome, listUnitEntry)) - int.parse(sumTarget(listData))}'),
-                  ],
-                )
-              : TableRow(
-                  decoration: BoxDecoration(color: Colors.orange.shade300),
-                  children: [
-                    textTable('Gab'),
-                    for (Dashboard3 data in listData) containerTable('${int.parse(sumModel(data, totalDay)) - int.parse(data.targetMekanik)}'),
-                    containerTable('${int.parse(sumTotalList(listData, totalDay)) - int.parse(sumTarget(listData))}'),
-                  ],
-                ),
-          //RUT
-          rutTable,
-        ],
+        ),
       ),
     );
   }
@@ -358,11 +478,15 @@ class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, Automati
     return TableRow(
       decoration: BoxDecoration(
         color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
+        ),
       ),
       children: [
         textTable('Rut Unit'),
-        for (Dashboard3 data in listData) containerTable(averageModel(data, totalDay)),
+        for (Dashboard3 data in listData)
+          containerTable(averageModel(data, totalDay)),
         containerTable(averageTotalList(listData, totalDay)),
       ],
     );
@@ -372,13 +496,19 @@ class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, Automati
     return TableRow(
       decoration: BoxDecoration(
         color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
+        ),
       ),
       children: [
         textTable('Spu Jasa'),
         for (Dashboard3 data in listData)
           containerTable((int.parse(sumModel(data, totalDay)) ~/
-                  int.parse(sumModel(listUnitEntry.firstWhere((element) => element.eName == data.eName), totalDay)))
+                  int.parse(sumModel(
+                      listUnitEntry.firstWhere(
+                          (element) => element.eName == data.eName),
+                      totalDay)))
               .toString()),
         containerTable(averageRUT(listData, totalDay, listUnitEntry)),
       ],
@@ -389,13 +519,19 @@ class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, Automati
     return TableRow(
       decoration: BoxDecoration(
         color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
+        ),
       ),
       children: [
         textTable('Spu Oli'),
         for (Dashboard3 data in listData)
           containerTable((int.parse(sumModel(data, totalDay)) ~/
-                  int.parse(sumModel(listUnitEntry.firstWhere((element) => element.eName == data.eName), totalDay)))
+                  int.parse(sumModel(
+                      listUnitEntry.firstWhere(
+                          (element) => element.eName == data.eName),
+                      totalDay)))
               .toString()),
         containerTable(averageRUT(listData, totalDay, listUnitEntry)),
       ],
@@ -406,13 +542,19 @@ class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, Automati
     return TableRow(
       decoration: BoxDecoration(
         color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
+        ),
       ),
       children: [
         textTable('Spu Parts'),
         for (Dashboard3 data in listData)
           containerTable((int.parse(sumModel(data, totalDay)) ~/
-                  int.parse(sumModel(listUnitEntry.firstWhere((element) => element.eName == data.eName), totalDay)))
+                  int.parse(sumModel(
+                      listUnitEntry.firstWhere(
+                          (element) => element.eName == data.eName),
+                      totalDay)))
               .toString()),
         containerTable(averageRUT(listData, totalDay, listUnitEntry)),
       ],
@@ -423,11 +565,15 @@ class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, Automati
     return TableRow(
       decoration: BoxDecoration(
         color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
+        ),
       ),
       children: [
         textTable('Average'),
-        for (Dashboard3 data in listData) containerTable(averageModel(data, totalDay).split('.')[0]),
+        for (Dashboard3 data in listData)
+          containerTable(averageModel(data, totalDay).split('.')[0]),
         containerTable(sumRUT(listData, totalDay)),
       ],
     );
@@ -437,11 +583,15 @@ class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, Automati
     return TableRow(
       decoration: BoxDecoration(
         color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
+        ),
       ),
       children: [
         textTable('Average'),
-        for (Dashboard3 data in listData) containerTable(averageModel(data, totalDay).split('.')[0]),
+        for (Dashboard3 data in listData)
+          containerTable(averageModel(data, totalDay).split('.')[0]),
         containerTable(sumRUT(listData, totalDay)),
       ],
     );
@@ -451,11 +601,15 @@ class _Dashboard3PageState extends State<Dashboard3Page> with BasePage, Automati
     return TableRow(
       decoration: BoxDecoration(
         color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
+        ),
       ),
       children: [
         textTable('Average'),
-        for (Dashboard3 data in listData) containerTable(averageModel(data, totalDay).split('.')[0]),
+        for (Dashboard3 data in listData)
+          containerTable(averageModel(data, totalDay).split('.')[0]),
         containerTable(sumRUT(listData, totalDay)),
       ],
     );

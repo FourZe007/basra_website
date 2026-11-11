@@ -12,20 +12,24 @@ class LegendWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 14,
-          height: 14,
-          margin: const EdgeInsets.only(top: 2),
+          width: 12,
+          height: 12,
+          margin: const EdgeInsets.only(top: 3),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: color,
           ),
         ),
         const SizedBox(width: 6),
-        Text(
-          name,
-          style: const TextStyle(
-            color: Colors.black87,
-            fontSize: 12,
+        Flexible(
+          child: Text(
+            name,
+            style: const TextStyle(
+              color: Colors.black87,
+              fontSize: 12,
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
           ),
         ),
       ],

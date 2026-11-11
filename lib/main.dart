@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stsj/booking-service/state_management/state_admin.dart';
+import 'package:stsj/booking-service/state_management/state_workshop.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/global/theme/app_theme.dart';
 import 'package:stsj/router/router.dart';
@@ -16,6 +18,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => UserIDmodel()),
         ChangeNotifierProvider(create: (_) => PtModel()),
         ChangeNotifierProvider(create: (_) => MenuState()),
+        ChangeNotifierProvider(create: (_) => AdminState()),
+        ChangeNotifierProvider(create: (_) => WorkshopState()),
       ],
       child: MyApp(),
     ),

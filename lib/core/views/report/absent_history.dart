@@ -218,7 +218,9 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<MenuState>(context, listen: false).resetAbsentHistory();
+    final state = Provider.of<MenuState>(context, listen: false);
+    state.resetAbsentHistory();
+    state.loadSipBranches();
     preprocessingDate();
   }
 
@@ -257,7 +259,7 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
             listData: value.getSipBranchNameList,
             inputan: value.selectedBranch,
             hint: 'Cabang',
-            handle: value.getSipBranchNameList.isEmpty ? () {} : state.setSelectedBranch,
+            handle: state.setSelectedBranch,
             disable: value.getSipBranchNameList.isEmpty,
           ),
           bgColor: value.getSipBranchNameList.isEmpty
@@ -274,8 +276,8 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
             listData: value.getSipShopNameList,
             inputan: value.selectedShop,
             hint: 'Toko',
-            handle: value.getSipShopNameList.isEmpty ? () {} : state.setSelectedShop,
-            branch: state.getSelectedBranch,
+            handle: state.setSelectedShop,
+            branch: value.selectedBranch,
             disable: value.getSipShopNameList.isEmpty,
           ),
           bgColor: value.getSipShopNameList.isEmpty
@@ -292,7 +294,7 @@ class _AbsentHistoryPageState extends State<AbsentHistoryPage> {
             listData: value.getSipLocationNameList,
             inputan: value.selectedLocation,
             hint: 'Lokasi',
-            handle: value.getSipLocationNameList.isEmpty ? () {} : state.setSelectedLocation,
+            handle: state.setSelectedLocation,
             disable: value.getSipLocationNameList.isEmpty,
           ),
           bgColor: value.getSipLocationNameList.isEmpty

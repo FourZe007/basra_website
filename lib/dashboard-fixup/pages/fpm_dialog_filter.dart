@@ -130,37 +130,41 @@ class _FPMDialogFilterState extends State<FPMDialogFilter> {
         title: const Text('FILTER',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         actionsAlignment: MainAxisAlignment.center,
-        content: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.3,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Dashboard :',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 2),
-              DropdownCustom(
-                state.getFilteredDashboardList,
-                dashboard,
-                'Pilih Dashboard',
-                setDashboard,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Bengkel :',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 2),
-              DropdownCustom(bengkelList, bengkel, 'Pilih Bengkel', setBengkel),
-              const SizedBox(height: 10),
-              const Text(
-                'Tanggal :',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 2),
-              DatepickerCustom(tgl, setTgl1),
-            ],
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 420),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Dashboard :',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                DropdownCustom(
+                  state.getFilteredDashboardList,
+                  dashboard,
+                  'Pilih Dashboard',
+                  setDashboard,
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'Bengkel :',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                DropdownCustom(
+                    bengkelList, bengkel, 'Pilih Bengkel', setBengkel),
+                const SizedBox(height: 12),
+                const Text(
+                  'Tanggal :',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                DatepickerCustom(tgl, setTgl1),
+              ],
+            ),
           ),
         ),
         actions: [

@@ -175,7 +175,8 @@ class ListReportController {
 
     if (listReport['PT'] == 'RSSM' ||
         listReport['PT'] == 'STSJ' ||
-        listReport['PT'] == 'SAMP') {
+        listReport['PT'] == 'SAMP' ||
+        listReport['PT'] == 'RM') {
       url =
           "http://203.201.175.80:82/crapi/Report/${format}?PT=${listReport['PT']}";
     } else if (listReport['PT'] == 'SS' ||

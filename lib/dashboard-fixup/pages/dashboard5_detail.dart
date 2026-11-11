@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:stsj/core/cleanArc/dashboard_service/helpers/format.dart';
 import 'package:stsj/dashboard-fixup/models/dashboard5_model.dart';
@@ -63,11 +64,14 @@ class _Dashboard5DetailState extends State<Dashboard5Detail> {
           child: const Padding(
             padding: EdgeInsets.only(
                 left: 15.0, right: 15.0, top: 10.0, bottom: 10.0),
-            child: Text('DETAIL',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1)),
+            child: Text(
+              'DETAIL',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1,
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 10),
@@ -84,11 +88,14 @@ class _Dashboard5DetailState extends State<Dashboard5Detail> {
                             duration: const Duration(milliseconds: 100));
                       }
                     },
-                    child: const Text('<',
-                        style: TextStyle(
-                            color: Colors.orange,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold)),
+                    child: const Text(
+                      '<',
+                      style: TextStyle(
+                        color: Colors.orange,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   )
                 : const SizedBox(width: 60),
             Padding(
@@ -109,90 +116,111 @@ class _Dashboard5DetailState extends State<Dashboard5Detail> {
                             duration: const Duration(milliseconds: 100));
                       }
                     },
-                    child: const Text('>',
-                        style: TextStyle(
-                            color: Colors.orange,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold)),
+                    child: const Text(
+                      '>',
+                      style: TextStyle(
+                        color: Colors.orange,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   )
                 : const SizedBox(width: 60)
           ],
         ),
         const SizedBox(height: 10),
         Flexible(
-          child: ListView(
-            controller: _scrollController,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: SelectionArea(
-                  child: Table(
-                    border: TableBorder.all(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(10)),
-                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    columnWidths: const {
-                      0: FlexColumnWidth(0.4),
-                      1: FlexColumnWidth(0.9),
-                      2: FlexColumnWidth(1.3),
-                      3: FlexColumnWidth(1),
-                      4: FlexColumnWidth(1.4),
-                      5: FlexColumnWidth(0.7),
-                      6: FlexColumnWidth(0.6),
-                      7: FlexColumnWidth(0.7),
-                    },
-                    children: [
-                      TableRow(
-                        decoration: BoxDecoration(
-                          color: Colors.indigo,
-                          borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(10),
-                            topRight: const Radius.circular(10),
-                            bottomLeft:
-                                Radius.circular(showList.isEmpty ? 10.0 : 0.0),
-                            bottomRight:
-                                Radius.circular(showList.isEmpty ? 10.0 : 0.0),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final hPad = constraints.maxWidth < 600 ? 12.0 : 20.0;
+              final availWidth = constraints.maxWidth - (hPad * 2);
+              final minTableWidth = math.max(availWidth, 820.0);
+
+              return ListView(
+                controller: _scrollController,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: hPad),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: SizedBox(
+                        width: minTableWidth,
+                        child: SelectionArea(
+                          child: Table(
+                            border: TableBorder.all(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            defaultVerticalAlignment:
+                                TableCellVerticalAlignment.middle,
+                            columnWidths: const {
+                              0: FlexColumnWidth(0.4),
+                              1: FlexColumnWidth(0.9),
+                              2: FlexColumnWidth(1.3),
+                              3: FlexColumnWidth(1),
+                              4: FlexColumnWidth(1.4),
+                              5: FlexColumnWidth(0.7),
+                              6: FlexColumnWidth(0.7),
+                              7: FlexColumnWidth(0.8),
+                            },
+                            children: [
+                              TableRow(
+                                decoration: BoxDecoration(
+                                  color: Colors.indigo,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: const Radius.circular(10),
+                                    topRight: const Radius.circular(10),
+                                    bottomLeft: Radius.circular(
+                                        showList.isEmpty ? 10.0 : 0.0),
+                                    bottomRight: Radius.circular(
+                                        showList.isEmpty ? 10.0 : 0.0),
+                                  ),
+                                ),
+                                children: [
+                                  headerTable(''),
+                                  headerTable('MEMBER ID'),
+                                  headerTable('NAMA'),
+                                  headerTable('TELEPON'),
+                                  headerTable('EMAIL'),
+                                  headerTable('POIN'),
+                                  headerTable('KUNJUNGAN'),
+                                  headerTable('TANGGAL'),
+                                ],
+                              ),
+                              ...showList.map((item) {
+                                return TableRow(
+                                  children: [
+                                    IconButton(
+                                      onPressed: item.detail.isEmpty
+                                          ? null
+                                          : () => widget.handle(item),
+                                      icon: const Icon(Icons.remove_red_eye),
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                    ),
+                                    textTable(item.memberId),
+                                    textTable(item.memberName),
+                                    textTable(Format.phoneFormat(item.phoneNo)),
+                                    textTable(item.emailAddress),
+                                    textTable(
+                                      Format.thousandFormat(
+                                          item.pointQty.toString()),
+                                    ),
+                                    textTable(item.totalVisit.toString()),
+                                    textTable(
+                                        Format.tanggalFormat(item.lastVisit)),
+                                  ],
+                                );
+                              }).toList(),
+                            ],
                           ),
                         ),
-                        children: [
-                          headerTable(''),
-                          headerTable('MEMBER ID'),
-                          headerTable('NAMA'),
-                          headerTable('TELEPON'),
-                          headerTable('EMAIL'),
-                          headerTable('POIN'),
-                          headerTable('KUNJUNGAN'),
-                          headerTable('TANGGAL'),
-                        ],
                       ),
-                      ...showList.map((item) {
-                        return TableRow(
-                          children: [
-                            IconButton(
-                              onPressed: item.detail.isEmpty
-                                  ? null
-                                  : () => widget.handle(item),
-                              icon: const Icon(Icons.remove_red_eye),
-                              hoverColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                            ),
-                            textTable(item.memberId),
-                            textTable(item.memberName),
-                            textTable(Format.phoneFormat(item.phoneNo)),
-                            textTable(item.emailAddress),
-                            textTable(
-                              Format.thousandFormat(item.pointQty.toString()),
-                            ),
-                            textTable(item.totalVisit.toString()),
-                            textTable(Format.tanggalFormat(item.lastVisit)),
-                          ],
-                        );
-                      }).toList(),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ],
+                ],
+              );
+            },
           ),
         ),
       ],

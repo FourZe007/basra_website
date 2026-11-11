@@ -42,9 +42,9 @@ class _SalesmanAutoCompleteState extends State<SalesmanAutoComplete> {
     // }
 
     if (widget.inputan != '' && state.getSipSalesmanList.isNotEmpty) {
-      nameInputan = (state.getSipSalesmanList.firstWhere((element) {
-        return element.employeeID == widget.inputan;
-      })).employeeName;
+      final matches = state.getSipSalesmanList
+          .where((element) => element.employeeID == widget.inputan);
+      nameInputan = matches.isNotEmpty ? matches.first.employeeName : '';
     } else {
       nameInputan = '';
     }

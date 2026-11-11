@@ -15,33 +15,46 @@ class _VSVerticalState extends State<VSVertical> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      child: Center(
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(
-                widget.n1 > widget.n2
-                    ? Icons.arrow_upward_rounded
-                    : Icons.arrow_downward_rounded,
-                color: widget.n1 > widget.n2 ? Colors.indigo : Colors.orange,
-                size: 50,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    widget.n1 > widget.n2
+                        ? Icons.arrow_upward_rounded
+                        : Icons.arrow_downward_rounded,
+                    color: widget.n1 > widget.n2 ? Colors.indigo : Colors.orange,
+                    size: 42,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    Format.thousandFormat(
+                      (widget.n1 - widget.n2).abs().toString(),
+                    ),
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
+              const SizedBox(height: 4),
               Text(
-                  Format.thousandFormat(
-                      (widget.n1 - widget.n2).abs().toString()),
-                  style: const TextStyle(fontSize: 30)),
-              const SizedBox(width: 5),
+                widget.lylm == 'LY' ? 'VS Last Year' : 'VS Last Month',
+                style: const TextStyle(fontSize: 13, color: Colors.black54),
+              ),
             ],
           ),
-          const SizedBox(height: 5),
-          Text(widget.lylm == 'LY' ? 'VS Last Year' : 'VS Last Month',
-              style: const TextStyle(fontSize: 13, color: Colors.black54)),
-          const SizedBox(height: 10),
-        ],
+        ),
       ),
     );
   }

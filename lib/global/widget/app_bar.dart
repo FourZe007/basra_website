@@ -9,7 +9,7 @@ import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/global/globalVar.dart';
 import 'package:stsj/global/theme/app_theme.dart';
 import 'package:stsj/core/views/app_shell.dart';
-import 'package:stsj/dashboard-fixup/utilities/utils.dart';
+
 import 'package:stsj/router/router_const.dart';
 import 'package:stsj/static/screenConstant.dart';
 
@@ -29,6 +29,7 @@ class CustomAppBar extends StatefulWidget {
   final double imageSize;
   final double profileRadius;
   final double returnButtonSize;
+
   /// When provided, a hamburger icon button is shown in the leading area
   /// instead of the back arrow. Used by [MenuPages] on narrow screens to
   /// open the sidebar drawer.
@@ -37,7 +38,6 @@ class CustomAppBar extends StatefulWidget {
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
 }
-
 
 class _CustomAppBarState extends State<CustomAppBar> {
   @override
@@ -87,7 +87,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
               Text(
                 GlobalVar.username,
                 style: const TextStyle(
-                  
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
@@ -103,7 +102,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 child: const Text(
                   'v1.0.16',
                   style: TextStyle(
-                    
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     color: AppColors.accentYellow,
@@ -149,17 +147,18 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       onLogout();
                     }
                   },
-                  itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<String>>[
                     PopupMenuItem<String>(
                       value: 'logout',
                       child: Row(
                         children: const [
-                          Icon(Icons.logout_rounded, size: 16, color: AppColors.accentCoral),
+                          Icon(Icons.logout_rounded,
+                              size: 16, color: AppColors.accentCoral),
                           SizedBox(width: 8),
                           Text(
                             'Logout',
                             style: TextStyle(
-                              
                               fontSize: 13,
                               color: AppColors.accentCoral,
                               fontWeight: FontWeight.w500,
@@ -180,9 +179,16 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    final router = GoRouterState.of(context).name;
+    String? router;
+    if (widget.isRoutes) {
+      try {
+        router = GoRouterState.of(context).name;
+      } catch (_) {
+        router = null;
+      }
+    }
     final state = Provider.of<MenuState>(context);
-    print('CustomAppbar Current route: ${GoRouterState.of(context).name}');
+    print('CustomAppbar Current route: $router');
 
     double screenWidth = MediaQuery.of(context).size.width;
     bool screen = screenWidth >= kMobileBreakpoint;
@@ -231,7 +237,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       if (router == RoutesConstant.absentHistory) {
                         state.resetAbsentHistory();
                       }
-                      
+
                       if (widget.goBack == RoutesConstant.menu) {
                         final infoRoutes = [
                           RoutesConstant.report,
@@ -241,7 +247,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                           RoutesConstant.serviceHistory,
                           RoutesConstant.mdsSparepartStock,
                         ];
-                        
+
                         final toolRoutes = [
                           RoutesConstant.service,
                           RoutesConstant.branchFreeStock,
@@ -250,13 +256,15 @@ class _CustomAppBarState extends State<CustomAppBar> {
                           RoutesConstant.importCetakQR,
                         ];
 
-                        if (infoRoutes.contains(router)) {
+                        if (state.getEntryLevelId.trim() == '50') {
+                          state.setStaticMenuNotifier('dashboard');
+                        } else if (infoRoutes.contains(router)) {
                           state.setStaticMenuNotifier('report');
                         } else if (toolRoutes.contains(router)) {
                           state.setStaticMenuNotifier('tools');
                         }
                       }
-                      
+
                       context.goNamed(widget.goBack!);
                     },
                   )
@@ -269,7 +277,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
           _buildUserActions(
             onLogout: () async {
               await Auth.resetAuth();
-              final SharedPreferences prefs = await SharedPreferences.getInstance();
+              final SharedPreferences prefs =
+                  await SharedPreferences.getInstance();
               await prefs.clear();
 
               if (context.mounted) context.go(RoutesConstant.login);

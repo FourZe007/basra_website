@@ -56,10 +56,6 @@ class _ServiceDialogFilterState extends State<ServiceDialogFilter> {
     setState(() => loading = true);
     try {
       await Api.getDashboard(dashboard, teritory, tgl1, tgl2).then((value) {
-        // context.goNamed(
-        //   RoutesConstant.dashboardService,
-        //   queryParams: {'dashboard': dashboard, 'value': value},
-        // );
         Navigator.pop(context);
         Navigator.push(
           context,
@@ -97,31 +93,37 @@ class _ServiceDialogFilterState extends State<ServiceDialogFilter> {
             const EdgeInsets.only(top: 20, right: 20, left: 20, bottom: 5),
         title: Text('FILTER', style: text20SB),
         actionsAlignment: MainAxisAlignment.center,
-        content: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.3,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Dashboard :', style: text13Med),
-              DropdownCustom(
-                  dashboardFC, dashboard, 'Pilih Dashboard', setDashboard),
-              const SizedBox(height: 10),
-              Text('Teritory :', style: text13Med),
-              DropdownCustom(
-                  teritoryFC, teritory, 'Pilih Teritory', setTeritory),
-              const SizedBox(height: 10),
-              Text('Tanggal :', style: text13Med),
-              Row(
-                children: [
-                  Expanded(flex: 1, child: DatepickerCustom(tgl1, setTgl1)),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: Text('-', style: TextStyle(fontSize: 15)),
-                  ),
-                  Expanded(flex: 1, child: DatepickerCustom(tgl2, setTgl2)),
-                ],
-              ),
-            ],
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 420),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Dashboard :', style: text13Med),
+                const SizedBox(height: 4),
+                DropdownCustom(
+                    dashboardFC, dashboard, 'Pilih Dashboard', setDashboard),
+                const SizedBox(height: 12),
+                Text('Teritory :', style: text13Med),
+                const SizedBox(height: 4),
+                DropdownCustom(
+                    teritoryFC, teritory, 'Pilih Teritory', setTeritory),
+                const SizedBox(height: 12),
+                Text('Tanggal :', style: text13Med),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Expanded(flex: 1, child: DatepickerCustom(tgl1, setTgl1)),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      child: Text('-', style: TextStyle(fontSize: 15)),
+                    ),
+                    Expanded(flex: 1, child: DatepickerCustom(tgl2, setTgl2)),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
         actions: [
@@ -130,9 +132,9 @@ class _ServiceDialogFilterState extends State<ServiceDialogFilter> {
               : ElevatedButton(
                   onPressed: () => find(context),
                   style: ButtonStyle(
-                    padding: const MaterialStatePropertyAll(EdgeInsets.all(10)),
-                    backgroundColor: MaterialStatePropertyAll(blueShappire),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    padding: const WidgetStatePropertyAll(EdgeInsets.all(10)),
+                    backgroundColor: WidgetStatePropertyAll(blueShappire),
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                   ),

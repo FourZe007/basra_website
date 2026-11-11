@@ -68,6 +68,7 @@ const List<_SidebarCategory> _catalog = [
       _SidebarItem(label: 'Packing',            icon: Icons.inventory_2_outlined,     routeName: 'packing',           accessCode: '005'),
       _SidebarItem(label: 'FPM Dashboard',      icon: Icons.analytics_outlined,       routeName: 'fpmDashboard',      accessCode: 'SAMP_FPM', isDialogRoute: true),
       _SidebarItem(label: 'FPM Import Excel',   icon: Icons.upload_file_outlined,     routeName: 'fpmImportExcel',    accessCode: 'SAMP_FPM'),
+      _SidebarItem(label: 'Booking Service',    icon: Icons.calendar_month_outlined,  routeName: 'bookingService',    accessCode: 'SAMP_FPM'),
     ],
   ),
   _SidebarCategory(
@@ -194,19 +195,19 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
   }
 
   static const List<String> _companyCodes = [
-    'STSJ', 'RSSM', 'SAMP', 'SPAA', 'SS', 'ST', 'SP', 'SPr'
+    'STSJ', 'RSSM', 'RM', 'SAMP', 'SPAA', 'SS', 'ST', 'SP', 'SPr'
   ];
 
   static const Map<String, String> _companyFullNames = {
     'STSJ': 'SURYA TIMUR SAKTI JATIM',
     'RSSM': 'RODA SAKTI SURYA MEGAH',
+    'RM': 'RODA MEGAH',
     'SAMP': 'SAPTA AJI MANUNGGAL PRIMA',
     'SPAA': 'SURYA PERKASA ANUGRAH ABADI',
     'SS': 'SURYA SEJAHTERA',
     'ST': 'SURYA TERANG',
     'SP': 'SURYA PRIMA',
     'SPr': 'SURYA PRATAMA',
-    'Spr': 'SURYA PRATAMA',
   };
 
   Map<String, bool> _companyAccess = {};
@@ -233,13 +234,14 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
         _companyAccess = {
           'STSJ': prefs.getBool('STSJ') ?? false,
           'RSSM': prefs.getBool('RSSM') ?? false,
+          'RM': prefs.getBool('RM') ?? false,
           'SAMP': prefs.getBool('SAMP') ?? false,
           'SPAA': prefs.getBool('SPAA') ?? false,
           'SS': prefs.getBool('SS') ?? false,
           'ST': prefs.getBool('ST') ?? false,
           'SP': prefs.getBool('SP') ?? false,
           'SPr': (prefs.getBool('Spr') ?? false) || (prefs.getBool('SPr') ?? false),
-          'Spr': (prefs.getBool('Spr') ?? false) || (prefs.getBool('SPr') ?? false),
+          'Spr': (prefs.getBool('Spr') ?? false) || (prefs.getBool('SPr') ?? false)
         };
       });
 
@@ -253,6 +255,9 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       }
       if (menuState.getEntryLevelId.isEmpty && _entryLevelId.isNotEmpty) {
         menuState.entryLevelId = _entryLevelId;
+      }
+      if (_entryLevelId.trim() == '50') {
+        menuState.setStaticMenuNotifier('dashboard');
       }
     }
   }
@@ -275,23 +280,25 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       'SP':   'assets/images/SP.png',
       'SPr':  'assets/images/SPr.png',
       'Spr':  'assets/images/SPr.png',
+      'RM':   'assets/images/RM.png',
     };
-    return map[code] ?? 'assets/images/stsj.png';
+    return map[code] ?? 'assets/images/rssm.png';
   }
 
   /// Check whether a company is authorized for the current user
   bool _isCompanyAuthorized(String code, MenuState state) {
     if (_companyAccess[code] == true) return true;
     if (code == 'SPr' && (_companyAccess['Spr'] == true || _companyAccess['SPr'] == true)) return true;
-    if (state.getCompanyAuthorization.contains(code)) return true;
-    if (code == 'SPr' && state.getCompanyAuthorization.contains('Spr')) return true;
-    if (state.getUserCompanyAccList.any((e) => e.pt.toUpperCase() == code.toUpperCase())) return true;
     return false;
   }
 
   /// Determine whether a sidebar item is accessible given the current
   /// [subHeaderList] and [companyAuthorization].
   bool _isItemAccessible(_SidebarItem item, MenuState state) {
+    final level = (state.getEntryLevelId.isNotEmpty ? state.getEntryLevelId : _entryLevelId).trim();
+    if (level == '50') {
+      return item.routeName == 'bookingService';
+    }
     // FPM items require SAMP company authorization
     if (item.accessCode == 'SAMP_FPM') {
       return state.getCompanyAuthorization.contains('SAMP');
@@ -307,6 +314,10 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
   }
 
   bool _isCategoryAccessible(_SidebarCategory cat, MenuState state) {
+    final level = (state.getEntryLevelId.isNotEmpty ? state.getEntryLevelId : _entryLevelId).trim();
+    if (level == '50') {
+      return cat.categoryKey == 'DASHBOARD';
+    }
     if (cat.categoryKey == 'SALES ACTIVITY') {
       final level = (state.getEntryLevelId.isNotEmpty ? state.getEntryLevelId : _entryLevelId).trim();
       if (!_isAllowedSalesActivity(level)) {
@@ -353,6 +364,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       state.userAccessList.addAll(access);
 
       String category = '';
+      final isLevel50 = _entryLevelId.trim() == '50' || state.getEntryLevelId.trim() == '50';
       for (var userAccess in access) {
         if (userAccess.isAllowView == 1) {
           if (userAccess.category == 'SALES ACTIVITY' && !_isAllowedSalesActivity(_entryLevelId)) {
@@ -363,7 +375,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
         }
       }
 
-      if (category == 'DASHBOARD') {
+      if (isLevel50 || category == 'DASHBOARD') {
         state.setStaticMenuNotifier('dashboard');
       } else if (category == 'SALES ACTIVITY') {
         state.setStaticMenuNotifier('activity');
@@ -489,6 +501,18 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: _catalog.map((cat) {
+                            final level = (state.getEntryLevelId.isNotEmpty ? state.getEntryLevelId : _entryLevelId).trim();
+                            if (level == '50') {
+                              return cat.categoryKey == 'DASHBOARD'
+                                  ? _buildCategory(
+                                      context: context,
+                                      cat: cat,
+                                      state: state,
+                                      activeMenu: activeMenu,
+                                      activeItem: activeItem,
+                                    )
+                                  : const SizedBox.shrink();
+                            }
                             if (cat.categoryKey == 'SALES ACTIVITY') {
                               final level = (state.getEntryLevelId.isNotEmpty ? state.getEntryLevelId : _entryLevelId).trim();
                               if (!_isAllowedSalesActivity(level)) {
@@ -634,15 +658,6 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                   children: [
                     Container(
                       padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppColors.sidebarBackgroundDark,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Icon(
-                        Icons.swap_horiz_rounded,
-                        color: AppColors.accentYellow,
-                        size: 22,
-                      ),
                     ),
                     const SizedBox(width: 12),
                     const Expanded(
@@ -759,8 +774,8 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                                                   fontSize: 13.5,
                                                   fontWeight: FontWeight.w700,
                                                   color: isAuthorized
-                                                      ? Colors.white
-                                                      : Colors.white.withValues(alpha: 0.4),
+                                                      ? AppColors.textPrimary
+                                                      : Colors.black.withValues(alpha: 0.4),
                                                 ),
                                               ),
                                               if (isCurrent) ...[
@@ -792,8 +807,8 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                                             style: TextStyle(
                                               fontSize: 11,
                                               color: isAuthorized
-                                                  ? AppColors.textSecondary
-                                                  : AppColors.textMuted.withValues(alpha: 0.5),
+                                                  ? AppColors.textPrimary
+                                                  : AppColors.textPrimary.withValues(alpha: 0.5),
                                             ),
                                           ),
                                         ],
@@ -846,7 +861,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                       icon: const Icon(Icons.home_outlined, size: 16),
                       label: const Text('Ke Halaman Utama', style: TextStyle(fontSize: 12)),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.white,
+                        foregroundColor: Colors.black,
                         side: const BorderSide(color: AppColors.border),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -1043,7 +1058,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
             ),
           ),
         ),
-      ),
+      )
     );
   }
 

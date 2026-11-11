@@ -45,6 +45,7 @@ class RoutesConstant {
   static String packing = 'packing';
   static String fpmDashboard = 'fpmDashboard';
   static String fpmImportExcel = 'fpmImportExcel';
+  static String bookingService = 'bookingService';
   static String fpm1stDashboard = 'fpm1stDashboard';
   static String fpm2ndDashboard = 'fpm2ndDashboard';
   static String fpm3rdDashboard = 'fpm3rdDashboard';

@@ -108,9 +108,10 @@ class _BrowseSalesmanPageState extends State<BrowseSalesmanPage> {
   @override
   void initState() {
     super.initState();
-    print(
-        'Branch length: ${Provider.of<MenuState>(context, listen: false).getSipBranchNameList.length}');
-
+    final state = Provider.of<MenuState>(context, listen: false);
+    state.setSelectedBranch('');
+    state.getBrowseSalesmanList.clear();
+    state.loadSipBranches();
     preprocessingDate();
   }
 
@@ -178,7 +179,7 @@ class _BrowseSalesmanPageState extends State<BrowseSalesmanPage> {
             listData: value.getSipBranchNameList,
             inputan: value.getSelectedBranch,
             hint: 'Cabang',
-            handle: value.getSipBranchNameList.isEmpty ? () {} : value.setSelectedBranch,
+            handle: value.setSelectedBranch,
             disable: value.getSipBranchNameList.isEmpty,
           ),
           bgColor: value.getSipBranchNameList.isEmpty
@@ -195,7 +196,7 @@ class _BrowseSalesmanPageState extends State<BrowseSalesmanPage> {
             listData: value.getSipShopNameList,
             inputan: value.getSelectedShop,
             hint: 'Toko',
-            handle: value.getSipShopNameList.isEmpty ? () {} : value.setSelectedShop,
+            handle: value.setSelectedShop,
             branch: value.getSelectedBranch,
             disable: value.getSipShopNameList.isEmpty,
           ),
@@ -213,7 +214,7 @@ class _BrowseSalesmanPageState extends State<BrowseSalesmanPage> {
             listData: value.getSipLocationNameList,
             inputan: value.getSelectedLocation,
             hint: 'Lokasi',
-            handle: value.getSipLocationNameList.isEmpty ? () {} : value.setSelectedLocation,
+            handle: value.setSelectedLocation,
             disable: value.getSipLocationNameList.isEmpty,
           ),
           bgColor: value.getSipLocationNameList.isEmpty

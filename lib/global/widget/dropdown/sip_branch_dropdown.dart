@@ -1,12 +1,10 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/global/font.dart';
 
 class SipBranchDropdown extends StatefulWidget {
-  SipBranchDropdown({
+  const SipBranchDropdown({
     required this.listData,
     required this.inputan,
     required this.hint,
@@ -17,7 +15,7 @@ class SipBranchDropdown extends StatefulWidget {
   });
 
   final List<dynamic> listData;
-  String inputan;
+  final String inputan;
   final String hint;
   final Function handle;
   final bool disable;
@@ -28,50 +26,40 @@ class SipBranchDropdown extends StatefulWidget {
 }
 
 class _SipBranchDropdownState extends State<SipBranchDropdown> {
-  String teksDisable = '';
   String value = '';
-
-  void loadBranchList(MenuState state) async {
-    if (state.getSipBranchNameList.isEmpty) {
-      await state.loadSipBranches();
-    }
-
-    if (state.getSipShopNameList.isNotEmpty) {
-      state.getSipShopNameList.clear();
-    }
-
-    if (state.getSipLocationNameList.isNotEmpty) {
-      state.getSipLocationNameList.clear();
-    }
-  }
 
   @override
   void initState() {
-    loadBranchList(Provider.of<MenuState>(context, listen: false));
-    if (widget.inputan.isNotEmpty) {
-      widget.inputan = '';
-    }
-    value = widget.inputan;
-    print('Value: $value');
-    // TODO: implement initState
     super.initState();
+    value = widget.inputan;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final state = Provider.of<MenuState>(context, listen: false);
+      if (state.getSipBranchNameList.isEmpty) {
+        state.loadSipBranches();
+      }
+    });
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
+  void didUpdateWidget(covariant SipBranchDropdown oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.inputan != value) {
+      setState(() {
+        value = widget.inputan;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<MenuState>(context);
-    // print('SIP Dropdown provider: ${state.getSipBranchList.length}');
-    // print('SIP Dropdown data: ${widget.listData.length}');
+    final selectedValue =
+        (value.isNotEmpty && widget.listData.contains(value)) ? value : null;
 
     if (!widget.isMobile) {
       return DropdownButtonHideUnderline(
-        child: DropdownButton(
+        child: DropdownButton<String>(
           menuWidth: MediaQuery.of(context).size.width * 0.175,
           borderRadius: BorderRadius.circular(20),
           isExpanded: true,
@@ -85,44 +73,43 @@ class _SipBranchDropdownState extends State<SipBranchDropdown> {
               fontFamily: 'Metropolis',
             ),
           ),
-          value: value == '' ? null : value,
+          value: selectedValue,
           icon: const Icon(
             Icons.arrow_drop_down_rounded,
             size: 25,
             color: Colors.black,
           ),
-          items: widget.disable == true
+          items: widget.disable == true || widget.listData.isEmpty
               ? null
-              : widget.listData.asMap().entries.map((entry) {
-                  // final index = entry.key;
-                  final data = entry.value;
-
-                  return DropdownMenuItem(
-                    value: data,
+              : widget.listData.map((data) {
+                  return DropdownMenuItem<String>(
+                    value: data.toString(),
                     child: Text(
-                      data,
+                      data.toString(),
                       textAlign: TextAlign.center,
                       style: GlobalFont.mediumfontR,
                       overflow: TextOverflow.ellipsis,
                     ),
                   );
                 }).toList(),
-          onChanged: (newValues) async {
-            if (value != newValues) {
-              setState(() => value = newValues.toString());
-              await widget.handle(newValues);
-              try {
-                await state.loadSipShops(branch: newValues.toString());
-              } catch (e) {
-                print('loadSipShopsError: $e');
-              }
-            }
-          },
+          onChanged: widget.disable == true || widget.listData.isEmpty
+              ? null
+              : (newValues) async {
+                  if (newValues != null && value != newValues.toString()) {
+                    setState(() => value = newValues.toString());
+                    await widget.handle(newValues.toString());
+                    try {
+                      await state.loadSipShops(branch: newValues.toString());
+                    } catch (e) {
+                      print('loadSipShopsError: $e');
+                    }
+                  }
+                },
         ),
       );
     } else {
       return DropdownButtonHideUnderline(
-        child: DropdownButton(
+        child: DropdownButton<String>(
           menuWidth: MediaQuery.of(context).size.width * 0.175,
           borderRadius: BorderRadius.circular(20),
           isExpanded: true,
@@ -132,39 +119,38 @@ class _SipBranchDropdownState extends State<SipBranchDropdown> {
             textAlign: TextAlign.center,
             style: GlobalFont.smallfontR,
           ),
-          value: value == '' ? null : value,
+          value: selectedValue,
           icon: const Icon(
             Icons.arrow_drop_down_rounded,
             size: 15,
             color: Colors.black,
           ),
-          items: widget.disable == true
+          items: widget.disable == true || widget.listData.isEmpty
               ? null
-              : widget.listData.asMap().entries.map((entry) {
-                  // final int index = entry.key;
-                  final data = entry.value;
-
-                  return DropdownMenuItem(
-                    value: data,
+              : widget.listData.map((data) {
+                  return DropdownMenuItem<String>(
+                    value: data.toString(),
                     child: Text(
-                      data,
+                      data.toString(),
                       textAlign: TextAlign.center,
                       style: GlobalFont.smallfontRBold,
                       overflow: TextOverflow.ellipsis,
                     ),
                   );
                 }).toList(),
-          onChanged: (newValues) async {
-            if (value != newValues) {
-              setState(() => value = newValues.toString());
-              await widget.handle(newValues);
-              try {
-                await state.loadSipShops(branch: newValues.toString());
-              } catch (e) {
-                print('loadSipShops Error: $e');
-              }
-            }
-          },
+          onChanged: widget.disable == true || widget.listData.isEmpty
+              ? null
+              : (newValues) async {
+                  if (newValues != null && value != newValues.toString()) {
+                    setState(() => value = newValues.toString());
+                    await widget.handle(newValues.toString());
+                    try {
+                      await state.loadSipShops(branch: newValues.toString());
+                    } catch (e) {
+                      print('loadSipShops Error: $e');
+                    }
+                  }
+                },
         ),
       );
     }

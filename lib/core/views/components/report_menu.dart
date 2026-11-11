@@ -14,22 +14,58 @@ class ReportMenuComponent extends HookWidget {
   Widget build(BuildContext context) {
     useEffect(() => null);
     final state = Provider.of<MenuState>(context);
+    if (state.getEntryLevelId.trim() == '50') {
+      return const SizedBox.shrink();
+    }
 
     return SizedBox(
       width: double.infinity,
       child: SingleChildScrollView(
-        child: Wrap(
-          spacing: 24.0,
-          runSpacing: 24.0,
-          alignment: WrapAlignment.start,
-          children: [
-            if (state.getSubHeaderList.contains('300'))
-              _buildMenuItem(context, 'assets/images/progress-report.png', 'Report', RoutesConstant.report, 'report'),
-            if (state.getSubHeaderList.contains('304'))
-              _buildMenuItem(context, 'assets/images/img_dailytask.png', 'Riwayat Absensi', RoutesConstant.absentHistory, 'attendance'),
-            if (state.getSubHeaderList.contains('305'))
-              _buildMenuItem(context, 'assets/images/salesman.png', 'Cari Salesman', RoutesConstant.browseSalesman, 'salesman list'),
-          ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isNarrow = constraints.maxWidth < 450;
+            final spacing = isNarrow ? 16.0 : 24.0;
+            final itemWidth = isNarrow ? 96.0 : 104.0;
+            final iconSize = isNarrow ? 80.0 : 88.0;
+
+            return Wrap(
+              spacing: spacing,
+              runSpacing: spacing,
+              alignment: WrapAlignment.start,
+              children: [
+                if (state.getSubHeaderList.contains('300'))
+                  _buildMenuItem(
+                    context,
+                    'assets/images/progress-report.png',
+                    'Report',
+                    RoutesConstant.report,
+                    'report',
+                    itemWidth: itemWidth,
+                    iconSize: iconSize,
+                  ),
+                if (state.getSubHeaderList.contains('304'))
+                  _buildMenuItem(
+                    context,
+                    'assets/images/img_dailytask.png',
+                    'Riwayat Absensi',
+                    RoutesConstant.absentHistory,
+                    'attendance',
+                    itemWidth: itemWidth,
+                    iconSize: iconSize,
+                  ),
+                if (state.getSubHeaderList.contains('305'))
+                  _buildMenuItem(
+                    context,
+                    'assets/images/salesman.png',
+                    'Cari Salesman',
+                    RoutesConstant.browseSalesman,
+                    'salesman list',
+                    itemWidth: itemWidth,
+                    iconSize: iconSize,
+                  ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -40,19 +76,29 @@ class ReportMenuComponent extends HookWidget {
     String imagePath,
     String tooltip,
     String route,
-    String menuName,
-  ) {
+    String menuName, {
+    required double itemWidth,
+    required double iconSize,
+  }) {
     return SizedBox(
-      width: 100,
+      width: itemWidth,
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _buildMenuIcon(context, imagePath, tooltip, route, menuName),
-          const SizedBox(height: 8),
+          _buildMenuIcon(context, imagePath, tooltip, route, menuName, iconSize: iconSize),
+          const SizedBox(height: 10),
           Text(
             tooltip,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 12),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+              height: 1.25,
+            ),
           ),
         ],
       ),
@@ -64,19 +110,21 @@ class ReportMenuComponent extends HookWidget {
     String imagePath,
     String tooltip,
     String route,
-    String menuName,
-  ) {
+    String menuName, {
+    required double iconSize,
+  }) {
     final isHovered = ValueNotifier<bool>(false);
 
     return MouseRegion(
+      cursor: SystemMouseCursors.click,
       onEnter: (_) => isHovered.value = true,
       onExit: (_) => isHovered.value = false,
       child: ValueListenableBuilder<bool>(
         valueListenable: isHovered,
         builder: (context, hovered, child) {
           return AnimatedContainer(
-            width: 88.0,
-            height: 88.0,
+            width: iconSize,
+            height: iconSize,
             duration: const Duration(milliseconds: 150),
             decoration: BoxDecoration(
               color: hovered ? AppColors.secondaryMaroon : AppColors.darkGrey,
@@ -99,21 +147,13 @@ class ReportMenuComponent extends HookWidget {
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(16),
-                onTap: () async {
-                  final state = Provider.of<MenuState>(context, listen: false);
+                onTap: () {
                   if (tooltip == 'Dashboard Service') {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) => ServiceDialogFilter(),
                     );
-                  } else if (menuName == 'attendance') {
-                    await state.resetAbsentHistory();
-                  } else if (menuName == 'salesman list') {
-                    await state.resetAbsentHistory();
-                    state.setSearchTriggerNotifier(false);
-                  }
-
-                  if (context.mounted) {
+                  } else {
                     context.goNamed(route);
                   }
                 },

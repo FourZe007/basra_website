@@ -65,7 +65,7 @@ class _DatepickerCustomState extends State<DatepickerCustom> {
         onTap: () => widget.readOnly ? null : _selectDate(context),
         child: Container(
           height: 34,
-          padding: const EdgeInsets.only(left: 6, top: 2, bottom: 3),
+          padding: const EdgeInsets.only(left: 6, right: 6, top: 2, bottom: 3),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: widget.readOnly ? Colors.white60 : Colors.transparent,
@@ -80,10 +80,14 @@ class _DatepickerCustomState extends State<DatepickerCustom> {
                 child: Icon(Icons.date_range_rounded, size: 19),
               ),
               const SizedBox(width: 7),
-              Text(
-                Format.tanggalFormat(tgl),
-                style: const TextStyle(fontSize: 13, letterSpacing: 0.3),
-                textAlign: TextAlign.left,
+              Expanded(
+                child: Text(
+                  Format.tanggalFormat(tgl),
+                  style: const TextStyle(fontSize: 13, letterSpacing: 0.3),
+                  textAlign: TextAlign.left,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),

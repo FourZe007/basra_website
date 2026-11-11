@@ -23,50 +23,92 @@ class ActivityMenuComponent extends HookWidget {
     if (level != '53' && level != '00') {
       return const SizedBox.shrink();
     }
-    
+
     return SizedBox(
       width: double.infinity,
       child: SingleChildScrollView(
-        child: Wrap(
-          spacing: 24.0,
-          runSpacing: 24.0,
-          alignment: WrapAlignment.start,
-          children: [
-            if (state.getSubHeaderList.contains('100')) _buildMenuItem(context, 'assets/images/maps.png', 'Peta', RoutesConstant.map, state),
-            if (state.getSubHeaderList.contains('101')) _buildMenuItem(context, 'assets/images/destination.png', 'Aktivitas Sales', RoutesConstant.salesActivities, state),
-            if (state.getSubHeaderList.contains('110')) _buildMenuItem(context, 'assets/images/activity.png', 'Aktivitas Manager', RoutesConstant.managerActivities, state),
-            if (state.getSubHeaderList.contains('110')) _buildMenuItem(context, 'assets/images/destination.png', 'Dashboard Pemetaan', RoutesConstant.filterPemetaan, state),
-            if (state.getSubHeaderList.contains('111')) _buildMenuItem(context, 'assets/images/weekly.png', 'Aktivitas Mingguan', RoutesConstant.weeklyActivitiesReport, state),
-            if (state.getSubHeaderList.contains('113')) _buildMenuItem(context, 'assets/images/subdealer.png', 'Aktivitas SubDealer', RoutesConstant.historyAktivitasSubDealer, state),
-            if (state.getSubHeaderList.contains('112')) _buildMenuItem(context, 'assets/images/coin.png', 'Points', RoutesConstant.filterPoint, state),
-            if (state.getSubHeaderList.contains('110')) _buildMenuItem(context, 'assets/images/goal.png', 'Import Target', RoutesConstant.importTargetActivities, state),
-            if (state.getSubHeaderList.contains('110')) _buildMenuItem(context, 'assets/images/progress-report.png', 'Target VS Result', RoutesConstant.targetResult, state),
-            if (state.getSubHeaderList.contains('114')) _buildMenuItem(context, 'assets/images/dashboard.png', 'Dashboard Sales', RoutesConstant.dashboardsales, state),
-            if (state.getSubHeaderList.contains('115')) _buildMenuItem(context, 'assets/images/operation-dealer.png', 'Operational Dealer', RoutesConstant.operationaldealer, state),
-            if (state.getSubHeaderList.contains('116')) _buildMenuItem(context, 'assets/images/dashboard-3.png', 'Dashboard Google Review', RoutesConstant.dashboardgooglereview, state),
-            if (state.getSubHeaderList.contains('117')) _buildMenuItem(context, 'assets/images/operational-sales-spv.png', 'Operational Sales Supervisor', RoutesConstant.operationalsalessupervisor, state),
-            if (state.getSubHeaderList.contains('118')) _buildMenuItem(context, 'assets/images/manpower-condition.png', 'Manpower Condition', RoutesConstant.manpowercondition, state),
-            if (state.getSubHeaderList.contains('119')) _buildMenuItem(context, 'assets/images/network-report.png', 'Network Report', RoutesConstant.networkreport, state),
-            if (state.getSubHeaderList.contains('120')) _buildMenuItem(context, 'assets/images/dashboard-2.png', 'Dashboard Sparepart STSJ', RoutesConstant.dashboardSparepartstsj, state),
-            if (state.getSubHeaderList.contains('121')) _buildMenuItem(context, 'assets/images/dashboard-2.png', 'Dashboard Sparepart SAMP', RoutesConstant.dashboardSparepartsamp, state),
-          ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isNarrow = constraints.maxWidth < 450;
+            final spacing = isNarrow ? 16.0 : 24.0;
+            final itemWidth = isNarrow ? 96.0 : 104.0;
+            final iconSize = isNarrow ? 80.0 : 88.0;
+
+            return Wrap(
+              spacing: spacing,
+              runSpacing: spacing,
+              alignment: WrapAlignment.start,
+              children: [
+                if (state.getSubHeaderList.contains('100'))
+                  _buildMenuItem(context, 'assets/images/maps.png', 'Peta', RoutesConstant.map, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('101'))
+                  _buildMenuItem(context, 'assets/images/destination.png', 'Aktivitas Sales', RoutesConstant.salesActivities, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('110'))
+                  _buildMenuItem(context, 'assets/images/activity.png', 'Aktivitas Manager', RoutesConstant.managerActivities, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('110'))
+                  _buildMenuItem(context, 'assets/images/destination.png', 'Dashboard Pemetaan', RoutesConstant.filterPemetaan, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('111'))
+                  _buildMenuItem(context, 'assets/images/weekly.png', 'Aktivitas Mingguan', RoutesConstant.weeklyActivitiesReport, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('113'))
+                  _buildMenuItem(context, 'assets/images/subdealer.png', 'Aktivitas SubDealer', RoutesConstant.historyAktivitasSubDealer, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('112'))
+                  _buildMenuItem(context, 'assets/images/coin.png', 'Points', RoutesConstant.filterPoint, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('110'))
+                  _buildMenuItem(context, 'assets/images/goal.png', 'Import Target', RoutesConstant.importTargetActivities, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('110'))
+                  _buildMenuItem(context, 'assets/images/progress-report.png', 'Target VS Result', RoutesConstant.targetResult, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('114'))
+                  _buildMenuItem(context, 'assets/images/dashboard.png', 'Dashboard Sales', RoutesConstant.dashboardsales, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('115'))
+                  _buildMenuItem(context, 'assets/images/operation-dealer.png', 'Operational Dealer', RoutesConstant.operationaldealer, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('116'))
+                  _buildMenuItem(context, 'assets/images/dashboard-3.png', 'Dashboard Google Review', RoutesConstant.dashboardgooglereview, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('117'))
+                  _buildMenuItem(context, 'assets/images/operational-sales-spv.png', 'Operational Sales Supervisor', RoutesConstant.operationalsalessupervisor, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('118'))
+                  _buildMenuItem(context, 'assets/images/manpower-condition.png', 'Manpower Condition', RoutesConstant.manpowercondition, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('119'))
+                  _buildMenuItem(context, 'assets/images/network-report.png', 'Network Report', RoutesConstant.networkreport, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('120'))
+                  _buildMenuItem(context, 'assets/images/dashboard-2.png', 'Dashboard Sparepart STSJ', RoutesConstant.dashboardSparepartstsj, state, itemWidth: itemWidth, iconSize: iconSize),
+                if (state.getSubHeaderList.contains('121'))
+                  _buildMenuItem(context, 'assets/images/dashboard-2.png', 'Dashboard Sparepart SAMP', RoutesConstant.dashboardSparepartsamp, state, itemWidth: itemWidth, iconSize: iconSize),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _buildMenuItem(BuildContext context, String imagePath, String tooltip, String route, MenuState state) {
+  Widget _buildMenuItem(
+    BuildContext context,
+    String imagePath,
+    String tooltip,
+    String route,
+    MenuState state, {
+    required double itemWidth,
+    required double iconSize,
+  }) {
     return SizedBox(
-      width: 100,
+      width: itemWidth,
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _buildMenuIcon(context, imagePath, tooltip, route, state),
-          const SizedBox(height: 8),
+          _buildMenuIcon(context, imagePath, tooltip, route, state, iconSize: iconSize),
+          const SizedBox(height: 10),
           Text(
             tooltip,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 12),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+              height: 1.25,
+            ),
           ),
         ],
       ),
@@ -78,8 +120,9 @@ class ActivityMenuComponent extends HookWidget {
     String imagePath,
     String tooltip,
     String route,
-    MenuState state,
-  ) {
+    MenuState state, {
+    required double iconSize,
+  }) {
     final isHovered = ValueNotifier<bool>(false);
 
     Future<void> handleTap() async {
@@ -102,49 +145,35 @@ class ActivityMenuComponent extends HookWidget {
           }
         });
       } else if (tooltip == 'Points') {
-        await state.fetchProvinces().then((_) {
-          if (context.mounted) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) => FilterPage(),
-            );
-          }
-        });
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => FilterPage(),
+        );
       } else if (tooltip == 'Target VS Result') {
-        await state.fetchProvinces().then((_) {
-          if (context.mounted) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) => PointVsTarget(),
-            );
-          }
-        });
-      } else if (tooltip == 'Network') {
-        try {
-          await launchUrl(Uri.parse(googleFormNetwork));
-        } catch (e) {
-          debugPrint(e.toString());
-        }
-      } else if (tooltip == 'Network2') {
-        try {
-          await launchUrl(Uri.parse(petunjukNetwork));
-        } catch (e) {
-          debugPrint(e.toString());
-        }
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => PointVsTarget(),
+        );
+      } else if (tooltip == 'Dashboard Google Review') {
+        launchUrl(
+          Uri.parse(linkBIGoogleReview),
+          mode: LaunchMode.platformDefault,
+        );
       } else {
         context.goNamed(route);
       }
     }
 
     return MouseRegion(
+      cursor: SystemMouseCursors.click,
       onEnter: (_) => isHovered.value = true,
       onExit: (_) => isHovered.value = false,
       child: ValueListenableBuilder<bool>(
         valueListenable: isHovered,
-        builder: (context, hovered, _) {
+        builder: (context, hovered, child) {
           return AnimatedContainer(
-            width: 88.0,
-            height: 88.0,
+            width: iconSize,
+            height: iconSize,
             duration: const Duration(milliseconds: 150),
             decoration: BoxDecoration(
               color: hovered ? AppColors.secondaryMaroon : AppColors.darkGrey,

@@ -14,26 +14,73 @@ class ToolsMenuComponent extends HookWidget {
   Widget build(BuildContext context) {
     useEffect(() => null);
     final provider = Provider.of<MenuState>(context);
+    if (provider.getEntryLevelId.trim() == '50') {
+      return const SizedBox.shrink();
+    }
 
     return SizedBox(
       width: double.infinity,
       child: SingleChildScrollView(
-        child: Wrap(
-          spacing: 24.0,
-          runSpacing: 24.0,
-          alignment: WrapAlignment.start,
-          children: [
-            if (provider.getSubHeaderList.contains('400'))
-              _buildMenuItem(context, 'assets/images/service.png', 'Service', RoutesConstant.service),
-            if (provider.getSubHeaderList.contains('401'))
-              _buildMenuItem(context, 'assets/images/stock.png', 'Free Stock', RoutesConstant.branchFreeStock),
-            if (provider.getSubHeaderList.contains('402'))
-              _buildMenuItem(context, 'assets/images/import.png', 'Import Alokasi Per BM', RoutesConstant.importAlokasiBM),
-            if (provider.getSubHeaderList.contains('403'))
-              _buildMenuItem(context, 'assets/images/edit.png', 'Koleksi Alokasi Per BM', RoutesConstant.koreksiAlokasiBM),
-            if (provider.getSubHeaderList.contains('406'))
-              _buildMenuItem(context, 'assets/images/import.png', 'Import Cetak QR', RoutesConstant.importCetakQR),
-          ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isNarrow = constraints.maxWidth < 450;
+            final spacing = isNarrow ? 16.0 : 24.0;
+            final itemWidth = isNarrow ? 96.0 : 104.0;
+            final iconSize = isNarrow ? 80.0 : 88.0;
+
+            return Wrap(
+              spacing: spacing,
+              runSpacing: spacing,
+              alignment: WrapAlignment.start,
+              children: [
+                if (provider.getSubHeaderList.contains('400'))
+                  _buildMenuItem(
+                    context,
+                    'assets/images/service.png',
+                    'Service',
+                    RoutesConstant.service,
+                    itemWidth: itemWidth,
+                    iconSize: iconSize,
+                  ),
+                if (provider.getSubHeaderList.contains('401'))
+                  _buildMenuItem(
+                    context,
+                    'assets/images/stock.png',
+                    'Free Stock',
+                    RoutesConstant.branchFreeStock,
+                    itemWidth: itemWidth,
+                    iconSize: iconSize,
+                  ),
+                if (provider.getSubHeaderList.contains('402'))
+                  _buildMenuItem(
+                    context,
+                    'assets/images/import.png',
+                    'Import Alokasi Per BM',
+                    RoutesConstant.importAlokasiBM,
+                    itemWidth: itemWidth,
+                    iconSize: iconSize,
+                  ),
+                if (provider.getSubHeaderList.contains('403'))
+                  _buildMenuItem(
+                    context,
+                    'assets/images/edit.png',
+                    'Koleksi Alokasi Per BM',
+                    RoutesConstant.koreksiAlokasiBM,
+                    itemWidth: itemWidth,
+                    iconSize: iconSize,
+                  ),
+                if (provider.getSubHeaderList.contains('406'))
+                  _buildMenuItem(
+                    context,
+                    'assets/images/import.png',
+                    'Import Cetak QR',
+                    RoutesConstant.importCetakQR,
+                    itemWidth: itemWidth,
+                    iconSize: iconSize,
+                  ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -43,19 +90,29 @@ class ToolsMenuComponent extends HookWidget {
     BuildContext context,
     String imagePath,
     String tooltip,
-    String route,
-  ) {
+    String route, {
+    required double itemWidth,
+    required double iconSize,
+  }) {
     return SizedBox(
-      width: 100,
+      width: itemWidth,
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _buildMenuIcon(context, imagePath, tooltip, route),
-          const SizedBox(height: 8),
+          _buildMenuIcon(context, imagePath, tooltip, route, iconSize: iconSize),
+          const SizedBox(height: 10),
           Text(
             tooltip,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 12),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+              height: 1.25,
+            ),
           ),
         ],
       ),
@@ -66,19 +123,21 @@ class ToolsMenuComponent extends HookWidget {
     BuildContext context,
     String imagePath,
     String tooltip,
-    String route,
-  ) {
+    String route, {
+    required double iconSize,
+  }) {
     final isHovered = ValueNotifier<bool>(false);
 
     return MouseRegion(
+      cursor: SystemMouseCursors.click,
       onEnter: (_) => isHovered.value = true,
       onExit: (_) => isHovered.value = false,
       child: ValueListenableBuilder<bool>(
         valueListenable: isHovered,
         builder: (context, hovered, child) {
           return AnimatedContainer(
-            width: 88.0,
-            height: 88.0,
+            width: iconSize,
+            height: iconSize,
             duration: const Duration(milliseconds: 150),
             decoration: BoxDecoration(
               color: hovered ? AppColors.secondaryMaroon : AppColors.darkGrey,
@@ -101,15 +160,15 @@ class ToolsMenuComponent extends HookWidget {
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(16),
-                onTap: () async {
+                onTap: () {
                   if (tooltip == 'Dashboard Service') {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) => ServiceDialogFilter(),
                     );
+                  } else {
+                    context.goNamed(route);
                   }
-
-                  if (context.mounted) context.goNamed(route);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

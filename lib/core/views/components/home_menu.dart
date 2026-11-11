@@ -24,6 +24,7 @@ class HomeMenuComponent extends HookWidget {
     final stAuth = useState(false);
     final spAuth = useState(false);
     final sprAuth = useState(false);
+    final rmAuth = useState(false);
 
     final loadingmenu = useState(true);
 
@@ -47,6 +48,7 @@ class HomeMenuComponent extends HookWidget {
         // print('RSSM Access: ${rssmAuth.value}');
         sprAuth.value = prefs.getBool('Spr') ?? false;
         // print('Spr Access: ${sprAuth.value}');
+        rmAuth.value = prefs.getBool('RM') ?? false;
 
         loadingmenu.value = false;
       } catch (e) {
@@ -71,6 +73,7 @@ class HomeMenuComponent extends HookWidget {
       ssAuth.value = Auth.ssAuth;
       stAuth.value = Auth.stAuth;
       sprAuth.value = Auth.spAuth;
+      rmAuth.value = Auth.rmAuth;
 
       return null;
     }, []);
@@ -153,6 +156,14 @@ class HomeMenuComponent extends HookWidget {
                   sprAuth.value,
                   homeMenuState,
                 ),
+                _buildMenuIcon(
+                  'assets/images/RM.png',
+                  'RM',
+                  'RODA MEGAH',
+                  RoutesConstant.menu,
+                  rmAuth.value,
+                  homeMenuState,
+                ),
               ],
             ),
           );
@@ -200,6 +211,7 @@ class HomeMenuComponent extends HookWidget {
         // Note --> disable for a while to display dashboard menu as the initial page
         // Delivery Page is still considered as global page who can be accessed by all users
         String category = '';
+        final isLevel50 = state.getEntryLevelId.trim() == '50';
 
         for (var userAccess in access) {
           if (userAccess.isAllowView == 1) {
@@ -208,7 +220,7 @@ class HomeMenuComponent extends HookWidget {
           }
         }
 
-        if (category == 'DASHBOARD') {
+        if (isLevel50 || category == 'DASHBOARD') {
           state.setStaticMenuNotifier('dashboard');
         } else if (category == 'SALES ACTIVITY') {
           state.setStaticMenuNotifier('activity');
@@ -366,6 +378,11 @@ class HomeMenuComponent extends HookWidget {
                               height: 22,
                               width: 22,
                               fit: BoxFit.contain,
+                              errorBuilder: (_, __, ___) => const Icon(
+                                Icons.business_rounded,
+                                size: 20,
+                                color: AppColors.accentYellow,
+                              ),
                             ),
                           ),
                           const SizedBox(width: 8),

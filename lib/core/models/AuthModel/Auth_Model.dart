@@ -15,6 +15,7 @@ class Auth {
     "ST",
     "RSSM",
     "SPr",
+    "RM",
   ];
 
   static Map<String, bool> accessGranted = {
@@ -26,6 +27,7 @@ class Auth {
     "ST": false,
     "RSSM": false,
     "SPr": false,
+    "RM": false,
   };
   static bool rssmAuth = false; // Roda Sakti Surya Megah
   static bool stsjAuth = false; // SURYA TIMUR SAKTI JATIM
@@ -36,6 +38,7 @@ class Auth {
   static bool stAuth = false; //Surya Terang
   static bool spAuth = false; // Surya Prima
   static bool sprauth = false; //Surya Pratama
+  static bool rmAuth = false; // Roda Megah
 
   // static void updateValuesFromSharedPreferences() async {
   //   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,6 +62,7 @@ class Auth {
       "ST": false,
       "RSSM": false,
       "SPr": false,
+      "RM": false,
     };
 
     rssmAuth = false; // Roda Sakti Surya Megah
@@ -69,6 +73,7 @@ class Auth {
     stAuth = false; //Surya Terang
     spAuth = false; // Surya Prima
     sprauth = false; //Surya Pratama
+    rmAuth = false; // Roda Megah
   }
 
   static void updateBasedOnDataDT(List<DataDT> dataDT) {
@@ -95,6 +100,7 @@ class Auth {
     ssAuth = accessGranted["SS"] ?? false;
     spAuth = accessGranted["SP"] ?? false;
     sprauth = accessGranted["SPr"] ?? false;
+    rmAuth = accessGranted["RM"] ?? false;
   }
 
   static Future<void> saveDataToSharedPreferences(List<DataDT> dataDT) async {
@@ -128,6 +134,7 @@ class Auth {
     stAuth = accessGranted["ST"] ?? false;
     rssmAuth = accessGranted["RSSM"] ?? false;
     sprauth = accessGranted["SPr"] ?? false;
+    rmAuth = accessGranted["RM"] ?? false;
 
     // Simpan nilai baru ke SharedPreferences
     await prefs.setBool('STSJ', stsjAuth);
@@ -138,6 +145,7 @@ class Auth {
     await prefs.setBool('SS', ssAuth);
     await prefs.setBool('SP', spAuth);
     await prefs.setBool('Spr', sprauth);
+    await prefs.setBool('RM', rmAuth);
 
     print('Data disimpan dalam SharedPreferences.');
   }

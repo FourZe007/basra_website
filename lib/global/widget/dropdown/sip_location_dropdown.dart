@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stsj/core/providers/Provider.dart';
@@ -28,32 +26,33 @@ class SipLocationDropdown extends StatefulWidget {
 }
 
 class _SipLocationDropdownState extends State<SipLocationDropdown> {
-  String teksDisable = '';
   String value = '';
 
   @override
   void initState() {
-    value = widget.inputan;
-    print('Value: $value');
-    // TODO: implement initState
     super.initState();
+    value = widget.inputan;
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
+  void didUpdateWidget(covariant SipLocationDropdown oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.inputan != value) {
+      setState(() {
+        value = widget.inputan;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<MenuState>(context);
-    // print('SIP Dropdown provider: ${state.getSipLocationList.length}');
-    // print('SIP Dropdown data: ${widget.listData.length}');
+    final selectedValue =
+        (value.isNotEmpty && widget.listData.contains(value)) ? value : null;
 
     if (!widget.isMobile) {
       return DropdownButtonHideUnderline(
-        child: DropdownButton(
+        child: DropdownButton<String>(
           menuWidth: MediaQuery.of(context).size.width * 0.175,
           borderRadius: BorderRadius.circular(20),
           isExpanded: true,
@@ -67,42 +66,45 @@ class _SipLocationDropdownState extends State<SipLocationDropdown> {
               fontFamily: 'Metropolis',
             ),
           ),
-          value: value == '' ? null : value,
+          value: selectedValue,
           icon: const Icon(
             Icons.arrow_drop_down_rounded,
             size: 25,
             color: Colors.black,
           ),
-          items: widget.disable == true
+          items: widget.disable == true || widget.listData.isEmpty
               ? null
-              : widget.listData.asMap().entries.map((entry) {
-                  // final index = entry.key;
-                  final data = entry.value;
-
-                  return DropdownMenuItem(
-                    value: data,
+              : widget.listData.map((data) {
+                  return DropdownMenuItem<String>(
+                    value: data.toString(),
                     child: Text(
-                      data,
+                      data.toString(),
                       textAlign: TextAlign.center,
                       style: GlobalFont.mediumfontR,
                       overflow: TextOverflow.ellipsis,
                     ),
                   );
                 }).toList(),
-          onChanged: (newValues) async {
-            if (value != newValues) {
-              setState(() {
-                value = newValues.toString();
-              });
-              await widget.handle(newValues);
-              state.filterSipSalesman();
-            }
-          },
+          onChanged: widget.disable == true || widget.listData.isEmpty
+              ? null
+              : (newValues) async {
+                  if (newValues != null && value != newValues.toString()) {
+                    setState(() {
+                      value = newValues.toString();
+                    });
+                    await widget.handle(newValues.toString());
+                    try {
+                      state.filterSipSalesman();
+                    } catch (e) {
+                      print('filterSipSalesman error: $e');
+                    }
+                  }
+                },
         ),
       );
     } else {
       return DropdownButtonHideUnderline(
-        child: DropdownButton(
+        child: DropdownButton<String>(
           menuWidth: MediaQuery.of(context).size.width * 0.175,
           borderRadius: BorderRadius.circular(20),
           isExpanded: true,
@@ -112,37 +114,40 @@ class _SipLocationDropdownState extends State<SipLocationDropdown> {
             textAlign: TextAlign.center,
             style: GlobalFont.smallfontR,
           ),
-          value: value == '' ? null : value,
+          value: selectedValue,
           icon: const Icon(
             Icons.arrow_drop_down_rounded,
             size: 15,
             color: Colors.black,
           ),
-          items: widget.disable == true
+          items: widget.disable == true || widget.listData.isEmpty
               ? null
-              : widget.listData.asMap().entries.map((entry) {
-                  // final int index = entry.key;
-                  final data = entry.value;
-
-                  return DropdownMenuItem(
-                    value: data,
+              : widget.listData.map((data) {
+                  return DropdownMenuItem<String>(
+                    value: data.toString(),
                     child: Text(
-                      data,
+                      data.toString(),
                       textAlign: TextAlign.center,
                       style: GlobalFont.smallfontRBold,
                       overflow: TextOverflow.ellipsis,
                     ),
                   );
                 }).toList(),
-          onChanged: (newValues) async {
-            if (value != newValues) {
-              setState(() {
-                value = newValues.toString();
-              });
-              await widget.handle(newValues);
-              state.filterSipSalesman();
-            }
-          },
+          onChanged: widget.disable == true || widget.listData.isEmpty
+              ? null
+              : (newValues) async {
+                  if (newValues != null && value != newValues.toString()) {
+                    setState(() {
+                      value = newValues.toString();
+                    });
+                    await widget.handle(newValues.toString());
+                    try {
+                      state.filterSipSalesman();
+                    } catch (e) {
+                      print('filterSipSalesman error: $e');
+                    }
+                  }
+                },
         ),
       );
     }

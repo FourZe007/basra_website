@@ -40,6 +40,7 @@ import 'package:stsj/dashboard-fixup/pages/dashboard3_page.dart';
 import 'package:stsj/dashboard-fixup/pages/dashboard4_page.dart';
 import 'package:stsj/dashboard-fixup/pages/dashboard5_page.dart';
 import 'package:stsj/dashboard-fixup/pages/import_excel.dart';
+import 'package:stsj/booking-service/booking_service_main.dart';
 import 'package:stsj/dashboard_pemetaan/pages/filter_dashboard.dart';
 import 'package:stsj/external_web/pages/monitoring_network.dart';
 import 'package:stsj/external_web/pages/p_web_bi_mkt_google_review.dart';
@@ -154,6 +155,13 @@ class RouterSettings {
             path: 'importExcel',
             pageBuilder: (context, state) {
               return MaterialPage(child: ImportExcel());
+            },
+          ),
+          GoRoute(
+            name: RoutesConstant.bookingService,
+            path: 'bookingService',
+            pageBuilder: (context, state) {
+              return const MaterialPage(child: BookingServiceMainPage());
             },
           ),
           GoRoute(

@@ -115,6 +115,7 @@ class MenuState with ChangeNotifier {
       companyAuthorization.add('Spr');
       companyAuthorization.add('SPr');
     }
+    if (prefs.getBool('RM') ?? false) companyAuthorization.add('RM');
     notifyListeners();
   }
 
@@ -1502,8 +1503,9 @@ class MenuState with ChangeNotifier {
     setSelectedShop('');
     setSelectedLocation('');
     setSelectedSalesman('');
+    sipShopNameList.clear();
+    sipLocationNameList.clear();
     setSipSalesmanHistoryList([]);
-    notifyListeners();
     searchTriggerNotifier.value = false;
     notifyListeners();
   }
@@ -1528,12 +1530,20 @@ class MenuState with ChangeNotifier {
 
   void setSelectedBranch(String value) {
     selectedBranch = value;
+    selectedShop = '';
+    selectedLocation = '';
+    selectedSalesman = '';
+    sipShopNameList.clear();
+    sipLocationNameList.clear();
     searchTriggerNotifier.value = false;
     notifyListeners();
   }
 
   void setSelectedShop(String value) {
     selectedShop = value;
+    selectedLocation = '';
+    selectedSalesman = '';
+    sipLocationNameList.clear();
     searchTriggerNotifier.value = false;
     notifyListeners();
   }
@@ -1566,14 +1576,31 @@ class MenuState with ChangeNotifier {
 
   Future<void> loadSipBranches() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // log('SIP Branch Name List (before): ${getSipBranchNameList.length}');
-    if (sipBranchNameList.isNotEmpty) {
-      // log('SIP Branch Name List is not empty');
-      sipBranchNameList = [];
-      // log('SIP Branch Name List: ${getSipBranchNameList.length}');
+    final company = getCompanyName.isNotEmpty
+        ? getCompanyName
+        : (prefs.getString('CompanyName') ?? '');
+
+    if (sipBranchList.isEmpty && company.isNotEmpty) {
+      await fetchSipSalesBranches(company);
+      return;
     }
 
-    sipBranchNameList.addAll(prefs.getStringList('sipBranches') ?? []);
+    final cached = prefs.getStringList('sipBranches') ?? [];
+    if (cached.isNotEmpty) {
+      sipBranchNameList = cached
+          .where((name) => name.trim().isNotEmpty)
+          .toSet()
+          .toList();
+    } else if (sipBranchList.isNotEmpty) {
+      sipBranchNameList = sipBranchList
+          .map((e) => e.branchName)
+          .where((name) => name.trim().isNotEmpty)
+          .toSet()
+          .toList();
+    } else if (company.isNotEmpty) {
+      await fetchSipSalesBranches(company);
+      return;
+    }
     notifyListeners();
     log('SIP Branch Name List: ${getSipBranchNameList.length}');
   }
@@ -1581,36 +1608,34 @@ class MenuState with ChangeNotifier {
   Future<void> fetchSipSalesBranches(String companyCode) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('UserID') ?? '';
+    final company = companyCode.isNotEmpty
+        ? companyCode
+        : (getCompanyName.isNotEmpty
+            ? getCompanyName
+            : (prefs.getString('CompanyName') ?? ''));
+
     print('User Idxx: $userId');
-    print('Company Codexx: $companyCode');
+    print('Company Codexx: $company');
 
     sipBranchList.clear();
-    sipBranchList.addAll(await GlobalAPI.getSipSalesBranches(
-      companyCode,
+    final branches = await GlobalAPI.getSipSalesBranches(
+      company,
       userId,
-    ));
+    );
+    sipBranchList.addAll(branches);
     print('SIP Branch List: ${sipBranchList.length}');
     for (var i in sipBranchList) {
       print(i.branchName);
     }
 
-    // await prefs.setStringList(
-    //   'sipBranches',
-    //   sipBranchList.map((e) => e.branchName).toList(),
-    // );
+    sipBranchNameList = sipBranchList
+        .map((e) => e.branchName)
+        .where((name) => name.trim().isNotEmpty)
+        .toSet()
+        .toList();
 
-    if (prefs.getStringList('sipBranches') == null ||
-        prefs.getStringList('sipBranches')!.isEmpty) {
-      log('SIP Branch Name List is empty');
-      await prefs.setStringList(
-        'sipBranches',
-        sipBranchList.map((e) => e.branchName).toList(),
-      );
-    } else {
-      log('SIP Branch Name List is not empty');
-    }
-
-    await loadSipBranches();
+    await prefs.setStringList('sipBranches', sipBranchNameList);
+    notifyListeners();
   }
 
   List<SipSalesShopsModel> sipShopList = [];
@@ -1619,41 +1644,43 @@ class MenuState with ChangeNotifier {
   List<String> get getSipShopNameList => sipShopNameList;
 
   Future<void> loadSipShops({String branch = ''}) async {
-    // print('Branch: $branch');
-    // log('SIP Branch Name List (before): ${getSipShopList.length}');
-    if (sipShopNameList.isNotEmpty) {
-      // log('SIP Branch Name List is not empty');
-      sipShopNameList.clear();
-      // log('SIP Branch Name List: ${getSipShopList.length}');
-    }
+    sipShopNameList.clear();
+    selectedShop = '';
+    selectedLocation = '';
+    sipLocationNameList.clear();
+    notifyListeners();
 
-    await fetchSipSalesShops(branch).then((list) {
-      sipShopNameList.addAll(list.map((e) => e.shopName).toList());
-      notifyListeners();
-    });
-    // log('SIP Branch Name List (after): ${getSipShopList.length}');
+    final b = branch.isNotEmpty ? branch : getSelectedBranch;
+    if (b.trim().isEmpty) return;
+
+    final list = await fetchSipSalesShops(b);
+    sipShopNameList = list
+        .map((e) => e.shopName)
+        .where((name) => name.trim().isNotEmpty)
+        .toSet()
+        .toList();
+    notifyListeners();
   }
 
   Future<List<SipSalesShopsModel>> fetchSipSalesShops(String branch) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('UserID') ?? '';
-    final companyCode = prefs.getString('CompanyCode') ?? '';
-    // print('User ID: $userId');
+    final companyCode = getCompanyName.isNotEmpty
+        ? getCompanyName
+        : (prefs.getString('CompanyName') ?? '');
 
-    if (sipBranchList.isEmpty) {
-      // print('SIP Branch List is empty');
-      sipBranchList.addAll(await GlobalAPI.getSipSalesBranches(
-        companyCode,
-        userId,
-      ));
+    if (sipBranchList.isEmpty && companyCode.isNotEmpty) {
+      await fetchSipSalesBranches(companyCode);
     }
 
     sipShopList.clear();
-    sipShopList.addAll(await GlobalAPI.getSipSalesShops(
-      userId,
-      sipBranchList.where((e) => e.branchName == branch).first.branchCode,
-    ));
-    // print('SIP Shop List: ${sipShopList.length}');
+    final matchedBranch = sipBranchList.where((e) => e.branchName == branch);
+    if (matchedBranch.isNotEmpty && matchedBranch.first.branchCode.isNotEmpty) {
+      sipShopList.addAll(await GlobalAPI.getSipSalesShops(
+        userId,
+        matchedBranch.first.branchCode,
+      ));
+    }
 
     return sipShopList;
   }
@@ -1664,19 +1691,21 @@ class MenuState with ChangeNotifier {
   List<String> get getSipLocationNameList => sipLocationNameList;
 
   Future<void> loadSipLocation({String branch = '', String shop = ''}) async {
-    // print('Branch: $branch');
-    // print('Shop: $shop');
-    // log('SIP Branch Name List (before): ${getSipShopList.length}');
-    if (sipLocationNameList.isNotEmpty) {
-      // log('SIP Branch Name List is not empty');
-      sipLocationNameList.clear();
-      // log('SIP Branch Name List: ${getSipShopList.length}');
-    }
+    sipLocationNameList.clear();
+    selectedLocation = '';
+    notifyListeners();
 
-    await fetchSipSalesLocation(branch, shop).then((list) {
-      sipLocationNameList.addAll(list.map((e) => e.locationName).toList());
-      notifyListeners();
-    });
+    final b = branch.isNotEmpty ? branch : getSelectedBranch;
+    final s = shop.isNotEmpty ? shop : getSelectedShop;
+    if (b.trim().isEmpty || s.trim().isEmpty) return;
+
+    final list = await fetchSipSalesLocation(b, s);
+    sipLocationNameList = list
+        .map((e) => e.locationName)
+        .where((name) => name.trim().isNotEmpty)
+        .toSet()
+        .toList();
+    notifyListeners();
   }
 
   Future<List<SipSalesLocationModel>> fetchSipSalesLocation(
@@ -1685,24 +1714,28 @@ class MenuState with ChangeNotifier {
   ) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('UserID') ?? '';
-    final companyCode = prefs.getString('CompanyCode') ?? '';
-    // print('User ID: $userId');
+    final companyCode = getCompanyName.isNotEmpty
+        ? getCompanyName
+        : (prefs.getString('CompanyName') ?? '');
 
-    if (sipBranchList.isEmpty) {
-      // print('SIP Branch List is empty');
-      sipBranchList.addAll(await GlobalAPI.getSipSalesBranches(
-        companyCode,
-        userId,
-      ));
+    if (sipBranchList.isEmpty && companyCode.isNotEmpty) {
+      await fetchSipSalesBranches(companyCode);
     }
 
     sipLocationList.clear();
-    sipLocationList.addAll(await GlobalAPI.getSipSalesLocation(
-      userId,
-      sipBranchList.where((e) => e.branchName == branch).first.branchCode,
-      sipShopList.where((e) => e.shopName == shop).first.shopCode,
-    ));
-    // print('SIP Shop List: ${sipShopList.length}');
+    final matchedBranch = sipBranchList.where((e) => e.branchName == branch);
+    final matchedShop = sipShopList.where((e) => e.shopName == shop);
+
+    if (matchedBranch.isNotEmpty &&
+        matchedBranch.first.branchCode.isNotEmpty &&
+        matchedShop.isNotEmpty &&
+        matchedShop.first.shopCode.isNotEmpty) {
+      sipLocationList.addAll(await GlobalAPI.getSipSalesLocation(
+        userId,
+        matchedBranch.first.branchCode,
+        matchedShop.first.shopCode,
+      ));
+    }
 
     return sipLocationList;
   }
@@ -1738,15 +1771,21 @@ class MenuState with ChangeNotifier {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('UserID') ?? '';
 
-    // print('UserID: $userId');
-    if (branch.isNotEmpty && shop.isNotEmpty && location.isNotEmpty) {
-      branch =
-          sipBranchList.where((e) => e.branchName == branch).first.branchCode;
-      shop = sipShopList.where((e) => e.shopName == shop).first.shopCode;
-      location = sipLocationList
-          .where((e) => e.locationName == location)
-          .first
-          .locationId;
+    String branchCode = '';
+    String shopCode = '';
+    String locationCode = '';
+
+    if (branch.isNotEmpty) {
+      final b = sipBranchList.where((e) => e.branchName == branch);
+      if (b.isNotEmpty) branchCode = b.first.branchCode;
+    }
+    if (shop.isNotEmpty) {
+      final s = sipShopList.where((e) => e.shopName == shop);
+      if (s.isNotEmpty) shopCode = s.first.shopCode;
+    }
+    if (location.isNotEmpty) {
+      final l = sipLocationList.where((e) => e.locationName == location);
+      if (l.isNotEmpty) locationCode = l.first.locationId;
     }
     // print('Branch: $branch');
     // print('Shop: $shop');
@@ -1756,9 +1795,9 @@ class MenuState with ChangeNotifier {
     // Note --> fix the parameter passed to API again!
     temp.addAll(await GlobalAPI.getSipSalesman(
       userId,
-      branch,
-      shop,
-      location,
+      branchCode,
+      shopCode,
+      locationCode,
     ));
     // log('fetch Salesman List: ${temp.length}');
 
@@ -1793,23 +1832,22 @@ class MenuState with ChangeNotifier {
 
     String branchCode = '';
     if (branch.isNotEmpty) {
-      branchCode =
-          sipBranchList.where((e) => e.branchName == branch).first.branchCode;
+      final b = sipBranchList.where((e) => e.branchName == branch);
+      if (b.isNotEmpty) branchCode = b.first.branchCode;
       print('Branch: $branchCode');
     }
 
     String shopCode = '';
     if (shop.isNotEmpty) {
-      shopCode = sipShopList.where((e) => e.shopName == shop).first.shopCode;
+      final s = sipShopList.where((e) => e.shopName == shop);
+      if (s.isNotEmpty) shopCode = s.first.shopCode;
       print('Shop: $shopCode');
     }
 
     String locationCode = '';
     if (location.isNotEmpty) {
-      locationCode = sipLocationList
-          .where((e) => e.locationName == location)
-          .first
-          .locationId;
+      final l = sipLocationList.where((e) => e.locationName == location);
+      if (l.isNotEmpty) locationCode = l.first.locationId;
       print('Location: $locationCode');
     }
 
@@ -1867,21 +1905,20 @@ class MenuState with ChangeNotifier {
     String companyName = prefs.getString('CompanyName') ?? '';
 
     if (branch.isNotEmpty) {
-      branch =
-          sipBranchList.where((e) => e.branchName == branch).first.branchCode;
+      final b = sipBranchList.where((e) => e.branchName == branch);
+      if (b.isNotEmpty) branch = b.first.branchCode;
       print('Branch: $branch');
     }
 
     if (shop.isNotEmpty) {
-      shop = sipShopList.where((e) => e.shopName == shop).first.shopCode;
+      final s = sipShopList.where((e) => e.shopName == shop);
+      if (s.isNotEmpty) shop = s.first.shopCode;
       print('Shop: $shop');
     }
 
     if (locationId.isNotEmpty) {
-      locationId = sipLocationList
-          .where((e) => e.locationName == locationId)
-          .first
-          .locationId;
+      final l = sipLocationList.where((e) => e.locationName == locationId);
+      if (l.isNotEmpty) locationId = l.first.locationId;
       print('Location: $locationId');
     }
 
@@ -1929,23 +1966,22 @@ class MenuState with ChangeNotifier {
 
     String branchCode = '';
     if (branch.isNotEmpty) {
-      branchCode =
-          sipBranchList.where((e) => e.branchName == branch).first.branchCode;
+      final b = sipBranchList.where((e) => e.branchName == branch);
+      if (b.isNotEmpty) branchCode = b.first.branchCode;
       print('Branch: $branchCode');
     }
 
     String shopCode = '';
     if (shop.isNotEmpty) {
-      shopCode = sipShopList.where((e) => e.shopName == shop).first.shopCode;
+      final s = sipShopList.where((e) => e.shopName == shop);
+      if (s.isNotEmpty) shopCode = s.first.shopCode;
       print('Shop: $shopCode');
     }
 
     String locationCode = '';
     if (location.isNotEmpty) {
-      locationCode = sipLocationList
-          .where((e) => e.locationName == location)
-          .first
-          .locationId;
+      final l = sipLocationList.where((e) => e.locationName == location);
+      if (l.isNotEmpty) locationCode = l.first.locationId;
       print('Location: $locationCode');
     }
 

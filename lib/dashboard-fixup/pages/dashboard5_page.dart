@@ -13,21 +13,10 @@ import 'package:stsj/dashboard-fixup/widgets/textfield_phone.dart';
 import 'package:stsj/global/widget/app_bar.dart';
 import 'package:stsj/router/router_const.dart';
 
-//TOTAL VISIT TIDAK BISA CARI 0, TOTAL1:0 TOTAL2:1
-//DATA TERAKHIR KELUAR DOUBLE (0101202400000480)
-//QTY MOTOR TIDAK SAMA DENGAN DETAILNYA, QTY MOTOR = MOTOR SERVIS
-//JIKA DICARI MEMBERID DETAILNYA BERBEDA DIBANDINGKAN DENGAN TANPA FILTER (0101202400000163), PROBLEM FILTER MEMBERID
 class Dashboard5Page extends StatefulWidget {
   const Dashboard5Page({
-    // this.user = '',
-    // this.branchShop = '',
-    // this.periode = '',
     super.key,
   });
-
-  // final String user;
-  // final String branchShop;
-  // final String periode;
 
   @override
   State<Dashboard5Page> createState() => _Dashboard5PageState();
@@ -70,16 +59,7 @@ class _Dashboard5PageState extends State<Dashboard5Page>
     listDashboard5 = [];
   }
 
-  Future export() async {
-    // String baseUrl =
-    //     "https://wsip.yamaha-jatim.co.id:2449/Report/ExportXls?PT=JAVAYOGA&Param={'PT':'JAVAYOGA','ReportName':'MEMBER OVERVIEW','UserID':'$user','Branch':'','Shop':'','TransNo':'','BeginDate':'$thn1','EndDate':'$thn2','Filter1':'$id','Filter2':'$nama','Filter3':'$gender','Filter4':'$hp','Filter5':'$alamat','Filter6':'','Filter7':'$umur1','Filter8':'$umur2','Filter9':'$status','Filter10':'','Filter11':'','Filter12':'','Filter13':'','Filter14':'','Filter15':''}";
-
-    // try {
-    //   await launchUrl(Uri.parse(baseUrl));
-    // } catch (e) {
-    //   ScaffoldMessenger.of(context).showSnackBar(info(true, e.toString()));
-    // }
-  }
+  Future export() async {}
 
   void refresh() async {
     setState(() => loading = true);
@@ -117,8 +97,7 @@ class _Dashboard5PageState extends State<Dashboard5Page>
     return Scaffold(
       backgroundColor: Colors.blue[50]!.withAlpha(200),
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(56),
+        preferredSize: const Size.fromHeight(56),
         child: CustomAppBar(
           goBack: RoutesConstant.menu,
         ),
@@ -132,7 +111,7 @@ class _Dashboard5PageState extends State<Dashboard5Page>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ExpansionPanelList(
-                  animationDuration: const Duration(seconds: 1),
+                  animationDuration: const Duration(milliseconds: 400),
                   dividerColor: Colors.transparent,
                   elevation: 0,
                   expandedHeaderPadding: const EdgeInsets.all(0.0),
@@ -149,10 +128,14 @@ class _Dashboard5PageState extends State<Dashboard5Page>
                         return Padding(
                           padding: const EdgeInsets.only(
                             left: 15.0,
-                            top: 1.0,
-                            bottom: 1.0,
+                            top: 4.0,
+                            bottom: 4.0,
                           ),
-                          child: Row(
+                          child: Wrap(
+                            alignment: WrapAlignment.spaceBetween,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 8,
+                            runSpacing: 6,
                             children: [
                               const Text(
                                 'HEADER',
@@ -162,12 +145,15 @@ class _Dashboard5PageState extends State<Dashboard5Page>
                                   letterSpacing: 1,
                                 ),
                               ),
-                              const Spacer(),
-                              ButtonCustom('Export', export),
-                              const SizedBox(width: 10),
-                              ButtonCustom('Reset', refresh),
-                              const SizedBox(width: 10),
-                              ButtonCustom('Cari', find),
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 6,
+                                children: [
+                                  ButtonCustom('Export', export),
+                                  ButtonCustom('Reset', refresh),
+                                  ButtonCustom('Cari', find),
+                                ],
+                              ),
                             ],
                           ),
                         );
@@ -176,62 +162,81 @@ class _Dashboard5PageState extends State<Dashboard5Page>
                         color: Colors.white.withGreen(250),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                            vertical: 1.0,
+                            vertical: 4.0,
                             horizontal: 20.0,
                           ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              final fieldId = Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      children: [
-                                        const TextStatic('Member ID'),
-                                        TextfieldCustom(
-                                          inputan: id,
-                                          hint: 'Inputkan Member ID',
-                                          handle: setId,
-                                        ),
-                                      ],
-                                    ),
+                                  const TextStatic('Member ID'),
+                                  TextfieldCustom(
+                                    inputan: id,
+                                    hint: 'Inputkan Member ID',
+                                    handle: setId,
                                   ),
-                                  const SizedBox(width: 30),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      children: [
-                                        const TextStatic('Nama'),
-                                        TextfieldCustom(
-                                          inputan: nama,
-                                          hint: 'Inputkan Nama',
-                                          handle: setNama,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(width: 30),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      children: [
-                                        const TextStatic('Telepon'),
-                                        TextfieldPhone(
-                                          inputan: hp,
-                                          hint: 'Inputkan Nomer Telepon',
-                                          handle: setHp,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(width: 30),
-                                  const Expanded(flex: 1, child: SizedBox()),
                                 ],
-                              ),
-                              const SizedBox(height: 15),
-                            ],
+                              );
+                              final fieldNama = Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const TextStatic('Nama'),
+                                  TextfieldCustom(
+                                    inputan: nama,
+                                    hint: 'Inputkan Nama',
+                                    handle: setNama,
+                                  ),
+                                ],
+                              );
+                              final fieldHp = Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const TextStatic('Telepon'),
+                                  TextfieldPhone(
+                                    inputan: hp,
+                                    hint: 'Inputkan Nomer Telepon',
+                                    handle: setHp,
+                                  ),
+                                ],
+                              );
+
+                              if (constraints.maxWidth < 600) {
+                                return Column(
+                                  children: [
+                                    fieldId,
+                                    fieldNama,
+                                    fieldHp,
+                                    const SizedBox(height: 15),
+                                  ],
+                                );
+                              }
+
+                              return Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(flex: 1, child: fieldId),
+                                      const SizedBox(width: 24),
+                                      Expanded(flex: 1, child: fieldNama),
+                                      const SizedBox(width: 24),
+                                      Expanded(flex: 1, child: fieldHp),
+                                      if (constraints.maxWidth >= 900) ...[
+                                        const SizedBox(width: 24),
+                                        const Expanded(
+                                          flex: 1,
+                                          child: SizedBox(),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                  const SizedBox(height: 15),
+                                ],
+                              );
+                            },
                           ),
                         ),
                       ),

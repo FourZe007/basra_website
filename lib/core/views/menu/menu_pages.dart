@@ -1,6 +1,7 @@
 // ignore_for_file: must_call_super
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/core/providers/refresh_detector.dart';
@@ -41,6 +42,18 @@ class _MenuPagesState extends State<MenuPages>
     state.loadSubHeader();
     state.readDashboardList();
     state.readCompanyAuthorization();
+    _checkLevel50(state);
+  }
+
+  void _checkLevel50(MenuState state) async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedLevel = prefs.getString('EntryLevelID') ?? '';
+    if (state.getEntryLevelId.isEmpty && savedLevel.isNotEmpty) {
+      state.entryLevelId = savedLevel;
+    }
+    if ((state.getEntryLevelId.isNotEmpty ? state.getEntryLevelId : savedLevel).trim() == '50') {
+      state.setStaticMenuNotifier('dashboard');
+    }
   }
 
   // ── Content panel ──────────────────────────────────────────────────────────
@@ -52,8 +65,9 @@ class _MenuPagesState extends State<MenuPages>
       valueListenable: state.getStaticMenuNotifier,
       builder: (context, activeMenu, _) {
         Widget content;
+        final currentLevel = state.getEntryLevelId.trim();
 
-        if (activeMenu == 'dashboard' || activeMenu == '') {
+        if (currentLevel == '50' || activeMenu == 'dashboard' || activeMenu == '') {
           content = DashboardMenuComponent();
         } else if (activeMenu == 'activity') {
           final level = state.getEntryLevelId.trim();

@@ -66,8 +66,8 @@ class _DatepickerCustomState extends State<DatepickerCustom> {
       child: InkWell(
         onTap: () => widget.readOnly ? null : _selectDate(context),
         child: Container(
-          height: 30,
-          padding: const EdgeInsets.only(left: 6, top: 0, bottom: 1),
+          height: 34,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: widget.readOnly ? grey2.withAlpha(120) : Colors.transparent,
@@ -77,15 +77,15 @@ class _DatepickerCustomState extends State<DatepickerCustom> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Padding(
-                padding: EdgeInsets.all(0),
-                child: Icon(Icons.date_range_rounded, size: 15),
-              ),
-              const SizedBox(width: 4),
-              Text(
-                Format.tanggalFormat(tgl),
-                style: text12Reg,
-                textAlign: TextAlign.left,
+              const Icon(Icons.date_range_rounded, size: 15),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  Format.tanggalFormat(tgl),
+                  style: text12Reg,
+                  textAlign: TextAlign.left,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),

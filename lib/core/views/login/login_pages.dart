@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stsj/core/controller/Login_controller.dart';
@@ -11,6 +13,7 @@ import 'package:stsj/core/providers/Provider.dart';
 import 'package:stsj/dashboard-fixup/utilities/utils.dart';
 import 'package:stsj/global/theme/app_theme.dart';
 import 'package:stsj/router/router_const.dart';
+import 'package:universal_html/html.dart' as html;
 
 class LoginPages extends StatefulWidget {
   const LoginPages({Key? key}) : super(key: key);
@@ -79,6 +82,7 @@ class _LoginPagesState extends State<LoginPages> {
 
           // ~:Header Privillage Preprocessing:~
           String category = '';
+          final isLevel50 = state.getEntryLevelId.trim() == '50';
           for (var userAccess in data) {
             if (userAccess.isAllowView == 1) {
               category = userAccess.category;
@@ -86,7 +90,7 @@ class _LoginPagesState extends State<LoginPages> {
             }
           }
           print('First Category: $category');
-          if (category == 'DASHBOARD') {
+          if (isLevel50 || category == 'DASHBOARD') {
             state.setStaticMenuNotifier('dashboard');
           } else if (category == 'SALES ACTIVITY') {
             state.setStaticMenuNotifier('activity');
@@ -209,6 +213,7 @@ class _LoginPagesState extends State<LoginPages> {
             listdatalogin[0].employeeid);
 
         await Auth.saveDataToSharedPreferences(listdatalogin[0].dataDT);
+        state.userCompanyAccList.clear();
         state.userCompanyAccList.addAll(listdatalogin[0].dataDT);
 
         canEntered = true;
@@ -239,6 +244,7 @@ class _LoginPagesState extends State<LoginPages> {
           statuslogin = -1;
         });
 
+        _injectToastTheme();
         Fluttertoast.showToast(
           msg: "Invalid Credential", // message
           toastLength: Toast.LENGTH_LONG, // length
@@ -252,6 +258,7 @@ class _LoginPagesState extends State<LoginPages> {
       // debugPrint('loginData: $listdatalogin');
     } catch (error) {
       // ~:Error occured during login:~
+      _injectToastTheme();
       Fluttertoast.showToast(
         msg: "$error", // message
         toastLength: Toast.LENGTH_LONG, // length
@@ -270,10 +277,55 @@ class _LoginPagesState extends State<LoginPages> {
     }
   }
 
+  void _injectToastTheme() {
+    if (kIsWeb) {
+      try {
+        const styleId = 'toastify-sora-theme';
+        if (html.document.getElementById(styleId) == null) {
+          if (html.document.getElementById('google-fonts-preconnect') == null) {
+            final preconnect1 = html.LinkElement()
+              ..id = 'google-fonts-preconnect'
+              ..rel = 'preconnect'
+              ..href = 'https://fonts.googleapis.com';
+            final preconnect2 = html.LinkElement()
+              ..rel = 'preconnect'
+              ..href = 'https://fonts.gstatic.com'
+              ..setAttribute('crossorigin', '');
+            html.document.head?.append(preconnect1);
+            html.document.head?.append(preconnect2);
+          }
+
+          if (html.document.getElementById('google-fonts-sora') == null) {
+            final fontLink = html.LinkElement()
+              ..id = 'google-fonts-sora'
+              ..rel = 'stylesheet'
+              ..href =
+                  'https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap';
+            html.document.head?.append(fontLink);
+          }
+
+          final styleElement = html.StyleElement()
+            ..id = styleId
+            ..text = '''
+              .toastify {
+                font-family: 'Sora', sans-serif !important;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+              }
+            ''';
+          final target = html.document.head ?? html.document.body;
+          target?.append(styleElement);
+        }
+      } catch (e) {
+        debugPrint('Error injecting toast theme font: $e');
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-
+    _injectToastTheme();
     ServicesBinding.instance.keyboard.addHandler(_onKey);
   }
 
@@ -287,6 +339,7 @@ class _LoginPagesState extends State<LoginPages> {
 
   @override
   Widget build(BuildContext context) {
+    _injectToastTheme();
     final state = Provider.of<MenuState>(context);
     final size = MediaQuery.of(context).size;
 
@@ -363,10 +416,9 @@ class _LoginPagesState extends State<LoginPages> {
                       const SizedBox(height: 28),
 
                       // Username Field
-                      const Text(
+                      Text(
                         'Username',
-                        style: TextStyle(
-                          
+                        style: GoogleFonts.sora(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: AppColors.textSecondary,
@@ -377,15 +429,13 @@ class _LoginPagesState extends State<LoginPages> {
                         textAlignVertical: TextAlignVertical.center,
                         controller: idController,
                         autofocus: true,
-                        style: const TextStyle(
-                          
+                        style: GoogleFonts.sora(
                           fontSize: 14,
                           color: AppColors.textPrimary,
                         ),
                         inputFormatters: [UppercaseTextInputFormatter()],
                         decoration: InputDecoration(
-                          hintStyle: const TextStyle(
-                            
+                          hintStyle: GoogleFonts.sora(
                             fontSize: 13,
                             color: AppColors.textMuted,
                           ),
@@ -428,10 +478,9 @@ class _LoginPagesState extends State<LoginPages> {
                       const SizedBox(height: 18),
 
                       // Password Field
-                      const Text(
+                      Text(
                         'Password',
-                        style: TextStyle(
-                          
+                        style: GoogleFonts.sora(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: AppColors.textSecondary,
@@ -441,15 +490,13 @@ class _LoginPagesState extends State<LoginPages> {
                       TextFormField(
                         controller: passwordController,
                         obscureText: !_passwordVisible,
-                        style: const TextStyle(
-                          
+                        style: GoogleFonts.sora(
                           fontSize: 14,
                           color: AppColors.textPrimary,
                         ),
                         inputFormatters: [UppercaseTextInputFormatter()],
                         decoration: InputDecoration(
-                          hintStyle: const TextStyle(
-                            
+                          hintStyle: GoogleFonts.sora(
                             fontSize: 13,
                             color: AppColors.textMuted,
                           ),
@@ -534,17 +581,16 @@ class _LoginPagesState extends State<LoginPages> {
                                         AppColors.onAccentYellow),
                                   ),
                                 )
-                              : const Row(
+                              : Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.login_rounded,
+                                    const Icon(Icons.login_rounded,
                                         size: 20,
                                         color: AppColors.onAccentYellow),
-                                    SizedBox(width: 8),
+                                    const SizedBox(width: 8),
                                     Text(
                                       'Sign In',
-                                      style: TextStyle(
-                                        
+                                      style: GoogleFonts.sora(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w700,
                                         color: AppColors.onAccentYellow,
@@ -569,10 +615,9 @@ class _LoginPagesState extends State<LoginPages> {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          const Text(
-                            'v1.0.15',
-                            style: TextStyle(
-                              
+                          Text(
+                            'v1.0.16',
+                            style: GoogleFonts.sora(
                               fontSize: 11,
                               color: AppColors.textMuted,
                               fontWeight: FontWeight.w400,

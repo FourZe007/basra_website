@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:dotted_border/dotted_border.dart';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
@@ -169,180 +170,269 @@ class _ImportExcelState extends State<ImportExcel>
     return Scaffold(
       backgroundColor: Colors.blue[50]!.withAlpha(200),
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(56),
+        preferredSize: const Size.fromHeight(56),
         child: CustomAppBar(
           goBack: RoutesConstant.menu,
         ),
       ),
       body: startUpPage(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final hPad = constraints.maxWidth < 600 ? 12.0 : 20.0;
+            final availWidth = constraints.maxWidth - (hPad * 2);
+            final minTableWidth = math.max(availWidth, 680.0);
+
+            return Padding(
+              padding: EdgeInsets.all(hPad),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('File Excel',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  const SizedBox(width: 15),
-                  Expanded(
-                    child: DottedBorder(
-                      borderType: BorderType.RRect,
-                      radius: const Radius.circular(5),
-                      strokeWidth: 1,
-                      color: namaFile == 'Upload File'
-                          ? Colors.blueGrey[300]!
-                          : Colors.indigo,
-                      dashPattern: namaFile == 'Upload File' ? [8, 4] : [8, 0],
-                      child: ListTile(
-                        horizontalTitleGap: 10,
-                        minLeadingWidth: 25,
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 10.0),
-                        leading: const Icon(Icons.upload_file),
-                        iconColor: namaFile == 'Upload File'
-                            ? Colors.blueGrey[300]!
-                            : Colors.indigo,
-                        textColor: namaFile == 'Upload File'
-                            ? Colors.blueGrey[300]!
-                            : Colors.indigo,
-                        title: Text(namaFile),
-                        onTap: _openFileExplorer,
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'File Excel',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: DottedBorder(
+                          borderType: BorderType.RRect,
+                          radius: const Radius.circular(5),
+                          strokeWidth: 1,
+                          color: namaFile == 'Upload File'
+                              ? Colors.blueGrey[300]!
+                              : Colors.indigo,
+                          dashPattern:
+                              namaFile == 'Upload File' ? [8, 4] : [8, 0],
+                          child: ListTile(
+                            horizontalTitleGap: 10,
+                            minLeadingWidth: 25,
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            leading: const Icon(Icons.upload_file),
+                            iconColor: namaFile == 'Upload File'
+                                ? Colors.blueGrey[300]!
+                                : Colors.indigo,
+                            textColor: namaFile == 'Upload File'
+                                ? Colors.blueGrey[300]!
+                                : Colors.indigo,
+                            title: Text(
+                              namaFile,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            onTap: _openFileExplorer,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      SizedBox(
+                        width: 100,
+                        child: _waiting
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.orange.shade50,
+                                  valueColor: const AlwaysStoppedAnimation(
+                                    Colors.orange,
+                                  ),
+                                  strokeWidth: 5.0,
+                                ),
+                              )
+                            : ButtonWidget('Proses', _readExcelFile),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: _proses
+                          ? SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: SizedBox(
+                                width: minTableWidth,
+                                child: Table(
+                                  border: TableBorder.all(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  defaultVerticalAlignment:
+                                      TableCellVerticalAlignment.middle,
+                                  columnWidths: const {
+                                    0: FlexColumnWidth(0.5),
+                                    1: FlexColumnWidth(1),
+                                    2: FlexColumnWidth(1),
+                                    3: FlexColumnWidth(1.5),
+                                    4: FlexColumnWidth(1),
+                                    5: FlexColumnWidth(1),
+                                    6: FlexColumnWidth(1),
+                                    7: FlexColumnWidth(1),
+                                  },
+                                  children: [
+                                    const TableRow(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(8),
+                                          topRight: Radius.circular(5),
+                                        ),
+                                      ),
+                                      children: [
+                                        Center(
+                                          child: Text(
+                                            'No.',
+                                            style: TextStyle(fontSize: 13),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            'Branch',
+                                            style: TextStyle(fontSize: 13),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            'Shop',
+                                            style: TextStyle(fontSize: 13),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            'Tanggal',
+                                            style: TextStyle(fontSize: 13),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            'SA',
+                                            style: TextStyle(fontSize: 13),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            'Mekanik',
+                                            style: TextStyle(fontSize: 13),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            'Hari Kerja',
+                                            style: TextStyle(fontSize: 13),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            'RUT',
+                                            style: TextStyle(fontSize: 13),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    ...detail.map((item) {
+                                      return TableRow(
+                                        children: [
+                                          Center(
+                                            child: Text(
+                                              (detail.indexOf(item) + 1)
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              item.branch,
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              item.shop,
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              item.tanggal,
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              item.sa.toString(),
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              item.mekanik.toString(),
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              item.hariKerja.toString(),
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              item.rut.toString(),
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ],
+                                ),
+                              ),
+                            )
+                          : const SizedBox(),
                     ),
                   ),
-                  const SizedBox(width: 15),
-                  SizedBox(
-                    width: 100,
-                    child: _waiting
-                        ? Center(
-                            child: CircularProgressIndicator(
-                              backgroundColor: Colors.orange.shade50,
-                              valueColor:
-                                  const AlwaysStoppedAnimation(Colors.orange),
-                              strokeWidth: 5.0,
-                            ),
-                          )
-                        : ButtonWidget('Proses', _readExcelFile),
-                  ),
+                  const SizedBox(height: 15),
+                  ButtonWidget('Upload', _uploadDataExcel, disable: !_proses)
                 ],
               ),
-              const SizedBox(height: 15),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: _proses
-                      ? Table(
-                          border: TableBorder.all(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(5)),
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
-                          columnWidths: const {
-                            0: FlexColumnWidth(0.5),
-                            1: FlexColumnWidth(1),
-                            2: FlexColumnWidth(1),
-                            3: FlexColumnWidth(1.5),
-                            4: FlexColumnWidth(1),
-                            5: FlexColumnWidth(1),
-                            6: FlexColumnWidth(1),
-                            7: FlexColumnWidth(1),
-                          },
-                          children: [
-                            const TableRow(
-                              decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(5)),
-                              ),
-                              children: [
-                                Center(
-                                    child: Text('No.',
-                                        style: TextStyle(fontSize: 13),
-                                        textAlign: TextAlign.center)),
-                                Center(
-                                    child: Text('Branch',
-                                        style: TextStyle(fontSize: 13),
-                                        textAlign: TextAlign.center)),
-                                Center(
-                                    child: Text('Shop',
-                                        style: TextStyle(fontSize: 13),
-                                        textAlign: TextAlign.center)),
-                                Center(
-                                    child: Text('Tanggal',
-                                        style: TextStyle(fontSize: 13),
-                                        textAlign: TextAlign.center)),
-                                Center(
-                                    child: Text('SA',
-                                        style: TextStyle(fontSize: 13),
-                                        textAlign: TextAlign.center)),
-                                Center(
-                                    child: Text('Mekanik',
-                                        style: TextStyle(fontSize: 13),
-                                        textAlign: TextAlign.center)),
-                                Center(
-                                    child: Text('Hari Kerja',
-                                        style: TextStyle(fontSize: 13),
-                                        textAlign: TextAlign.center)),
-                                Center(
-                                    child: Text('RUT',
-                                        style: TextStyle(fontSize: 13),
-                                        textAlign: TextAlign.center)),
-                              ],
-                            ),
-                            ...detail.map((item) {
-                              return TableRow(
-                                children: [
-                                  Center(
-                                      child: Text(
-                                          (detail.indexOf(item) + 1).toString(),
-                                          style: const TextStyle(fontSize: 13),
-                                          textAlign: TextAlign.center)),
-                                  Center(
-                                      child: Text(item.branch,
-                                          style: const TextStyle(fontSize: 13),
-                                          textAlign: TextAlign.center)),
-                                  Center(
-                                      child: Text(item.shop,
-                                          style: const TextStyle(fontSize: 13),
-                                          textAlign: TextAlign.center)),
-                                  Center(
-                                      child: Text(item.tanggal,
-                                          style: const TextStyle(fontSize: 13),
-                                          textAlign: TextAlign.center)),
-                                  Center(
-                                      child: Text(item.sa.toString(),
-                                          style: const TextStyle(fontSize: 13),
-                                          textAlign: TextAlign.center)),
-                                  Center(
-                                      child: Text(item.mekanik.toString(),
-                                          style: const TextStyle(fontSize: 13),
-                                          textAlign: TextAlign.center)),
-                                  Center(
-                                      child: Text(item.hariKerja.toString(),
-                                          style: const TextStyle(fontSize: 13),
-                                          textAlign: TextAlign.center)),
-                                  Center(
-                                      child: Text(item.rut.toString(),
-                                          style: const TextStyle(fontSize: 13),
-                                          textAlign: TextAlign.center)),
-                                ],
-                              );
-                            }).toList(),
-                          ],
-                        )
-                      : const SizedBox(),
-                ),
-              ),
-              const SizedBox(height: 15),
-              ButtonWidget('Upload', _uploadDataExcel, disable: !_proses)
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
